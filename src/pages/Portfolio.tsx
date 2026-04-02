@@ -77,7 +77,8 @@ const Portfolio = () => {
             });
 
             if (bestEntry) {
-                const id = (bestEntry.target as HTMLElement).id;
+                const visibleEntry = bestEntry as IntersectionObserverEntry;
+                const id = (visibleEntry.target as HTMLElement).id;
                 const newPath = SECTION_ROUTES[id];
                 if (newPath && window.location.pathname !== newPath) {
                     // Update URL without triggering a scroll (replace state)
