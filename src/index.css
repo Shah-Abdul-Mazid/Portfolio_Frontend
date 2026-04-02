@@ -1,0 +1,142 @@
+:root {
+    --bg-color: #020617; 
+    --text-color: #f8fafc;
+    --text-secondary: #94a3b8;
+    --primary: #38bdf8; 
+    --primary-glow: rgba(56, 189, 248, 0.5);
+    --accent: #d946ef; 
+    --card-bg: rgba(15, 23, 42, 0.4); 
+    --border-color: rgba(56, 189, 248, 0.15);
+    --nav-bg: rgba(2, 6, 23, 0.85);
+    --gradient: linear-gradient(135deg, #38bdf8, #818cf8, #d946ef);
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --section-padding: 80px 0;
+}
+
+html.light-mode {
+    --bg-color: #f8fafc; 
+    --text-color: #0f172a; 
+    --text-secondary: #475569;
+    --primary: #0369a1; 
+    --primary-glow: rgba(3, 105, 161, 0.25);
+    --accent: #be185d; 
+    --card-bg: rgba(255, 255, 255, 0.75); 
+    --border-color: rgba(3, 105, 161, 0.25);
+    --nav-bg: rgba(255, 255, 255, 0.9);
+    --gradient: linear-gradient(135deg, #0284c7, #4f46e5, #c026d3);
+}
+
+html {
+    overflow-x: hidden; /* Prevent horizontal scrollbar */
+    scroll-behavior: smooth;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: transparent !important;
+    color: var(--text-color);
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+#root, .app {
+    background-color: transparent !important;
+    height: 100vh;
+}
+
+.app {
+    overflow-y: auto;
+    scroll-behavior: smooth;
+}
+
+/* Standardized Section Layout */
+.section, section {
+    min-height: 100vh;
+    padding-top: 130px; /* Fixed consistent distance from top for all headings */
+    padding-bottom: 80px;
+    scroll-margin-top: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* Ensures no giant gaps at top for short sections like About */
+    align-items: center;
+    position: relative;
+    z-index: 2;
+    background: transparent !important;
+    overflow-y: auto; /* Allows scrolling inside the section if content is tall */
+    overflow-x: hidden;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+    width: 100%;
+}
+
+/* Consistent Typography for Section Headings */
+.section-title {
+    text-align: center;
+    margin-bottom: 60px;
+    width: 100%;
+}
+
+.section-title h2 {
+    font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+    font-weight: 800;
+    color: var(--text-color);
+    margin-top: 8px;
+}
+
+.subtitle {
+    display: block;
+    color: var(--primary);
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+}
+
+/* Standardized Cards */
+.card, .project-card, .experience-item, .contact-card, .contact-form-panel, .skills-group, .work-content, .exp-card {
+    background: var(--card-bg) !important;
+    backdrop-filter: blur(40px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(40px) saturate(180%) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: 28px !important;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3) !important;
+}
+
+.gradient-text {
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Scroll behavior */
+html {
+    scroll-behavior: smooth;
+}
