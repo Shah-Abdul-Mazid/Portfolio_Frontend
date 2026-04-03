@@ -45,58 +45,39 @@ const Portfolio = () => {
         const raw = location.pathname.replace('/', '');
         const targetId = raw === '' ? 'hero' : raw;
         const el = document.getElementById(targetId);
-        
         if (el) {
-            // Lock out the observer for 1.5s while smooth scroll happens
             scrollLock.current = true;
-            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            
-            const timer = setTimeout(() => {
-                scrollLock.current = false;
-            }, 1500);
-            return () => clearTimeout(timer);
+            el.scrollIntoView({ behavior: 'smooth' });
+            setTimeout(() => { scrollLock.current = false; }, 1000);
         }
     }, [location.pathname]);
 
     // ── Scroll → update URL via IntersectionObserver ──────────────────────
     useEffect(() => {
-        // Use a single observer for ALL sections to prevent race conditions
-        const observer = new IntersectionObserver((entries) => {
-            if (scrollLock.current) return;
-
-            // Find the entry that has the highest intersection ratio
-            // and is significantly visible (threshold 0.5+)
-            let bestEntry: IntersectionObserverEntry | null = null;
-            let maxRatio = 0.5; // Only care if at least 50% visible
-
-            entries.forEach(entry => {
-                if (entry.isIntersecting && entry.intersectionRatio > maxRatio) {
-                    maxRatio = entry.intersectionRatio;
-                    bestEntry = entry;
-                }
-            });
-
-            if (bestEntry) {
-                const visibleEntry = bestEntry as IntersectionObserverEntry;
-                const id = (visibleEntry.target as HTMLElement).id;
-                const newPath = SECTION_ROUTES[id];
-                if (newPath && window.location.pathname !== newPath) {
-                    // Update URL without triggering a scroll (replace state)
-                    navigate(newPath, { replace: true });
-                }
-            }
-        }, { 
-            threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0],
-            rootMargin: '-10% 0px -10% 0px' // Focus on the middle 80% of screen
-        });
+        const observers: IntersectionObserver[] = [];
 
         Object.keys(SECTION_ROUTES).forEach(id => {
             const el = document.getElementById(id);
-            if (el) observer.observe(el);
+            if (!el) return;
+
+            const obs = new IntersectionObserver(
+                ([entry]) => {
+                    if (entry.isIntersecting && !scrollLock.current) {
+                        const newPath = SECTION_ROUTES[id];
+                        if (window.location.pathname !== newPath) {
+                            navigate(newPath, { replace: true });
+                        }
+                    }
+                },
+                { threshold: 0.45 }
+            );
+
+            obs.observe(el);
+            observers.push(obs);
         });
 
-        return () => observer.disconnect();
-    }, [navigate]);
+        return () => observers.forEach(o => o.disconnect());
+    }, []);
 
     return (
         <div className="app">

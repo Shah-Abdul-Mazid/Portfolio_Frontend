@@ -4,175 +4,6 @@ import { usePortfolio } from '../context/PortfolioContext';
 import { Mail, Eye, Calendar, Phone, Trash2, Reply, Plus, Minus, Upload, Link as LinkIcon, CheckCircle, Users } from 'lucide-react';
 import type { EducationItem, ExperienceItem, WorkItem, ProjectItem, PaperItem, SkillCategory } from '../context/PortfolioContext';
 
-
-const FileUploadInput = ({ label, value, onUpload, id, placeholder = "Enter URL or upload file" }: { 
-    label: string, 
-    value: string, 
-    onUpload: (url: string) => void,
-    id: string,
-    placeholder?: string 
-}) => {
-    const [uploading, setUploading] = useState(false);
-    const [showUrlInput, setShowUrlInput] = useState(false);
-
-    const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (!file) return;
-
-        setUploading(true);
-        const formData = new FormData();
-        formData.append('file', file);
-
-        try {
-            const res = await fetch('/api/upload', {
-                method: 'POST',
-                body: formData,
-            });
-            const result = await res.json();
-            if (result.success) {
-                onUpload(result.url);
-            } else {
-                alert(result.message || 'Upload failed');
-            }
-        } catch (err) {
-            alert('Connection error during upload');
-        } finally {
-            setUploading(false);
-        }
-    };
-
-    return (
-        <div className="form-group" style={{ marginBottom: '16px' }}>
-            <label style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span>{label}</span>
-                <button 
-                    type="button" 
-                    onClick={() => setShowUrlInput(!showUrlInput)}
-                    style={{ background: 'none', border: 'none', color: 'var(--primary)', cursor: 'pointer', fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '4px' }}
-                >
-                    {showUrlInput ? <><Upload size={12} /> Use Upload</> : <><LinkIcon size={12} /> Enter Link Manually</>}
-                </button>
-            </label>
-            
-            <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                {showUrlInput ? (
-                    <input 
-                        type="text" 
-                        value={value || ''} 
-                        onChange={(e) => onUpload(e.target.value)} 
-                        placeholder={placeholder}
-                        style={{ flex: 1 }}
-                    />
-                ) : (
-                    <div style={{ flex: 1, position: 'relative' }}>
-                        <input 
-                            type="file" 
-                            onChange={handleFileChange} 
-                            style={{ display: 'none' }} 
-                            id={`file-upload-${id}`}
-                            accept=".jpg,.jpeg,.png,.pdf"
-                        />
-                        <label 
-                            htmlFor={`file-upload-${id}`}
-                            className="btn"
-                            style={{ 
-                                display: 'flex', 
-                                alignItems: 'center', 
-                                justifyContent: 'center', 
-                                gap: '8px', 
-                                width: '100%', 
-                                background: value ? 'rgba(16, 185, 129, 0.05)' : 'rgba(255,255,255,0.05)',
-                                border: value ? '1px solid rgba(16, 185, 129, 0.2)' : '1px dashed var(--border-color)',
-                                padding: '10px',
-                                borderRadius: '8px',
-                                cursor: 'pointer',
-                                transition: 'var(--transition)'
-                            }}
-                        >
-                            {uploading ? (
-                                <>Uploading...</>
-                            ) : value ? (
-                                <><CheckCircle size={16} color="#10b981" /> {value.split('/').pop()?.substring(0, 25) || 'File selected'}</>
-                            ) : (
-                                <><Upload size={16} /> Browse File (PDF/Image)</>
-                            )}
-                        </label>
-                    </div>
-                )}
-                {value && (
-                    <button 
-                        type="button" 
-                        onClick={(e) => {
-                            e.preventDefault();
-                            onUpload('');
-                        }}
-                        className="btn btn-icon" 
-                        style={{ 
-                            padding: '10px', 
-                            color: '#ef4444', 
-                            background: 'rgba(239, 68, 68, 0.05)',
-                            border: '1px solid rgba(239, 68, 68, 0.1)',
-                            borderRadius: '8px',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center'
-                        }}
-                        title="Clear file"
-                    >
-                        <Trash2 size={18} />
-                    </button>
-                )}
-            </div>
-            {value && <p style={{ fontSize: '0.7rem', color: 'var(--text-muted)', marginTop: '4px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>Current: {value}</p>}
-        </div>
-    );
-};
-
-const SectionConfigPanel = ({ sectionKey, editData, setEditData }: { sectionKey: keyof any, editData: any, setEditData: any }) => {
-    const config = editData.sections?.[sectionKey] || { navLabel: '', adminLabel: '', title: '', subtitle: '' };
-    return (
-        <div className="form-section" style={{ borderLeft: '3px solid #3b82f6', background: 'rgba(59,130,246,0.03)' }}>
-            <h4 className="section-label">Section Display Settings</h4>
-            <div className="flex-group">
-                 <div className="form-group w-50">
-                     <label>Site Navigation Label</label>
-                     <input type="text" value={config.navLabel || ''} 
-                         onChange={e => setEditData({...editData, sections: {...editData.sections, [sectionKey]: {...config, navLabel: e.target.value}}})} />
-                 </div>
-                 <div className="form-group w-50">
-                     <label>Admin Menu Label</label>
-                     <input type="text" value={config.adminLabel || ''} 
-                         onChange={e => setEditData({...editData, sections: {...editData.sections, [sectionKey]: {...config, adminLabel: e.target.value}}})} />
-                 </div>
-            </div>
-            <div className="flex-group">
-                 <div className="form-group w-50">
-                     <label>Main Title</label>
-                     <input type="text" value={config.title || ''} 
-                         onChange={e => setEditData({...editData, sections: {...editData.sections, [sectionKey]: {...config, title: e.target.value}}})} />
-                 </div>
-                 <div className="form-group w-50">
-                     <label>Subtitle / Tagline</label>
-                     <input type="text" value={config.subtitle || ''} 
-                         onChange={e => setEditData({...editData, sections: {...editData.sections, [sectionKey]: {...config, subtitle: e.target.value}}})} />
-                 </div>
-            </div>
-        </div>
-    );
-};
-
-const SaveBar = ({ activeTab, navItems, onSave }: { activeTab: string, navItems: any[], onSave: () => void }) => (
-    <div className="pane-header">
-        <div>
-            <h2 className="pane-title" style={{ textTransform: 'capitalize' }}>
-                {navItems.find(n => n.id === activeTab)?.label || activeTab}
-            </h2>
-            <p className="pane-desc">Edit and save your content changes.</p>
-        </div>
-        <button onClick={onSave} className="btn btn-primary">Save Changes</button>
-    </div>
-);
-
 const AdminDashboard = () => {
     const navigate = useNavigate();
     const { data, updateData } = usePortfolio();
@@ -189,23 +20,6 @@ const AdminDashboard = () => {
     const [newAdminEmail, setNewAdminEmail] = useState('');
     const [newAdminPassword, setNewAdminPassword] = useState('');
     const [bibtexInputs, setBibtexInputs] = useState<{[key:number]:string}>({});
-
-    const navItems = [
-        { id: 'overview', icon: '⚡', label: 'Dashboard' },
-        { id: 'profile', icon: '👤', label: editData.sections?.about?.adminLabel || 'About' },
-        { id: 'education', icon: '🎓', label: editData.sections?.education?.adminLabel || 'Education' },
-        { id: 'work', icon: '💼', label: editData.sections?.work?.adminLabel || 'Experience' },
-        { id: 'projects', icon: '🚀', label: editData.sections?.projects?.adminLabel || 'Projects' },
-        { id: 'skills', icon: '🧠', label: editData.sections?.skills?.adminLabel || 'Skills' },
-        { id: 'experience', icon: '📜', label: editData.sections?.experience?.adminLabel || 'Achievements' },
-        { id: 'activities', icon: '🏅', label: editData.sections?.activities?.adminLabel || 'Activities' },
-        { id: 'papers', icon: '📚', label: editData.sections?.papers?.adminLabel || 'Publications' },
-        { id: 'references', icon: '🤝', label: editData.sections?.references?.adminLabel || 'References' },
-        { id: 'blogs', icon: '✍️', label: editData.sections?.blogs?.adminLabel || 'Blog Posts' },
-        { id: 'messages', icon: '📩', label: 'Messages' },
-        { id: 'visitors', icon: <Users size={18} />, label: 'Visitor Logs' },
-        { id: 'contact', icon: '📞', label: editData.sections?.contact?.adminLabel || 'Contact' },
-    ];
 
     const handleParseBibtex = (index: number) => {
         const str = bibtexInputs[index] || '';
@@ -242,6 +56,7 @@ const AdminDashboard = () => {
         }
     }, [navigate]);
 
+    // Sync editData when data changes (e.g. on mount)
     useEffect(() => {
         setEditData(data);
     }, [data]);
@@ -258,6 +73,7 @@ const AdminDashboard = () => {
             const msgsRes = await fetch('/api/messages');
             const msgsData = await msgsRes.json();
 
+            // MOCK TEST DATA for verification
             const mockMessage = { id: 'test-123', name: 'Test User', email: 'ezanshah58@gmail.com', query: 'Verification test for Reply & Clear', created_at: new Date().toISOString() };
             const combinedMessages = Array.isArray(msgsData) ? [mockMessage, ...msgsData] : [mockMessage];
 
@@ -277,6 +93,7 @@ const AdminDashboard = () => {
             setAdminsList(adminsData);
         } catch (e){
             console.error(e);
+            // Even on error, show the mock message for local testing
             setMessages([{ id: 'test-123', name: 'Test User', email: 'ezanshah58@gmail.com', query: 'Verification test for Reply & Clear', created_at: new Date().toISOString() }]);
         } finally {
             setLoading(false);
@@ -292,7 +109,9 @@ const AdminDashboard = () => {
     };
 
     const handleReplyAndDelete = async (id: string, email: string) => {
+        // Open the email client
         window.location.href = `mailto:${email}?subject=RE: Portfolio Inquiry`;
+        // Delay a bit to ensure the mailto: is triggered before the confirm/delete
         setTimeout(async () => {
              if (window.confirm('The reply mail has been opened. Would you like to clear this message from the database now?')) {
                  handleDeleteMessage(id, true);
@@ -371,6 +190,7 @@ const AdminDashboard = () => {
         setTimeout(() => setSaveStatus(''), 3000);
     };
 
+    // ── Generic list helpers ──────────────────────────────────────────────────
     const updateListItem = (key: string, index: number, field: string, value: any) => {
         setEditData(prev => {
             const list = [...(prev as any)[key]];
@@ -391,6 +211,7 @@ const AdminDashboard = () => {
         setEditData(prev => ({ ...prev, [key]: [...(prev as any)[key], template] }));
     };
 
+    // ── Work detail helpers ───────────────────────────────────────────────────
     const updateWorkDetail = (workIndex: number, detailIndex: number, value: string) => {
         setEditData(prev => {
             const work = [...prev.work];
@@ -416,6 +237,7 @@ const AdminDashboard = () => {
         });
     };
 
+    // ── Skill helpers ─────────────────────────────────────────────────────────
     const updateSkillItem = (catIndex: number, itemIndex: number, value: string) => {
         setEditData(prev => {
             const skills = prev.skills.map((cat, ci) => {
@@ -443,6 +265,7 @@ const AdminDashboard = () => {
         });
     };
 
+    // ── Project tag helpers ───────────────────────────────────────────────────
     const updateProjectTag = (projIndex: number, tagIndex: number, value: string) => {
         setEditData(prev => {
             const projects = prev.projects.map((p, pi) => {
@@ -453,6 +276,194 @@ const AdminDashboard = () => {
             return { ...prev, projects };
         });
     };
+
+
+
+
+    const FileUploadInput = ({ label, value, onUpload, id, placeholder = "Enter URL or upload file" }: { 
+        label: string, 
+        value: string, 
+        onUpload: (url: string) => void,
+        id: string,
+        placeholder?: string 
+    }) => {
+        const [uploading, setUploading] = useState(false);
+        const [showUrlInput, setShowUrlInput] = useState(false);
+
+        const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+            const file = e.target.files?.[0];
+            if (!file) return;
+
+            setUploading(true);
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                const res = await fetch('/api/upload', {
+                    method: 'POST',
+                    body: formData,
+                });
+                const result = await res.json();
+                if (result.success) {
+                    onUpload(result.url);
+                } else {
+                    alert(result.message || 'Upload failed');
+                }
+            } catch (err) {
+                alert('Connection error during upload');
+            } finally {
+                setUploading(false);
+            }
+        };
+
+        return (
+            <div className="form-group" style={{ marginBottom: '16px' }}>
+                <label style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <span>{label}</span>
+                    <button 
+                        type="button" 
+                        onClick={() => setShowUrlInput(!showUrlInput)}
+                        style={{ background: 'none', border: 'none', color: 'var(--primary)', cursor: 'pointer', fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '4px' }}
+                    >
+                        {showUrlInput ? <><Upload size={12} /> Use Upload</> : <><LinkIcon size={12} /> Enter Link Manually</>}
+                    </button>
+                </label>
+                
+                <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                    {showUrlInput ? (
+                        <input 
+                            type="text" 
+                            value={value || ''} 
+                            onChange={(e) => onUpload(e.target.value)} 
+                            placeholder={placeholder}
+                            style={{ flex: 1 }}
+                        />
+                    ) : (
+                        <div style={{ flex: 1, position: 'relative' }}>
+                            <input 
+                                type="file" 
+                                onChange={handleFileChange} 
+                                style={{ display: 'none' }} 
+                                id={`file-upload-${id}`}
+                                accept=".jpg,.jpeg,.png,.pdf"
+                            />
+                            <label 
+                                htmlFor={`file-upload-${id}`}
+                                className="btn"
+                                style={{ 
+                                    display: 'flex', 
+                                    alignItems: 'center', 
+                                    justifyContent: 'center', 
+                                    gap: '8px', 
+                                    width: '100%', 
+                                    background: value ? 'rgba(16, 185, 129, 0.05)' : 'rgba(255,255,255,0.05)',
+                                    border: value ? '1px solid rgba(16, 185, 129, 0.2)' : '1px dashed var(--border-color)',
+                                    padding: '10px',
+                                    borderRadius: '8px',
+                                    cursor: 'pointer',
+                                    transition: 'var(--transition)'
+                                }}
+                            >
+                                {uploading ? (
+                                    <>Uploading...</>
+                                ) : value ? (
+                                    <><CheckCircle size={16} color="#10b981" /> {value.split('/').pop()?.substring(0, 25) || 'File selected'}</>
+                                ) : (
+                                    <><Upload size={16} /> Browse File (PDF/Image)</>
+                                )}
+                            </label>
+                        </div>
+                    )}
+                    {value && (
+                        <button 
+                            type="button" 
+                            onClick={(e) => {
+                                e.preventDefault();
+                                onUpload('');
+                            }}
+                            className="btn btn-icon" 
+                            style={{ 
+                                padding: '10px', 
+                                color: '#ef4444', 
+                                background: 'rgba(239, 68, 68, 0.05)',
+                                border: '1px solid rgba(239, 68, 68, 0.1)',
+                                borderRadius: '8px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center'
+                            }}
+                            title="Clear file"
+                        >
+                            <Trash2 size={18} />
+                        </button>
+                    )}
+                </div>
+                {value && <p style={{ fontSize: '0.7rem', color: 'var(--text-muted)', marginTop: '4px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>Current: {value}</p>}
+            </div>
+        );
+    };
+
+    const navItems = [
+        { id: 'overview', icon: '⚡', label: 'Dashboard' },
+        { id: 'profile', icon: '👤', label: editData.sections?.about?.adminLabel || 'About' },
+        { id: 'education', icon: '🎓', label: editData.sections?.education?.adminLabel || 'Education' },
+        { id: 'work', icon: '💼', label: editData.sections?.work?.adminLabel || 'Experience' },
+        { id: 'projects', icon: '🚀', label: editData.sections?.projects?.adminLabel || 'Projects' },
+        { id: 'skills', icon: '🧠', label: editData.sections?.skills?.adminLabel || 'Skills' },
+        { id: 'experience', icon: '📜', label: editData.sections?.experience?.adminLabel || 'Achievements' },
+        { id: 'activities', icon: '🏅', label: editData.sections?.activities?.adminLabel || 'Activities' },
+        { id: 'papers', icon: '📚', label: editData.sections?.papers?.adminLabel || 'Publications' },
+        { id: 'references', icon: '🤝', label: editData.sections?.references?.adminLabel || 'References' },
+        { id: 'blogs', icon: '✍️', label: editData.sections?.blogs?.adminLabel || 'Blog Posts' },
+        { id: 'messages', icon: '📩', label: 'Messages' },
+        { id: 'visitors', icon: <Users size={18} />, label: 'Visitor Logs' },
+        { id: 'contact', icon: '📞', label: editData.sections?.contact?.adminLabel || 'Contact' },
+    ];
+
+    const SectionConfigPanel = ({ sectionKey }: { sectionKey: keyof typeof editData.sections }) => {
+        const config = editData.sections?.[sectionKey] || { navLabel: '', adminLabel: '', title: '', subtitle: '' };
+        return (
+            <div className="form-section" style={{ borderLeft: '3px solid #3b82f6', background: 'rgba(59,130,246,0.03)' }}>
+                <h4 className="section-label">Section Display Settings</h4>
+                <div className="flex-group">
+                     <div className="form-group w-50">
+                         <label>Site Navigation Label</label>
+                         <input type="text" value={config.navLabel || ''} 
+                             onChange={e => setEditData({...editData, sections: {...editData.sections, [sectionKey]: {...config, navLabel: e.target.value}}})} />
+                     </div>
+                     <div className="form-group w-50">
+                         <label>Admin Menu Label</label>
+                         <input type="text" value={config.adminLabel || ''} 
+                             onChange={e => setEditData({...editData, sections: {...editData.sections, [sectionKey]: {...config, adminLabel: e.target.value}}})} />
+                     </div>
+                </div>
+                <div className="flex-group">
+                     <div className="form-group w-50">
+                         <label>Main Title</label>
+                         <input type="text" value={config.title || ''} 
+                             onChange={e => setEditData({...editData, sections: {...editData.sections, [sectionKey]: {...config, title: e.target.value}}})} />
+                     </div>
+                     <div className="form-group w-50">
+                         <label>Subtitle / Tagline</label>
+                         <input type="text" value={config.subtitle || ''} 
+                             onChange={e => setEditData({...editData, sections: {...editData.sections, [sectionKey]: {...config, subtitle: e.target.value}}})} />
+                     </div>
+                </div>
+            </div>
+        );
+    };
+
+    const SaveBar = () => (
+        <div className="pane-header">
+            <div>
+                <h2 className="pane-title" style={{ textTransform: 'capitalize' }}>
+                    {navItems.find(n => n.id === activeTab)?.label || activeTab}
+                </h2>
+                <p className="pane-desc">Edit and save your content changes.</p>
+            </div>
+            <button onClick={handleSave} className="btn btn-primary">Save Changes</button>
+        </div>
+    );
 
     return (
         <div className="admin-layout">
@@ -588,9 +599,9 @@ const AdminDashboard = () => {
                     {/* ── INTRO & PROFILE ──────────────────────────────────── */}
                     {activeTab === 'profile' && (
                         <div className="tab-pane cms-pane">
-                            <SaveBar activeTab={activeTab} navItems={navItems} onSave={handleSave} />
+                            <SaveBar />
                             {saveStatus && <div className="status-badge success">✓ {saveStatus}</div>}
-                            <SectionConfigPanel sectionKey="about" editData={editData} setEditData={setEditData} />
+                            <SectionConfigPanel sectionKey="about" />
 
                             <div className="form-section">
                                 <h4 className="section-label">Hero Banner</h4>
@@ -639,9 +650,9 @@ const AdminDashboard = () => {
                     {/* ── EDUCATION ────────────────────────────────────────── */}
                     {activeTab === 'education' && (
                         <div className="tab-pane cms-pane">
-                            <SaveBar activeTab={activeTab} navItems={navItems} onSave={handleSave} />
+                            <SaveBar />
                             {saveStatus && <div className="status-badge success">✓ {saveStatus}</div>}
-                            <SectionConfigPanel sectionKey="education" editData={editData} setEditData={setEditData} />
+                            <SectionConfigPanel sectionKey="education" />
                             {editData.education.map((item: EducationItem, i: number) => (
                                 <div key={i} className="form-section item-card">
                                     <div className="item-card-header">
@@ -697,9 +708,9 @@ const AdminDashboard = () => {
                     {/* ── WORK HISTORY ─────────────────────────────────────── */}
                     {activeTab === 'work' && (
                         <div className="tab-pane cms-pane">
-                            <SaveBar activeTab={activeTab} navItems={navItems} onSave={handleSave} />
+                            <SaveBar />
                             {saveStatus && <div className="status-badge success">✓ {saveStatus}</div>}
-                            <SectionConfigPanel sectionKey="work" editData={editData} setEditData={setEditData} />
+                            <SectionConfigPanel sectionKey="work" />
                             {editData.work.map((job: WorkItem, i: number) => (
                                 <div key={i} className="form-section item-card">
                                     <div className="item-card-header">
@@ -770,9 +781,9 @@ const AdminDashboard = () => {
                     {/* ── ACHIEVEMENTS (Experience) ─────────────────────────── */}
                     {activeTab === 'experience' && (
                         <div className="tab-pane cms-pane">
-                            <SaveBar activeTab={activeTab} navItems={navItems} onSave={handleSave} />
+                            <SaveBar />
                             {saveStatus && <div className="status-badge success">✓ {saveStatus}</div>}
-                            <SectionConfigPanel sectionKey="experience" editData={editData} setEditData={setEditData} />
+                            <SectionConfigPanel sectionKey="experience" />
                             {editData.experience.map((item: ExperienceItem, i: number) => (
                                 <div key={i} className="form-section item-card">
                                     <div className="item-card-header">
@@ -881,9 +892,9 @@ const AdminDashboard = () => {
                     {/* ── TECH STACK (Skills) ───────────────────────────────── */}
                     {activeTab === 'skills' && (
                         <div className="tab-pane cms-pane">
-                            <SaveBar activeTab={activeTab} navItems={navItems} onSave={handleSave} />
+                            <SaveBar />
                             {saveStatus && <div className="status-badge success">✓ {saveStatus}</div>}
-                            <SectionConfigPanel sectionKey="skills" editData={editData} setEditData={setEditData} />
+                            <SectionConfigPanel sectionKey="skills" />
                             {editData.skills.map((cat: SkillCategory, ci: number) => (
                                 <div key={ci} className="form-section item-card">
                                     <div className="item-card-header">
@@ -920,9 +931,9 @@ const AdminDashboard = () => {
                     {/* ── PROJECTS (Portfolio) ──────────────────────────────── */}
                     {activeTab === 'projects' && (
                         <div className="tab-pane cms-pane">
-                            <SaveBar activeTab={activeTab} navItems={navItems} onSave={handleSave} />
+                            <SaveBar />
                             {saveStatus && <div className="status-badge success">✓ {saveStatus}</div>}
-                            <SectionConfigPanel sectionKey="projects" editData={editData} setEditData={setEditData} />
+                            <SectionConfigPanel sectionKey="projects" />
                             {editData.projects.map((project: ProjectItem, i: number) => (
                                 <div key={i} className="form-section item-card">
                                     <div className="item-card-header">
@@ -978,9 +989,9 @@ const AdminDashboard = () => {
                     {/* ── RESEARCH PAPERS ────────────────────────────────────── */}
                     {activeTab === 'papers' && (
                         <div className="tab-pane cms-pane">
-                            <SaveBar activeTab={activeTab} navItems={navItems} onSave={handleSave} />
+                            <SaveBar />
                             {saveStatus && <div className="status-badge success">✓ {saveStatus}</div>}
-                            <SectionConfigPanel sectionKey="papers" editData={editData} setEditData={setEditData} />
+                            <SectionConfigPanel sectionKey="papers" />
                             {editData.papers.map((paper: PaperItem, i: number) => (
                                 <div key={i} className="form-section item-card">
                                     <div className="item-card-header">
@@ -1054,9 +1065,9 @@ const AdminDashboard = () => {
                     {/* ── ACTIVITIES ────────────────────────────────────────── */}
                     {activeTab === 'activities' && (
                         <div className="tab-pane cms-pane">
-                            <SaveBar activeTab={activeTab} navItems={navItems} onSave={handleSave} />
+                            <SaveBar />
                             {saveStatus && <div className="status-badge success">✓ {saveStatus}</div>}
-                            <SectionConfigPanel sectionKey="activities" editData={editData} setEditData={setEditData} />
+                            <SectionConfigPanel sectionKey="activities" />
                             {editData.activities?.map((activity: any, i: number) => (
                                 <div key={i} className="form-section item-card">
                                     <div className="item-card-header">
@@ -1092,9 +1103,9 @@ const AdminDashboard = () => {
                     {/* ── REFERENCES ────────────────────────────────────────── */}
                     {activeTab === 'references' && (
                         <div className="tab-pane cms-pane">
-                            <SaveBar activeTab={activeTab} navItems={navItems} onSave={handleSave} />
+                            <SaveBar />
                             {saveStatus && <div className="status-badge success">✓ {saveStatus}</div>}
-                            <SectionConfigPanel sectionKey="references" editData={editData} setEditData={setEditData} />
+                            <SectionConfigPanel sectionKey="references" />
                             {editData.references?.map((ref: any, i: number) => (
                                 <div key={i} className="form-section item-card">
                                     <div className="item-card-header">
@@ -1142,9 +1153,9 @@ const AdminDashboard = () => {
                     {/* ── BLOG POSTS ────────────────────────────────────────── */}
                     {activeTab === 'blogs' && (
                         <div className="tab-pane cms-pane">
-                            <SaveBar activeTab={activeTab} navItems={navItems} onSave={handleSave} />
+                            <SaveBar />
                             {saveStatus && <div className="status-badge success">✓ {saveStatus}</div>}
-                            <SectionConfigPanel sectionKey="blogs" editData={editData} setEditData={setEditData} />
+                            <SectionConfigPanel sectionKey="blogs" />
                             {editData.blogs?.map((blog: any, i: number) => (
                                 <div key={i} className="form-section item-card">
                                     <div className="item-card-header">
@@ -1180,9 +1191,9 @@ const AdminDashboard = () => {
                     {/* ── CONTACT DETAILS ─────────────────────────────────── */}
                     {activeTab === 'contact' && (
                         <div className="tab-pane cms-pane">
-                            <SaveBar activeTab={activeTab} navItems={navItems} onSave={handleSave} />
+                            <SaveBar />
                             {saveStatus && <div className="status-badge success">✓ {saveStatus}</div>}
-                            <SectionConfigPanel sectionKey="contact" editData={editData} setEditData={setEditData} />
+                            <SectionConfigPanel sectionKey="contact" />
 
                             <div className="form-section">
                                 <h4 className="section-label">General Contact</h4>

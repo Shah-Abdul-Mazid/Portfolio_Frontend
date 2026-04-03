@@ -272,19 +272,19 @@ const PortfolioContext = createContext<PortfolioContextType | undefined>(undefin
 
 const API_BASE = '/api';
 
-// Helper to resolve document URLs for both dev and production
+// Helper to resolve document URLs (strips localhost if present, ensuring it works in prod)
 export const resolveUrl = (url: string | undefined): string => {
     if (!url) return '';
-    // Full external URLs — leave as-is
-    if (url.startsWith('https://')) return url;
-    if (url.startsWith('http://') && !url.includes('localhost')) return url;
-    // Legacy localhost references — strip to relative
-    if (url.includes('localhost:3001')) {
+    // If it's already a full production URL or a relative path, keep it
+    if (url.startsWith('https://') || url.startsWith('http://') && !url.includes('localhost')) {
+        return url;
+    }
+    // If it's a localhost URL, convert to relative /uploads
+    if (url.includes('localhost:3001/uploads/')) {
         return url.split('localhost:3001')[1];
     }
-    // /api/upload/:id — already proxied by Vite (dev) and Vercel (prod), works as-is
-    // /data/... — served from public/ by Vite/Vercel, works as-is
-    // /uploads/... — legacy local uploads; proxy to backend in dev
+    // For relative paths like /uploads/..., prefix with backend URL in development
+    // In production (Vercel), since it's proxied/served from same origin, /uploads/... works
     const isDev = window.location.hostname === 'localhost';
     if (url.startsWith('/uploads/') && isDev) {
         return `http://localhost:3001${url}`;

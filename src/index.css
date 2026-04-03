@@ -52,6 +52,7 @@ body {
 
 .app {
     overflow-y: auto;
+    scroll-snap-type: y mandatory;
     scroll-behavior: smooth;
 }
 
@@ -60,11 +61,11 @@ body {
     min-height: 100vh;
     padding-top: 130px; /* Fixed consistent distance from top for all headings */
     padding-bottom: 80px;
-    scroll-margin-top: 100px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start; /* Ensures no giant gaps at top for short sections like About */
     align-items: center;
+    scroll-snap-align: start;
     position: relative;
     z-index: 2;
     background: transparent !important;
