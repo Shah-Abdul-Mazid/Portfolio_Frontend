@@ -47,14 +47,10 @@ body {
 
 #root, .app {
     background-color: transparent !important;
-    height: 100vh;
+    min-height: 100vh;
 }
 
-.app {
-    overflow-y: auto;
-    scroll-snap-type: y mandatory;
-    scroll-behavior: smooth;
-}
+
 
 /* Standardized Section Layout */
 .section, section {
@@ -65,11 +61,9 @@ body {
     flex-direction: column;
     justify-content: flex-start; /* Ensures no giant gaps at top for short sections like About */
     align-items: center;
-    scroll-snap-align: start;
     position: relative;
     z-index: 2;
     background: transparent !important;
-    overflow-y: auto; /* Allows scrolling inside the section if content is tall */
     overflow-x: hidden;
 }
 
