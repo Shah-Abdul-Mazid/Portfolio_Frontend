@@ -10,7 +10,7 @@ interface DocInfo {
 }
 
 const isImage = (url: string) => /\.(jpg|jpeg|png|webp|avif|gif)$/i.test(url);
-const isPdf = (url: string) => /\.pdf$/i.test(url);
+const isPdf = (url: string) => /\.pdf$/i.test(url) || (url.includes('/api/upload/') && !isImage(url));
 
 /* ---------- Mini thumbnail for one document ---------- */
 const DocThumbnail = ({ doc, onClick }: { doc: DocInfo; onClick: () => void }) => {
@@ -89,20 +89,12 @@ const DocModal = ({ doc, onClose }: { doc: DocInfo; onClose: () => void }) => {
                 {/* Content */}
                 <div className="doc-modal-body">
                     {pdf ? (
-                        <object
-                            data={resolved}
-                            type="application/pdf"
+                        <iframe
+                            src={`${resolved}#toolbar=1&navpanes=0&view=FitH`}
                             className="doc-modal-object"
-                        >
-                            {/* Fallback for browsers that block object */}
-                            <div className="doc-modal-fallback">
-                                <FileText size={48} color="#8b5cf6" />
-                                <p>Your browser cannot display this PDF inline.</p>
-                                <a href={resolved} target="_blank" rel="noopener noreferrer" className="doc-modal-open-btn">
-                                    <ExternalLink size={14} /> Open PDF
-                                </a>
-                            </div>
-                        </object>
+                            title={doc.label}
+                            style={{ border: 'none', backgroundColor: 'white' }}
+                        />
                     ) : (
                         <img src={resolved} alt={doc.label} className="doc-modal-img" />
                     )}
