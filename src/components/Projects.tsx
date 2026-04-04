@@ -240,7 +240,7 @@ const Projects = ({ addToRefs }: { addToRefs: (el: HTMLElement | null) => void }
                 }
 
                 .project-desc { font-size: 1.125rem; color: #64748b; line-height: 1.6; margin-bottom: 48px; max-width: 90%; flex-grow: 1; }
-                .dark-mode .project-desc { color: #94a3b8; }
+                .dark-mode .project-desc { color: #ffffff; opacity: 0.8; }
 
                 .project-tags { display: flex; gap: 12px; flex-wrap: wrap; flex: 1; min-width: 0; }
                 .tag-outline { 
@@ -249,7 +249,8 @@ const Projects = ({ addToRefs }: { addToRefs: (el: HTMLElement | null) => void }
                     border-radius: 100px; 
                     font-size: 0.8125rem; 
                     font-weight: 700; 
-                    color: #1e293b; 
+                    color: #ffffff; 
+                    background: rgba(255, 255, 255, 0.05);
                     white-space: nowrap;
                 }
                 .dark-mode .tag-outline { border-color: #334155; color: #f1f5f9; }

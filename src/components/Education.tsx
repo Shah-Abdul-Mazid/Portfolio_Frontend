@@ -107,12 +107,15 @@ const Education = ({ addToRefs }: { addToRefs: (el: HTMLElement | null) => void 
                 .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; gap: 24px; }
                 .card-header-left { display: flex; gap: 20px; align-items: center; flex: 1; min-width: 0; }
                 .card-title-group { flex: 1; min-width: 0; }
-                .card-title { font-size: 1.2rem; color: #fff; margin: 0 0 4px 0; font-weight: 700; }
+                .card-title { font-size: 1.25rem; color: #fff; margin: 0 0 4px 0; font-weight: 700; white-space: nowrap; }
+                @media (max-width: 1100px) {
+                    .card-title { white-space: normal; }
+                }
                 .card-subtitle { color: var(--primary); font-weight: 700; font-size: 0.95rem; margin: 0; }
                 
-                .card-meta { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+                .card-meta { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; flex-shrink: 0; text-align: right; margin-left: 20px; }
                 .card-period { background: rgba(139,92,246,0.08); color: var(--primary); padding: 2px 12px; border-radius: 100px; font-size: 0.75rem; font-weight: 700; border: 1px solid rgba(139,92,246,0.2); }
-                .card-duration { font-size: 0.65rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+                .card-duration { font-size: 0.65rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; max-width: 200px; line-height: 1.2; }
 
                 .card-body { display: flex; gap: 24px; align-items: center; justify-content: space-between; }
                 .card-content { flex: 1; min-width: 250px; }
