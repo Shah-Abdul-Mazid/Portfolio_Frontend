@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { usePortfolio, resolveUrl } from '../context/PortfolioContext';
-import { ExternalLink, Search } from 'lucide-react';
+import { ExternalLink, Search, Github } from 'lucide-react';
 import { isPdfUrl, getPdfViewerUrl } from '../utils/filePreview';
 
 const Projects = ({ addToRefs }: { addToRefs: (el: HTMLElement | null) => void }) => {
@@ -88,12 +88,20 @@ const Projects = ({ addToRefs }: { addToRefs: (el: HTMLElement | null) => void }
                                                     ))}
                                                 </div>
 
-                                            {project.projectUrl && (
-                                                <a href={resolveUrl(project.projectUrl)} target="_blank" rel="noopener noreferrer" className="project-action-btn">
-                                                    <ExternalLink size={14} />
-                                                    View Project
-                                                </a>
-                                            )}
+                                            <div style={{ display: 'flex', gap: '12px' }}>
+                                                {project.githubUrl && (
+                                                    <a href={resolveUrl(project.githubUrl)} target="_blank" rel="noopener noreferrer" className="project-action-btn github-btn">
+                                                        <Github size={14} />
+                                                        GitHub
+                                                    </a>
+                                                )}
+                                                {project.projectUrl && (
+                                                    <a href={resolveUrl(project.projectUrl)} target="_blank" rel="noopener noreferrer" className="project-action-btn">
+                                                        <ExternalLink size={14} />
+                                                        View Project
+                                                    </a>
+                                                )}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -135,13 +143,15 @@ const Projects = ({ addToRefs }: { addToRefs: (el: HTMLElement | null) => void }
                 .overline { color: #8b5cf6; font-size: 0.8125rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 8px; }
                 .title { font-size: 3.5rem; font-weight: 800; color: var(--text-color); margin-bottom: 60px; }
                 
-                .showcase-slider { width: 100%; position: relative; min-height: 500px; display: flex; flex-direction: column; align-items: center; }
-                .slider-container { display: flex; align-items: center; justify-content: center; width: 100%; position: relative; height: 500px; perspective: 1500px; }
+                .showcase-slider { width: 100%; position: relative; min-height: 600px; display: flex; flex-direction: column; align-items: center; }
+                .slider-container { display: flex; align-items: center; justify-content: center; width: 100%; position: relative; height: 600px; perspective: 1500px; }
                 
                 .project-slide { 
                     position: absolute; 
                     transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
                     width: 700px;
+                    max-height: 100%;
+                    display: flex;
                     z-index: 1;
                     opacity: 0;
                     transform: scale(0.6) translateZ(-400px);
@@ -167,19 +177,21 @@ const Projects = ({ addToRefs }: { addToRefs: (el: HTMLElement | null) => void }
                 .project-card { 
                     background: rgba(15, 23, 42, 0.4); 
                     border: 1px solid rgba(139, 92, 246, 0.2); 
-                    border-radius: 46px; 
-                    padding: 60px; 
+                    border-radius: 40px; 
+                    padding: 48px; 
                     backdrop-filter: blur(40px);
                     -webkit-backdrop-filter: blur(40px);
                     box-shadow: 0 30px 60px rgba(0,0,0,0.3);
                     text-align: left;
-                    height: 100%;
+                    height: auto;
+                    max-height: 600px;
                     box-sizing: border-box;
                     transition: border-color 0.4s, box-shadow 0.4s;
                     display: flex;
                     flex-direction: column;
                     position: relative;
-                    overflow: hidden;
+                    overflow-y: auto;
+                    overflow-x: hidden;
                     background-size: cover;
                     background-position: center;
                 }
@@ -230,16 +242,16 @@ const Projects = ({ addToRefs }: { addToRefs: (el: HTMLElement | null) => void }
                 }
 
                 .project-title-gradient { 
-                    font-size: 2.8rem; 
+                    font-size: 2.4rem; 
                     font-weight: 800; 
-                    line-height: 1.1; 
-                    margin-bottom: 32px; 
+                    line-height: 1.2; 
+                    margin-bottom: 24px; 
                     background: linear-gradient(90deg, #a855f7 0%, #f97316 100%);
                     -webkit-background-clip: text;
                     -webkit-text-fill-color: transparent;
                 }
 
-                .project-desc { font-size: 1.125rem; color: #64748b; line-height: 1.6; margin-bottom: 48px; max-width: 90%; flex-grow: 1; }
+                .project-desc { font-size: 1.125rem; color: #64748b; line-height: 1.6; margin-bottom: 32px; max-width: 90%; flex-shrink: 0; }
                 .dark-mode .project-desc { color: #ffffff; opacity: 0.8; }
 
                 .project-tags { display: flex; gap: 12px; flex-wrap: wrap; flex: 1; min-width: 0; }
@@ -275,6 +287,17 @@ const Projects = ({ addToRefs }: { addToRefs: (el: HTMLElement | null) => void }
                     box-shadow: 0 12px 24px rgba(139,92,246,0.4);
                     background: #7c3aed;
                 }
+                
+                .github-btn { 
+                    background: rgba(255,255,255,0.05); 
+                    border: 1px solid rgba(255,255,255,0.1); 
+                    box-shadow: none;
+                }
+                .github-btn:hover { 
+                    background: #24292e; 
+                    border-color: #24292e;
+                    box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+                }
 
                 .pagination-dots { display: flex; gap: 8px; margin-top: 60px; align-items: center; }
                 .dot { width: 8px; height: 8px; border-radius: 50%; background: #e2e2e2; border: none; cursor: pointer; transition: 0.4s; padding: 0; }
@@ -299,7 +322,7 @@ const Projects = ({ addToRefs }: { addToRefs: (el: HTMLElement | null) => void }
                 }
 
                 @media (max-width: 480px) {
-                    .slider-container { height: 450px; perspective: none; }
+                    .slider-container { height: 550px; perspective: none; }
                     .project-slide { width: 100%; transition: opacity 0.4s ease; transform: none !important; position: static; opacity: 1; display: none; }
                     .project-slide.active { display: block; }
                     .project-title-gradient { font-size: 1.75rem; }

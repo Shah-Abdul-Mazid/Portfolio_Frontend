@@ -1068,7 +1068,7 @@ const AdminDashboard = () => {
                                         }}><Plus size={14} /> Add Tag</button>
                                     </div>
                                     <div className="flex-group" style={{ flexWrap: 'wrap' }}>
-                                        <div className="form-group" style={{ width: '33.33%' }}>
+                                        <div className="form-group" style={{ width: '25%' }}>
                                             <FileUploadInput 
                                                 label="Project Thumbnail" 
                                                 value={project.thumbnailUrl || ''} 
@@ -1076,15 +1076,24 @@ const AdminDashboard = () => {
                                                 onUpload={(url) => updateListItem('projects', i, 'thumbnailUrl', url)} 
                                             />
                                         </div>
-                                        <div className="form-group" style={{ width: '33.33%' }}>
+                                        <div className="form-group" style={{ width: '25%' }}>
                                             <FileUploadInput 
-                                                label="Project Link / Document" 
+                                                label="Project Link / App" 
                                                 value={project.projectUrl || ''} 
                                                 id={`project-link-${i}`}
                                                 onUpload={(url) => updateListItem('projects', i, 'projectUrl', url)} 
                                             />
                                         </div>
-                                        <div className="form-group" style={{ width: '33.33%' }}>
+                                        <div className="form-group" style={{ width: '25%' }}>
+                                            <FileUploadInput 
+                                                label="GitHub Repository" 
+                                                value={project.githubUrl || ''} 
+                                                id={`project-github-${i}`}
+                                                onUpload={(url) => updateListItem('projects', i, 'githubUrl', url)} 
+                                                placeholder="https://github.com/..."
+                                            />
+                                        </div>
+                                        <div className="form-group" style={{ width: '25%' }}>
                                             <FileUploadInput 
                                                 label="Project Certificate" 
                                                 value={project.certificateUrl || ''} 
@@ -1095,7 +1104,7 @@ const AdminDashboard = () => {
                                     </div>
                                 </div>
                             ))}
-                            <button className="add-btn" onClick={() => addListItem('projects', { title: '', desc: '', tags: [''], showcase: editData.projects.length + 1, projectUrl: '', certificateUrl: '', thumbnailUrl: '' })}>
+                            <button className="add-btn" onClick={() => addListItem('projects', { title: '', desc: '', tags: [''], showcase: editData.projects.length + 1, projectUrl: '', githubUrl: '', certificateUrl: '', thumbnailUrl: '' })}>
                                 <Plus size={16} /> Add Project
                             </button>
                         </div>

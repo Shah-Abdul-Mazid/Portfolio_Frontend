@@ -48,6 +48,7 @@ export interface ProjectItem {
     showcase: number;
     projectUrl?: string;
     certificateUrl?: string;
+    githubUrl?: string;
     thumbnailUrl?: string; // Newly added
 }
 
@@ -200,8 +201,8 @@ const defaultData: PortfolioData = {
         { title: 'Competitive Intelligence Workflow Automation', desc: 'Automated competitive intelligence workflow using n8n, Jungle Scout, and web scraping techniques.', tags: ['n8n', 'Jungle Scout', 'Scraping'], showcase: 2 },
         { title: 'VAID: Aerial Image Dataset', desc: 'An Aerial Image Dataset for Vehicle Detection research project targeting high-altitude surveillance.', tags: ['Aerial Imaging', 'Detection', 'Dataset'], showcase: 3 },
         { title: 'Library Management System', desc: 'A robust database project implemented with full CRUD operations and secure user authentication.', tags: ['SQL', 'Database'], showcase: 4 },
-        { title: 'Hate Speech Detection from Live Stream', desc: 'This project implements a real-time hate speech detection system for live audio streams using BERT, PyAudio, and TensorFlow.', tags: ['BERT', 'PyAudio', 'TensorFlow'], showcase: 5 },
-        { title: 'Mechanical Glove Mouse: Motion-Based Control', desc: 'Motion-controlled wireless glove mouse for human-computer interaction using ESP32-S3 and MPU6050 sensor.', tags: ['ESP32-S3', 'MPU6050', 'Arduino IDE'], showcase: 6 }
+        { title: 'Hate Speech Detection from Live Stream', desc: 'This project implements a real-time hate speech detection system for live audio streams using BERT, PyAudio, and TensorFlow.', tags: ['BERT', 'PyAudio', 'TensorFlow'], showcase: 5, githubUrl: '' },
+        { title: 'Mechanical Glove Mouse: Motion-Based Control', desc: 'Motion-controlled wireless glove mouse for human-computer interaction using ESP32-S3 and MPU6050 sensor.', tags: ['ESP32-S3', 'MPU6050', 'Arduino IDE'], showcase: 6, githubUrl: '' }
     ],
     papers: [
         { 
