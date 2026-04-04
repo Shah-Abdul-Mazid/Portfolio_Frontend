@@ -33,7 +33,7 @@ const Education = ({ addToRefs }: { addToRefs: (el: HTMLElement | null) => void 
                     {education.map((item, index) => (
                         <div key={index} className="unified-card fade-in" ref={addToRefs}>
                             <div className="card-header">
-                                <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+                                <div className="card-header-left">
                                     {item.logoUrl && (
                                         <div className="school-logo-wrap">
                                             <img src={resolveUrl(item.logoUrl)} alt={item.school} className="school-logo-img" />
@@ -97,14 +97,16 @@ const Education = ({ addToRefs }: { addToRefs: (el: HTMLElement | null) => void 
             )}
 
             <style>{`
-                .card-stack { max-width: 850px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+                .card-stack { max-width: 1000px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
                 .unified-card { background: var(--card-bg); border: 1px solid var(--border-color); padding: 24px; border-radius: 16px; transition: var(--transition); position: relative; }
                 .unified-card:hover { border-color: var(--primary); transform: translateY(-2px); }
 
                 .school-logo-wrap { width: 64px; height: 64px; border-radius: 14px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); background: #ffffff; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
                 .school-logo-img { width: 100%; height: 100%; object-fit: contain; padding: 2px; }
                 
-                .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; gap: 20px; }
+                .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; gap: 24px; }
+                .card-header-left { display: flex; gap: 20px; align-items: center; flex: 1; min-width: 0; }
+                .card-title-group { flex: 1; min-width: 0; }
                 .card-title { font-size: 1.2rem; color: #fff; margin: 0 0 4px 0; font-weight: 700; }
                 .card-subtitle { color: var(--primary); font-weight: 700; font-size: 0.95rem; margin: 0; }
                 
