@@ -272,25 +272,35 @@ const PortfolioContext = createContext<PortfolioContextType | undefined>(undefin
 
 const API_BASE = '/api';
 
-// Helper to resolve document URLs (strips localhost if present, ensuring it works in prod)
+// Helper to resolve document URLs (Supports Local, GridFS, and Cloudinary)
 export const resolveUrl = (url: string | undefined): string => {
     if (!url) return '';
-    // If it's already a full production URL or a relative path, keep it
-    if (url.startsWith('https://') || url.startsWith('http://') && !url.includes('localhost')) {
+
+    // 1. If it's already a full Cloudinary or generic HTTPS URL, return as is
+    if (url.startsWith('https://') || (url.startsWith('http://') && !url.includes('localhost'))) {
         return url;
     }
-    // If it's a localhost URL, convert to relative /uploads
-    if (url.includes('localhost:3001/uploads/')) {
-        return url.split('localhost:3001')[1];
+
+    // 2. Handle localhost URLs from old data
+    if (url.includes('localhost:3001/')) {
+        const path = url.split('localhost:3001')[1];
+        const isDev = window.location.hostname === 'localhost';
+        return isDev ? `http://localhost:3001${path}` : path;
     }
-    // For relative paths like /uploads/..., prefix with backend URL in development
-    // In production (Vercel), since it's proxied/served from same origin, /uploads/... works
+
+    // 3. Handle relative paths (e.g., /uploads/ or /api/upload/)
     const isDev = window.location.hostname === 'localhost';
-    if (url.startsWith('/uploads/') && isDev) {
-        return `http://localhost:3001${url}`;
+    const backendUrl = 'http://localhost:3001'; // Default dev backend
+    
+    if (url.startsWith('/') && isDev) {
+        // In dev, prefix relative paths with the backend URL
+        return `${backendUrl}${url}`;
     }
+
+    // 4. In production, relative paths work fine if proxied or on same origin
     return url;
 };
+
 
 const sanitizeData = (obj: any): any => {
     if (typeof obj !== 'object' || obj === null) {
@@ -353,12 +363,31 @@ export const PortfolioProvider: React.FC<{ children: ReactNode }> = ({ children 
         load();
     }, []);
 
-    const updateData = async (newData: PortfolioData) => {
-        setData(newData);
-        // Always save to localStorage as instant cache
-        localStorage.setItem('portfolio_data', JSON.stringify(newData));
+    useEffect(() => {
+        const syncTabs = (e: StorageEvent) => {
+            if (e.key === 'portfolio_data' && e.newValue) {
+                try {
+                    const parsed = JSON.parse(e.newValue);
+                    setData(parsed);
+                } catch (err) {
+                    console.error('Error syncing tab data:', err);
+                }
+            }
+        };
+        window.addEventListener('storage', syncTabs);
+        return () => window.removeEventListener('storage', syncTabs);
+    }, []);
+
+    const updateData = async (newData: PortfolioData): Promise<boolean> => {
+        const sanitized = sanitizeData(newData);
+        setData(sanitized);
+        
+        // Always save to localStorage as instant cache (triggers 'storage' event in other tabs)
+        localStorage.setItem('portfolio_data', JSON.stringify(sanitized));
+        
         // Save to backend DB for cross-device sync
         try {
+            console.log('📡 Syncing portfolio to MongoDB Atlas...');
             const token = localStorage.getItem('admin_token');
             const res = await fetch(`${API_BASE}/portfolio`, {
                 method: 'POST',
@@ -366,14 +395,24 @@ export const PortfolioProvider: React.FC<{ children: ReactNode }> = ({ children 
                     'Content-Type': 'application/json',
                     ...(token ? { Authorization: `Bearer ${token}` } : {})
                 },
-                body: JSON.stringify(newData)
+                body: JSON.stringify(sanitized)
             });
-            if (!res.ok) console.warn('Failed to save portfolio to DB:', await res.text());
-            else console.log('✅ Portfolio synced to MongoDB');
+            
+            if (res.ok) {
+                console.log('✅ Portfolio data saved to MongoDB');
+                return true;
+            } else {
+                const errText = await res.text();
+                console.warn('❌ Failed to save portfolio to DB:', errText);
+                return false;
+            }
         } catch (err) {
-            console.warn('Could not reach backend to save portfolio data:', err);
+            console.warn('⚠️ Could not reach backend to save portfolio data:', err);
+            return false;
         }
     };
+
+
 
     return (
         <PortfolioContext.Provider value={{ data, updateData }}>

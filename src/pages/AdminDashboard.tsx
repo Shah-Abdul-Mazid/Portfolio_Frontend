@@ -184,11 +184,17 @@ const AdminDashboard = () => {
         }
     };
 
-    const handleSave = () => {
-        updateData(editData);
-        setSaveStatus('Changes saved successfully!');
-        setTimeout(() => setSaveStatus(''), 3000);
+    const handleSave = async () => {
+        setSaveStatus('Saving to Database...');
+        const success = await updateData(editData);
+        if (success) {
+            setSaveStatus('✅ Changes synced to Database successfully!');
+        } else {
+            setSaveStatus('⚠️ Saved locally, but failed to sync to Database.');
+        }
+        setTimeout(() => setSaveStatus(''), 4000);
     };
+
 
     // ── Generic list helpers ──────────────────────────────────────────────────
     const updateListItem = (key: string, index: number, field: string, value: any) => {
