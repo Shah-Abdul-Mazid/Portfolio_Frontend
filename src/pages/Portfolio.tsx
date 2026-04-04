@@ -42,35 +42,55 @@ const Portfolio = () => {
     const scrollLock = useRef(false);
     const isFirstLoad = useRef(true); // Prevent observer navigation during initial load
 
-
-    // ── Pre-mount: Manual Scroll Restoration ──────────────────────────────
-    useEffect(() => {
-        if ('scrollRestoration' in window.history) {
-            window.history.scrollRestoration = 'manual';
-        }
-    }, []);
+    // ── Pre-mount: Disable browser scroll restoration immediately ─────────
+    // This must run as early as possible — before any effects — to prevent
+    // the browser from jumping to the previously saved scroll position on refresh.
+    if ('scrollRestoration' in window.history) {
+        window.history.scrollRestoration = 'manual';
+    }
 
     // ── Route change → scroll to matching section ─────────────────────────
     useEffect(() => {
         const raw = location.pathname.replace('/', '');
         const targetId = raw === '' ? 'hero' : raw;
+
+        // On first load at root, force instant scroll to top BEFORE anything else.
+        // This overrides any browser-restored scroll position immediately.
+        if (isFirstLoad.current && targetId === 'hero') {
+            window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+        }
+
         const el = document.getElementById(targetId);
         
         if (el) {
             scrollLock.current = true;
             
-            // If hitting home for the first time, force a hard scroll to top to avoid browser jumps
-            if (targetId === 'hero' && isFirstLoad.current) {
-                window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+            // Use instant scroll for the very first load so there's no visible jump
+            if (isFirstLoad.current) {
+                el.scrollIntoView({ behavior: 'instant' });
+            } else {
+                el.scrollIntoView({ behavior: 'smooth' });
             }
             
-            el.scrollIntoView({ behavior: 'smooth' });
-            
-            // Wait longer for smooth scroll to finish and layout to stabilize
+            // Keep scroll lock active long enough to cover layout + animation time
             setTimeout(() => { 
                 scrollLock.current = false;
                 isFirstLoad.current = false; 
-            }, 3000); 
+            }, 4000); 
+        } else {
+            // Element not yet in DOM (e.g. data still loading) — retry after a moment
+            const retryTimer = setTimeout(() => {
+                const retryEl = document.getElementById(targetId);
+                if (retryEl) {
+                    scrollLock.current = true;
+                    retryEl.scrollIntoView({ behavior: isFirstLoad.current ? 'instant' : 'smooth' });
+                    setTimeout(() => {
+                        scrollLock.current = false;
+                        isFirstLoad.current = false;
+                    }, 4000);
+                }
+            }, 500);
+            return () => clearTimeout(retryTimer);
         }
     }, [location.pathname]);
 
