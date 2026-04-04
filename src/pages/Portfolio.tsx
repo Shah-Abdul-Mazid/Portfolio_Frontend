@@ -23,8 +23,9 @@ const SECTION_ROUTES: Record<string, string> = {
     'hero':         '/',
     'about':        '/about',
     'education':    '/education',
-    'work':         '/work',
+    'experience':   '/experience',
     'achievements': '/achievements',
+
     'activities':   '/activities',
     'skills':       '/skills',
     'projects':     '/projects',
@@ -39,18 +40,41 @@ const Portfolio = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const scrollLock = useRef(false);
+    const isFirstLoad = useRef(true); // Prevent observer navigation during initial load
+
+
+    // ── Pre-mount: Manual Scroll Restoration ──────────────────────────────
+    useEffect(() => {
+        if ('scrollRestoration' in window.history) {
+            window.history.scrollRestoration = 'manual';
+        }
+    }, []);
 
     // ── Route change → scroll to matching section ─────────────────────────
     useEffect(() => {
         const raw = location.pathname.replace('/', '');
         const targetId = raw === '' ? 'hero' : raw;
         const el = document.getElementById(targetId);
+        
         if (el) {
             scrollLock.current = true;
+            
+            // If hitting home for the first time, force a hard scroll to top to avoid browser jumps
+            if (targetId === 'hero' && isFirstLoad.current) {
+                window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+            }
+            
             el.scrollIntoView({ behavior: 'smooth' });
-            setTimeout(() => { scrollLock.current = false; }, 1000);
+            
+            // Wait longer for smooth scroll to finish and layout to stabilize
+            setTimeout(() => { 
+                scrollLock.current = false;
+                isFirstLoad.current = false; 
+            }, 3000); 
         }
     }, [location.pathname]);
+
+
 
     // ── Scroll → update URL via IntersectionObserver ──────────────────────
     useEffect(() => {
@@ -62,7 +86,7 @@ const Portfolio = () => {
 
             const obs = new IntersectionObserver(
                 ([entry]) => {
-                    if (entry.isIntersecting && !scrollLock.current) {
+                    if (entry.isIntersecting && !scrollLock.current && !isFirstLoad.current) {
                         const newPath = SECTION_ROUTES[id];
                         if (window.location.pathname !== newPath) {
                             navigate(newPath, { replace: true });

@@ -119,7 +119,7 @@ const WorkExperience = ({ addToRefs }: { addToRefs: (el: HTMLElement | null) => 
     const [activeDoc, setActiveDoc] = useState<DocInfo | null>(null);
 
     return (
-        <section id="work" className="section alt-bg">
+        <section id="experience" className="section alt-bg">
             <div className="container">
                 <div className="section-title fade-in" ref={addToRefs}>
                     <span className="subtitle">{data.sections?.work?.subtitle || 'Career Journey'}</span>

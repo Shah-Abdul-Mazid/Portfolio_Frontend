@@ -1,5 +1,7 @@
 import { usePortfolio } from '../context/PortfolioContext';
+import { Link } from 'react-router-dom';
 import avtarImg from '../assets/avtar.png';
+
 
 const Hero = ({ addToRefs }: { addToRefs: (el: HTMLElement | null) => void }) => {
     const { data } = usePortfolio();
@@ -25,9 +27,10 @@ const Hero = ({ addToRefs }: { addToRefs: (el: HTMLElement | null) => void }) =>
                         {data.hero.description}
                     </p>
                     <div className="hero-btns fade-in" ref={addToRefs}>
-                        <a href="#projects" className="btn btn-primary btn-gradient">View My Work</a>
-                        <a href="#contact" className="btn btn-secondary btn-outline">Get In Touch</a>
+                        <Link to="/projects" className="btn btn-primary btn-gradient">View My Work</Link>
+                        <Link to="/contact" className="btn btn-secondary btn-outline">Get In Touch</Link>
                     </div>
+
                 </div>
             </div>
             <style>{`

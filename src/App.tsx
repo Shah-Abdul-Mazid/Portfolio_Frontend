@@ -25,7 +25,7 @@ function App() {
                         } />
                         <Route path="/about" element={<Portfolio />} />
                         <Route path="/education" element={<Portfolio />} />
-                        <Route path="/work" element={<Portfolio />} />
+                        <Route path="/experience" element={<Portfolio />} />
                         <Route path="/achievements" element={<Portfolio />} />
                         <Route path="/activities" element={<Portfolio />} />
                         <Route path="/skills" element={<Portfolio />} />
