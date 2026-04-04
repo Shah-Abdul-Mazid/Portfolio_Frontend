@@ -39,19 +39,35 @@ const Hero = ({ addToRefs }: { addToRefs: (el: HTMLElement | null) => void }) =>
                     <h1 className="fade-in" ref={addToRefs} style={{ fontSize: 'clamp(3rem, 10vw, 6rem)', fontWeight: 900, margin: '16px 0' }}>
                         Hi, I'm <span className="gradient-text">{data.hero.name}</span>
                     </h1>
-                    <p className="fade-in" ref={addToRefs} style={{ fontSize: '1.5rem', color: 'var(--text-secondary)', maxWidth: '800px', margin: '0 auto 10px', lineHeight: 1.6, minHeight: '38px', display: 'flex', justifyContent: 'center' }}>
+                    <p className="fade-in" ref={addToRefs} style={{ fontSize: '1.5rem', color: 'var(--text-secondary)', maxWidth: '800px', margin: '0 auto 10px', lineHeight: 1.6, minHeight: '38px', display: 'flex', justifyContent: 'center', overflow: 'hidden' }}>
                         <span style={{ display: 'inline-flex', alignItems: 'center' }}>
                             {(() => {
                                 const text = roles[roleIndex] || '';
-                                const middle = Math.ceil(text.length / 2);
-                                const leftPart = text.slice(0, middle);
-                                const rightPart = text.slice(middle);
-                                return (
-                                    <>
-                                        <span className={`split-half left-half ${fade ? 'in' : 'out'}`} style={{ whiteSpace: 'pre' }}>{leftPart}</span>
-                                        <span className={`split-half right-half ${fade ? 'in' : 'out'}`} style={{ whiteSpace: 'pre' }}>{rightPart}</span>
-                                    </>
-                                );
+                                return text.split('').map((char, index) => {
+                                    const len = text.length;
+                                    const center = (len - 1) / 2;
+                                    const dist = Math.abs(index - center);
+                                    const maxDist = center;
+                                    
+                                    // Fading IN: center appears first, expands outwards
+                                    const inDelay = dist * 0.04;
+                                    // Fading OUT: edges vanish first, ends at the middle
+                                    const outDelay = (maxDist - dist) * 0.04;
+                                    const delay = fade ? inDelay : outDelay;
+
+                                    return (
+                                        <span 
+                                            key={`${roleIndex}-${index}`}
+                                            className={`edge-fade ${fade ? 'in' : 'out'}`}
+                                            style={{ 
+                                                animationDelay: `${delay}s`,
+                                                whiteSpace: 'pre'
+                                            }}
+                                        >
+                                            {char === ' ' ? ' ' : char}
+                                        </span>
+                                    );
+                                });
                             })()}
                         </span>
                     </p>
@@ -90,40 +106,26 @@ const Hero = ({ addToRefs }: { addToRefs: (el: HTMLElement | null) => void }) =>
                     opacity: 1;
                 }
                 
-                .split-half {
+                .edge-fade {
                     display: inline-block;
                     opacity: 0;
                 }
                 
-                .left-half.in {
-                    animation: splitLeftIn 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+                .edge-fade.in {
+                    animation: edgeFadeIn 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
                 }
-                .right-half.in {
-                    animation: splitRightIn 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-                }
-                
-                .left-half.out {
-                    animation: splitLeftOut 0.4s cubic-bezier(0.8, 0.2, 1, 0.8) forwards;
-                }
-                .right-half.out {
-                    animation: splitRightOut 0.4s cubic-bezier(0.8, 0.2, 1, 0.8) forwards;
+                .edge-fade.out {
+                    animation: edgeFadeOut 0.6s cubic-bezier(0.8, 0.2, 1, 0.8) forwards;
                 }
 
-                @keyframes splitLeftIn {
-                    0% { opacity: 0; transform: translateX(-40px); filter: blur(4px); }
-                    100% { opacity: 1; transform: translateX(0); filter: blur(0px); }
+                @keyframes edgeFadeIn {
+                    0% { opacity: 0; filter: blur(6px); transform: scale(0.95); letter-spacing: -2px; }
+                    100% { opacity: 1; filter: blur(0px); transform: scale(1); letter-spacing: 0px; }
                 }
-                @keyframes splitRightIn {
-                    0% { opacity: 0; transform: translateX(40px); filter: blur(4px); }
-                    100% { opacity: 1; transform: translateX(0); filter: blur(0px); }
-                }
-                @keyframes splitLeftOut {
-                    0% { opacity: 1; transform: translateX(0); filter: blur(0px); }
-                    100% { opacity: 0; transform: translateX(-40px); filter: blur(4px); }
-                }
-                @keyframes splitRightOut {
-                    0% { opacity: 1; transform: translateX(0); filter: blur(0px); }
-                    100% { opacity: 0; transform: translateX(40px); filter: blur(4px); }
+
+                @keyframes edgeFadeOut {
+                    0% { opacity: 1; filter: blur(0px); transform: scale(1); letter-spacing: 0px; }
+                    100% { opacity: 0; filter: blur(10px); transform: scale(0.9); letter-spacing: 2px; }
                 }
 
                 .btn-gradient { background: var(--gradient); color: white; border: none; padding: 14px 32px; font-size: 1rem; }
