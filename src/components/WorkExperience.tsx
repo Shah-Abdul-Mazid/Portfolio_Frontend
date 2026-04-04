@@ -559,9 +559,16 @@ const WorkExperience = ({ addToRefs }: { addToRefs: (el: HTMLElement | null) => 
                         return (
                             <div key={index} className="unified-card fade-in" ref={addToRefs}>
                                 <div className="card-header">
-                                    <div className="card-title-group">
-                                        <h3 className="card-title">{job.role}</h3>
-                                        <p className="card-subtitle">{job.company}</p>
+                                    <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+                                        {job.logoUrl && (
+                                            <div className="company-logo-wrap">
+                                                <img src={resolveUrl(job.logoUrl)} alt={job.company} className="company-logo-img" />
+                                            </div>
+                                        )}
+                                        <div className="card-title-group">
+                                            <h3 className="card-title">{job.role}</h3>
+                                            <p className="card-subtitle">{job.company}</p>
+                                        </div>
                                     </div>
                                     <div className="card-meta">
                                         <span className="card-period">
@@ -606,6 +613,9 @@ const WorkExperience = ({ addToRefs }: { addToRefs: (el: HTMLElement | null) => 
                 .card-stack { max-width: 850px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
                 .unified-card { background: var(--card-bg); border: 1px solid var(--border-color); padding: 24px; border-radius: 16px; transition: var(--transition); }
                 .unified-card:hover { border-color: var(--primary); transform: translateY(-2px); }
+
+                .company-logo-wrap { width: 48px; height: 48px; border-radius: 10px; overflow: hidden; border: 1px solid var(--border-color); background: rgba(255,255,255,0.03); flex-shrink: 0; }
+                .company-logo-img { width: 100%; height: 100%; object-fit: contain; padding: 4px; }
 
                 .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; gap: 20px; }
                 .card-title { font-size: 1.2rem; color: #fff; margin: 0 0 4px 0; font-weight: 700; }

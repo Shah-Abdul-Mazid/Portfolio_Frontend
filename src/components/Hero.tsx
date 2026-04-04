@@ -1,4 +1,4 @@
-import { usePortfolio } from '../context/PortfolioContext';
+import { usePortfolio, resolveUrl } from '../context/PortfolioContext';
 import { Link } from 'react-router-dom';
 import avtarImg from '../assets/avtar.png';
 
@@ -11,7 +11,7 @@ const Hero = ({ addToRefs }: { addToRefs: (el: HTMLElement | null) => void }) =>
             <div className="container">
                 <div className="hero-image fade-in" ref={addToRefs} style={{ marginBottom: '32px' }}>
                     <div className="image-wrapper">
-                        <img src={avtarImg} alt="Shah Abdul Mazid" />
+                        <img src={data.hero.avatarUrl ? resolveUrl(data.hero.avatarUrl) : avtarImg} alt={data.hero.name} />
                     </div>
                 </div>
                 

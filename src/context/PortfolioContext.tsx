@@ -10,9 +10,10 @@ export interface EducationItem {
     school: string;
     year: string;
     major: string;
-    attachmentUrl?: string; // Newly added
-    attachmentLabel?: string; // Newly added
-    certificateUrl?: string; // Add certificate support for consistency if desired
+    attachmentUrl?: string;
+    attachmentLabel?: string;
+    certificateUrl?: string;
+    logoUrl?: string; // Newly added
 }
 
 export interface ExperienceItem {
@@ -23,6 +24,7 @@ export interface ExperienceItem {
     attachmentUrl?: string;
     attachmentLabel?: string;
     certificateUrl?: string;
+    logoUrl?: string; // Newly added
 }
 
 export interface WorkItem {
@@ -36,6 +38,7 @@ export interface WorkItem {
     certificateUrl?: string;
     appointmentLetterUrl?: string;
     experienceLetterUrl?: string;
+    logoUrl?: string; // Newly added
 }
 
 export interface ProjectItem {
@@ -43,6 +46,9 @@ export interface ProjectItem {
     desc: string;
     tags: string[];
     showcase: number;
+    projectUrl?: string;
+    certificateUrl?: string;
+    thumbnailUrl?: string; // Newly added
 }
 
 export interface PaperItem {
@@ -61,6 +67,8 @@ export interface ActivityItem {
     organization: string;
     period: string;
     desc: string;
+    certificateUrl?: string; // Newly added
+    attachmentUrl?: string; // Newly added
 }
 
 export interface ReferenceItem {
@@ -104,6 +112,7 @@ export interface PortfolioData {
         name: string;
         title: string;
         description: string;
+        avatarUrl?: string; // Newly added
     };
     about: {
         bio: string;

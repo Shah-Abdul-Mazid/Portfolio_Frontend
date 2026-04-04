@@ -695,6 +695,14 @@ const AdminDashboard = () => {
                                     <input type="text" value={editData.hero.description}
                                         onChange={e => handleHeroChange('description', e.target.value)} />
                                 </div>
+                                <div className="form-group">
+                                    <FileUploadInput 
+                                        label="Profile Avatar / Photo" 
+                                        value={editData.hero.avatarUrl || ''} 
+                                        id="hero-avatar"
+                                        onUpload={(url) => handleHeroChange('avatarUrl', url)} 
+                                    />
+                                </div>
                             </div>
 
                             <div className="form-section">
@@ -739,10 +747,10 @@ const AdminDashboard = () => {
                                     <div className="flex-group">
                                         <div className="form-group w-50">
                                             <FileUploadInput 
-                                                label="Certificate (Image/PDF)" 
-                                                value={item.certificateUrl || ''} 
-                                                id={`edu-cert-${i}`}
-                                                onUpload={(url) => updateListItem('education', i, 'certificateUrl', url)} 
+                                                label="School / Institution Logo" 
+                                                value={item.logoUrl || ''} 
+                                                id={`edu-logo-${i}`}
+                                                onUpload={(url) => updateListItem('education', i, 'logoUrl', url)} 
                                             />
                                         </div>
                                         <div className="form-group w-50">
@@ -754,9 +762,17 @@ const AdminDashboard = () => {
                                             />
                                         </div>
                                     </div>
+                                    <div className="form-group">
+                                        <FileUploadInput 
+                                            label="Certificate (Image/PDF)" 
+                                            value={item.certificateUrl || ''} 
+                                            id={`edu-cert-${i}`}
+                                            onUpload={(url) => updateListItem('education', i, 'certificateUrl', url)} 
+                                        />
+                                    </div>
                                 </div>
                             ))}
-                            <button className="add-btn" onClick={() => addListItem('education', { degree: '', school: '', year: '', major: '', certificateUrl: '', attachmentUrl: '' })}>
+                            <button className="add-btn" onClick={() => addListItem('education', { degree: '', school: '', year: '', major: '', certificateUrl: '', attachmentUrl: '', logoUrl: '' })}>
                                 <Plus size={16} /> Add Education
                             </button>
                         </div>
@@ -812,24 +828,32 @@ const AdminDashboard = () => {
                                     <div className="flex-group">
                                         <div className="form-group w-50">
                                             <FileUploadInput 
+                                                label="Company Logo" 
+                                                value={job.logoUrl || ''} 
+                                                id={`work-logo-${i}`}
+                                                onUpload={(url) => updateListItem('work', i, 'logoUrl', url)} 
+                                            />
+                                        </div>
+                                        <div className="form-group w-50">
+                                            <FileUploadInput 
                                                 label="Appointment Letter" 
                                                 value={job.appointmentLetterUrl || ''} 
                                                 id={`work-appoint-${i}`}
                                                 onUpload={(url) => updateListItem('work', i, 'appointmentLetterUrl', url)} 
                                             />
                                         </div>
-                                        <div className="form-group w-50">
-                                            <FileUploadInput 
-                                                label="Experience Letter" 
-                                                value={job.experienceLetterUrl || ''} 
-                                                id={`work-exp-${i}`}
-                                                onUpload={(url) => updateListItem('work', i, 'experienceLetterUrl', url)} 
-                                            />
-                                        </div>
+                                    </div>
+                                    <div className="form-group">
+                                        <FileUploadInput 
+                                            label="Experience Letter" 
+                                            value={job.experienceLetterUrl || ''} 
+                                            id={`work-exp-${i}`}
+                                            onUpload={(url) => updateListItem('work', i, 'experienceLetterUrl', url)} 
+                                        />
                                     </div>
                                 </div>
                             ))}
-                            <button className="add-btn" onClick={() => addListItem('work', { role: '', company: '', startDate: '', endDate: '', details: [''], appointmentLetterUrl: '', experienceLetterUrl: '' })}>
+                            <button className="add-btn" onClick={() => addListItem('work', { role: '', company: '', startDate: '', endDate: '', details: [''], appointmentLetterUrl: '', experienceLetterUrl: '', logoUrl: '' })}>
                                 <Plus size={16} /> Add Position
                             </button>
                         </div>
@@ -870,24 +894,32 @@ const AdminDashboard = () => {
                                     <div className="flex-group">
                                         <div className="form-group w-50">
                                             <FileUploadInput 
+                                                label="Achievement Logo" 
+                                                value={item.logoUrl || ''} 
+                                                id={`exp-logo-${i}`}
+                                                onUpload={(url) => updateListItem('experience', i, 'logoUrl', url)} 
+                                            />
+                                        </div>
+                                        <div className="form-group w-50">
+                                            <FileUploadInput 
                                                 label="Achievement Certificate" 
                                                 value={item.certificateUrl || ''} 
                                                 id={`exp-cert-${i}`}
                                                 onUpload={(url) => updateListItem('experience', i, 'certificateUrl', url)} 
                                             />
                                         </div>
-                                        <div className="form-group w-50">
-                                            <FileUploadInput 
-                                                label="Proof Document" 
-                                                value={item.attachmentUrl || ''} 
-                                                id={`exp-attach-${i}`}
-                                                onUpload={(url) => updateListItem('experience', i, 'attachmentUrl', url)} 
-                                            />
-                                        </div>
+                                    </div>
+                                    <div className="form-group">
+                                        <FileUploadInput 
+                                            label="Proof Document" 
+                                            value={item.attachmentUrl || ''} 
+                                            id={`exp-attach-${i}`}
+                                            onUpload={(url) => updateListItem('experience', i, 'attachmentUrl', url)} 
+                                        />
                                     </div>
                                 </div>
                             ))}
-                            <button className="add-btn" onClick={() => addListItem('experience', { role: '', company: '', period: '', desc: '', certificateUrl: '', attachmentUrl: '' })}>
+                            <button className="add-btn" onClick={() => addListItem('experience', { role: '', company: '', period: '', desc: '', certificateUrl: '', attachmentUrl: '', logoUrl: '' })}>
                                 <Plus size={16} /> Add Achievement
                             </button>
                         </div>
@@ -1035,9 +1067,35 @@ const AdminDashboard = () => {
                                             });
                                         }}><Plus size={14} /> Add Tag</button>
                                     </div>
+                                    <div className="flex-group" style={{ flexWrap: 'wrap' }}>
+                                        <div className="form-group" style={{ width: '33.33%' }}>
+                                            <FileUploadInput 
+                                                label="Project Thumbnail" 
+                                                value={project.thumbnailUrl || ''} 
+                                                id={`project-thumb-${i}`}
+                                                onUpload={(url) => updateListItem('projects', i, 'thumbnailUrl', url)} 
+                                            />
+                                        </div>
+                                        <div className="form-group" style={{ width: '33.33%' }}>
+                                            <FileUploadInput 
+                                                label="Project Link / Document" 
+                                                value={project.projectUrl || ''} 
+                                                id={`project-link-${i}`}
+                                                onUpload={(url) => updateListItem('projects', i, 'projectUrl', url)} 
+                                            />
+                                        </div>
+                                        <div className="form-group" style={{ width: '33.33%' }}>
+                                            <FileUploadInput 
+                                                label="Project Certificate" 
+                                                value={project.certificateUrl || ''} 
+                                                id={`project-cert-${i}`}
+                                                onUpload={(url) => updateListItem('projects', i, 'certificateUrl', url)} 
+                                            />
+                                        </div>
+                                    </div>
                                 </div>
                             ))}
-                            <button className="add-btn" onClick={() => addListItem('projects', { title: '', desc: '', tags: [''], showcase: editData.projects.length + 1 })}>
+                            <button className="add-btn" onClick={() => addListItem('projects', { title: '', desc: '', tags: [''], showcase: editData.projects.length + 1, projectUrl: '', certificateUrl: '', thumbnailUrl: '' })}>
                                 <Plus size={16} /> Add Project
                             </button>
                         </div>
@@ -1149,9 +1207,27 @@ const AdminDashboard = () => {
                                         <label>Description</label>
                                         <textarea rows={3} value={activity.desc} onChange={e => updateListItem('activities', i, 'desc', e.target.value)} />
                                     </div>
+                                    <div className="flex-group">
+                                        <div className="form-group w-50">
+                                            <FileUploadInput 
+                                                label="Activity Certificate" 
+                                                value={activity.certificateUrl || ''} 
+                                                id={`act-cert-${i}`}
+                                                onUpload={(url) => updateListItem('activities', i, 'certificateUrl', url)} 
+                                            />
+                                        </div>
+                                        <div className="form-group w-50">
+                                            <FileUploadInput 
+                                                label="Proof Document" 
+                                                value={activity.attachmentUrl || ''} 
+                                                id={`act-attach-${i}`}
+                                                onUpload={(url) => updateListItem('activities', i, 'attachmentUrl', url)} 
+                                            />
+                                        </div>
+                                    </div>
                                 </div>
                             ))}
-                            <button className="add-btn" onClick={() => addListItem('activities', { role: '', organization: '', period: '', desc: '' })}>
+                            <button className="add-btn" onClick={() => addListItem('activities', { role: '', organization: '', period: '', desc: '', certificateUrl: '', attachmentUrl: '' })}>
                                 <Plus size={16} /> Add Activity
                             </button>
                         </div>

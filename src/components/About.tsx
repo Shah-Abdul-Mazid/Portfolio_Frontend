@@ -1,4 +1,4 @@
-import { usePortfolio } from '../context/PortfolioContext';
+import { usePortfolio, resolveUrl } from '../context/PortfolioContext';
 import avtarImg from '../assets/avtar.png';
 
 const About = ({ addToRefs }: { addToRefs: (el: HTMLElement | null) => void }) => {
@@ -20,7 +20,7 @@ const About = ({ addToRefs }: { addToRefs: (el: HTMLElement | null) => void }) =
 
                 <div className="about-grid fade-in" ref={addToRefs}>
                     <div className="about-image">
-                        <img src={avtarImg} alt="Shah Abdul Mazid" className="img-card" />
+                        <img src={data.hero.avatarUrl ? resolveUrl(data.hero.avatarUrl) : avtarImg} alt={data.hero.name} className="img-card" />
                     </div>
 
                     <div className="about-text">

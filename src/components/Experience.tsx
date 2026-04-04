@@ -26,9 +26,16 @@ const Experience = ({ addToRefs }: { addToRefs: (el: HTMLElement | null) => void
                     {competitions.map((items, index) => (
                         <div key={index} className="unified-card fade-in" ref={addToRefs}>
                             <div className="card-header">
-                                <div className="card-title-group">
-                                    <h3 className="card-title">{items.role}</h3>
-                                    <p className="card-subtitle">{items.company}</p>
+                                <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+                                    {items.logoUrl && (
+                                        <div className="achievement-logo-wrap">
+                                            <img src={resolveUrl(items.logoUrl)} alt={items.company} className="achievement-logo-img" />
+                                        </div>
+                                    )}
+                                    <div className="card-title-group">
+                                        <h3 className="card-title">{items.role}</h3>
+                                        <p className="card-subtitle">{items.company}</p>
+                                    </div>
                                 </div>
                                 <div className="card-meta">
                                     <span className="card-period">{items.period}</span>
@@ -83,6 +90,9 @@ const Experience = ({ addToRefs }: { addToRefs: (el: HTMLElement | null) => void
                 .card-stack { max-width: 850px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
                 .unified-card { background: var(--card-bg); border: 1px solid var(--border-color); padding: 24px; border-radius: 16px; transition: var(--transition); position: relative; }
                 .unified-card:hover { border-color: var(--primary); transform: translateY(-2px); }
+
+                .achievement-logo-wrap { width: 36px; height: 36px; border-radius: 8px; overflow: hidden; border: 1px solid var(--border-color); background: rgba(255,255,255,0.03); flex-shrink: 0; }
+                .achievement-logo-img { width: 100%; height: 100%; object-fit: contain; padding: 3px; }
                 
                 .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; gap: 20px; }
                 .card-title { font-size: 1.2rem; color: #fff; margin: 0 0 4px 0; font-weight: 700; }
