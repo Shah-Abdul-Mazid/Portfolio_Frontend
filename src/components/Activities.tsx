@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { usePortfolio, resolveUrl } from '../context/PortfolioContext';
-import { ExternalLink, FileText, Link as LinkIcon, Search } from 'lucide-react';
+import { FileText, Link as LinkIcon, Search } from 'lucide-react';
 
 const Activities = ({ addToRefs }: { addToRefs: (el: HTMLElement | null) => void }) => {
     const { data } = usePortfolio();
