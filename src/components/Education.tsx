@@ -2,13 +2,13 @@ import { useState } from 'react';
 import type { MouseEvent } from 'react';
 import { usePortfolio, resolveUrl } from '../context/PortfolioContext';
 import { FileText, ExternalLink, Link as LinkIcon } from 'lucide-react';
+import { isImageUrl, isPdfUrl, getPdfViewerUrl } from '../utils/filePreview';
 
 const Education = ({ addToRefs }: { addToRefs: (el: HTMLElement | null) => void }) => {
     const { data } = usePortfolio();
     const education = data.education;
     const [selectedFile, setSelectedFile] = useState<string | null>(null);
 
-    const isImage = (url: string) => /\.(jpg|jpeg|png|webp|avif|gif)$/i.test(url);
 
     const closeModal = (e: MouseEvent<HTMLDivElement>) => {
         if (e.target === e.currentTarget) {
@@ -64,7 +64,7 @@ const Education = ({ addToRefs }: { addToRefs: (el: HTMLElement | null) => void 
                                 {item.certificateUrl && (
                                     <div className="card-previews">
                                         <div className="mini-thumbnail" onClick={() => setSelectedFile(resolveUrl(item.certificateUrl))}>
-                                            {isImage(item.certificateUrl) ? (
+                                            {isImageUrl(item.certificateUrl) ? (
                                                 <img src={resolveUrl(item.certificateUrl)} alt="Certificate" />
                                             ) : (
                                                 <div className="mini-pdf-tag"><FileText size={16} /></div>
@@ -83,8 +83,12 @@ const Education = ({ addToRefs }: { addToRefs: (el: HTMLElement | null) => void 
                 <div className="image-modal-overlay" onClick={closeModal}>
                     <div className="image-modal-content">
                         <button className="close-modal-btn" onClick={() => setSelectedFile(null)}>✖</button>
-                        {selectedFile.toLowerCase().endsWith('.pdf') ? (
-                            <iframe src={selectedFile} className="pdf-viewer" title="Document Viewer" />
+                        {isPdfUrl(selectedFile) ? (
+                            <iframe 
+                                src={getPdfViewerUrl(selectedFile)} 
+                                className="pdf-viewer" 
+                                title="Document Viewer" 
+                            />
                         ) : (
                             <img src={selectedFile} alt="Fullscreen View" className="fullscreen-image" />
                         )}
