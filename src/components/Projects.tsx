@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { usePortfolio, resolveUrl } from '../context/PortfolioContext';
 import { ExternalLink, Search } from 'lucide-react';
+import { isPdfUrl, getPdfViewerUrl } from '../utils/filePreview';
 
 const Projects = ({ addToRefs }: { addToRefs: (el: HTMLElement | null) => void }) => {
     const { data } = usePortfolio();
@@ -116,8 +117,12 @@ const Projects = ({ addToRefs }: { addToRefs: (el: HTMLElement | null) => void }
                 <div className="image-modal-overlay" onClick={() => setSelectedFile(null)}>
                     <div className="image-modal-content" onClick={(e) => e.stopPropagation()}>
                         <button className="close-modal-btn" onClick={() => setSelectedFile(null)}>✖</button>
-                        {selectedFile.toLowerCase().endsWith('.pdf') ? (
-                            <iframe src={selectedFile} className="pdf-viewer" title="Document Viewer" />
+                        {isPdfUrl(selectedFile) ? (
+                            <iframe 
+                                src={getPdfViewerUrl(selectedFile)} 
+                                className="pdf-viewer" 
+                                title="Document Viewer" 
+                            />
                         ) : (
                             <img src={selectedFile} alt="Full View" className="fullscreen-image" />
                         )}
