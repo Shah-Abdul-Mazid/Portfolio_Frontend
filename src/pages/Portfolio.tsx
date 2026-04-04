@@ -49,48 +49,42 @@ const Portfolio = () => {
         window.history.scrollRestoration = 'manual';
     }
 
-    // ── Route change → scroll to matching section ─────────────────────────
+    // ── On page refresh/first load: ALWAYS go back to top (hero section) ────
+    // This runs once on mount. If the user refreshes while on /achievements,
+    // we redirect them to '/' so the page always starts from the top.
     useEffect(() => {
-        const raw = location.pathname.replace('/', '');
-        const targetId = raw === '' ? 'hero' : raw;
+        // Immediately snap to top to override any browser scroll restoration
+        window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
 
-        // On first load at root, force instant scroll to top BEFORE anything else.
-        // This overrides any browser-restored scroll position immediately.
-        if (isFirstLoad.current && targetId === 'hero') {
-            window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+        // If the URL is not root on first load, redirect to root
+        if (location.pathname !== '/') {
+            navigate('/', { replace: true });
         }
 
+        // Release the first-load guard after layout has settled
+        const timer = setTimeout(() => {
+            isFirstLoad.current = false;
+        }, 1500);
+        return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []); // ← empty deps = runs ONCE on mount only
+
+    // ── Route change → scroll to matching section ─────────────────────────
+    // (Only runs AFTER first load, when the user clicks a nav link)
+    useEffect(() => {
+        // Skip during first load — the mount effect above handles it
+        if (isFirstLoad.current) return;
+
+        const raw = location.pathname.replace('/', '');
+        const targetId = raw === '' ? 'hero' : raw;
         const el = document.getElementById(targetId);
-        
+
         if (el) {
             scrollLock.current = true;
-            
-            // Use instant scroll for the very first load so there's no visible jump
-            if (isFirstLoad.current) {
-                el.scrollIntoView({ behavior: 'instant' });
-            } else {
-                el.scrollIntoView({ behavior: 'smooth' });
-            }
-            
-            // Keep scroll lock active long enough to cover layout + animation time
-            setTimeout(() => { 
+            el.scrollIntoView({ behavior: 'smooth' });
+            setTimeout(() => {
                 scrollLock.current = false;
-                isFirstLoad.current = false; 
-            }, 4000); 
-        } else {
-            // Element not yet in DOM (e.g. data still loading) — retry after a moment
-            const retryTimer = setTimeout(() => {
-                const retryEl = document.getElementById(targetId);
-                if (retryEl) {
-                    scrollLock.current = true;
-                    retryEl.scrollIntoView({ behavior: isFirstLoad.current ? 'instant' : 'smooth' });
-                    setTimeout(() => {
-                        scrollLock.current = false;
-                        isFirstLoad.current = false;
-                    }, 4000);
-                }
-            }, 500);
-            return () => clearTimeout(retryTimer);
+            }, 1200);
         }
     }, [location.pathname]);
 
