@@ -9,6 +9,7 @@ const AdminDashboard = () => {
     const { data, updateData } = usePortfolio();
     const [editData, setEditData] = useState(data);
     const [saveStatus, setSaveStatus] = useState('');
+    const [health, setHealth] = useState({ database: 'Checking...', cloudinary: 'Checking...' });
     const [activeTab, setActiveTab] = useState('overview');
     
     const [stats, setStats] = useState({ views: 0, messages: 0, admins: 0 });
@@ -67,21 +68,28 @@ const AdminDashboard = () => {
             const token = localStorage.getItem('admin_token');
             const headers: HeadersInit = token ? { 'Authorization': `Bearer ${token}` } : {};
 
-            const viewsRes = await fetch('/api/analytics');
+            const viewsRes = await fetch('/api/analytics/count');
             const viewsData = await viewsRes.json();
             
             const msgsRes = await fetch('/api/messages');
             const msgsData = await msgsRes.json();
 
-            // MOCK TEST DATA for verification
-            const mockMessage = { id: 'test-123', name: 'Test User', email: 'ezanshah58@gmail.com', query: 'Verification test for Reply & Clear', created_at: new Date().toISOString() };
-            const combinedMessages = Array.isArray(msgsData) ? [mockMessage, ...msgsData] : [mockMessage];
+            // Support both standard and mock message results
+            const combinedMessages = Array.isArray(msgsData) ? msgsData : [];
 
             let adminsData = [];
             if (token) {
                 const adminsRes = await fetch('/api/admin/list', { headers });
                 const json = await adminsRes.json();
                 if (json.success) adminsData = json.data;
+            }
+
+            try {
+                const healthRes = await fetch('/api/v1/health');
+                const healthData = await healthRes.json();
+                setHealth(healthData);
+            } catch (err) {
+                setHealth({ database: 'Error', cloudinary: 'Error' });
             }
 
             setStats({ 
@@ -93,8 +101,6 @@ const AdminDashboard = () => {
             setAdminsList(adminsData);
         } catch (e){
             console.error(e);
-            // Even on error, show the mock message for local testing
-            setMessages([{ id: 'test-123', name: 'Test User', email: 'ezanshah58@gmail.com', query: 'Verification test for Reply & Clear', created_at: new Date().toISOString() }]);
         } finally {
             setLoading(false);
         }
@@ -184,37 +190,57 @@ const AdminDashboard = () => {
         }
     };
 
+    const handleHeroChange = (field: string, value: string) => {
+        setEditData(prev => ({
+            ...prev,
+            hero: { ...prev.hero, [field]: value }
+        }));
+    };
+
+    const handleAboutChange = (field: string, value: string) => {
+        setEditData(prev => ({
+            ...prev,
+            about: { ...prev.about, [field]: value }
+        }));
+    };
+
+    const updateListItem = (collection: string, index: number, field: string, value: any) => {
+        setEditData(prev => {
+            const list = [...(prev as any)[collection]];
+            list[index] = { ...list[index], [field]: value };
+            return { ...prev, [collection]: list };
+        });
+    };
+
+    const removeListItem = (collection: string, index: number) => {
+        if (!window.confirm(`Delete this ${collection} item?`)) return;
+        setEditData(prev => {
+            const list = [...(prev as any)[collection]];
+            list.splice(index, 1);
+            return { ...prev, [collection]: list };
+        });
+    };
+
+    const addListItem = (collection: string, defaultItem: any) => {
+        setEditData(prev => ({
+            ...prev,
+            [collection]: [...(prev as any)[collection], defaultItem]
+        }));
+    };
+
     const handleSave = async () => {
         setSaveStatus('Saving to Database...');
-        const success = await updateData(editData);
-        if (success) {
-            setSaveStatus('✅ Changes synced to Database successfully!');
-        } else {
-            setSaveStatus('⚠️ Saved locally, but failed to sync to Database.');
+        try {
+            const success = await updateData(editData);
+            if (success) {
+                setSaveStatus('✅ Changes synced to Database successfully!');
+                setTimeout(() => setSaveStatus(''), 3000);
+            } else {
+                setSaveStatus('⚠️ Saved locally, but failed to sync to Database.');
+            }
+        } catch (err) {
+            setSaveStatus('❌ Error during save. Check backend.');
         }
-        setTimeout(() => setSaveStatus(''), 4000);
-    };
-
-
-    // ── Generic list helpers ──────────────────────────────────────────────────
-    const updateListItem = (key: string, index: number, field: string, value: any) => {
-        setEditData(prev => {
-            const list = [...(prev as any)[key]];
-            list[index] = { ...list[index], [field]: value };
-            return { ...prev, [key]: list };
-        });
-    };
-
-    const removeListItem = (key: string, index: number) => {
-        setEditData(prev => {
-            const list = [...(prev as any)[key]];
-            list.splice(index, 1);
-            return { ...prev, [key]: list };
-        });
-    };
-
-    const addListItem = (key: string, template: any) => {
-        setEditData(prev => ({ ...prev, [key]: [...(prev as any)[key], template] }));
     };
 
     // ── Work detail helpers ───────────────────────────────────────────────────
@@ -452,7 +478,13 @@ const AdminDashboard = () => {
                      <div className="form-group w-50">
                          <label>Subtitle / Tagline</label>
                          <input type="text" value={config.subtitle || ''} 
-                             onChange={e => setEditData({...editData, sections: {...editData.sections, [sectionKey]: {...config, subtitle: e.target.value}}})} />
+                             onChange={e => {
+                                 const updatedConfig = { ...config, subtitle: e.target.value };
+                                 setEditData(prev => ({
+                                     ...prev,
+                                     sections: { ...prev.sections, [sectionKey]: updatedConfig }
+                                 }));
+                             }} />
                      </div>
                 </div>
             </div>
@@ -463,8 +495,16 @@ const AdminDashboard = () => {
         <div className="pane-header">
             <div>
                 <h2 className="pane-title" style={{ textTransform: 'capitalize' }}>
-                    {navItems.find(n => n.id === activeTab)?.label || activeTab}
+                    {navItems?.find(n => n.id === activeTab)?.label || activeTab}
                 </h2>
+                <div className="flex gap-4 mt-2">
+                    <span style={{ fontSize: '0.75rem', opacity: 0.7, color: health.database === 'Connected' ? '#10b981' : '#f43f5e' }}>
+                       ● MongoDB: {health.database}
+                    </span>
+                    <span style={{ fontSize: '0.75rem', opacity: 0.7, color: health.cloudinary === 'Configured' ? '#0ea5e9' : '#f59e0b' }}>
+                       ● Cloudinary: {health.cloudinary}
+                    </span>
+                </div>
                 <p className="pane-desc">Edit and save your content changes.</p>
             </div>
             <button onClick={handleSave} className="btn btn-primary">Save Changes</button>
@@ -607,48 +647,59 @@ const AdminDashboard = () => {
                         <div className="tab-pane cms-pane">
                             <SaveBar />
                             {saveStatus && <div className="status-badge success">✓ {saveStatus}</div>}
-                            <SectionConfigPanel sectionKey="about" />
-
-                            <div className="form-section">
-                                <h4 className="section-label">Hero Banner</h4>
-                                <div className="flex-group">
-                                    <div className="form-group w-50">
-                                        <label>Display Name</label>
+                            
+                            {/* NEW: Individual Identity Form */}
+                            <div className="form-section enhanced-profile">
+                                <h3 className="text-xl font-semibold mb-6 flex items-center gap-2" style={{ color: '#60a5fa' }}>
+                                    <Users className="w-5 h-5" />
+                                    Identity & Core Details
+                                </h3>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                                    <div className="form-group">
+                                        <label>Full Display Name</label>
                                         <input type="text" value={editData.hero.name}
-                                            onChange={e => setEditData({ ...editData, hero: { ...editData.hero, name: e.target.value } })} />
+                                            onChange={e => handleHeroChange('name', e.target.value)}
+                                            className="enhanced-input" />
                                     </div>
-                                    <div className="form-group w-50">
-                                        <label>Primary Tagline</label>
+                                    <div className="form-group">
+                                        <label>Professional Tagline</label>
                                         <input type="text" value={editData.hero.title}
-                                            onChange={e => setEditData({ ...editData, hero: { ...editData.hero, title: e.target.value } })} />
+                                            onChange={e => handleHeroChange('title', e.target.value)}
+                                            className="enhanced-input" />
+                                    </div>
+                                    <div className="form-group">
+                                        <label>Current Age / Status</label>
+                                        <input type="text" value={editData.about.age}
+                                            onChange={e => handleAboutChange('age', e.target.value)}
+                                            className="enhanced-input" />
+                                    </div>
+                                    <div className="form-group">
+                                        <label>Projects Completed (Stat)</label>
+                                        <input type="text" value={editData.about.projects}
+                                            onChange={e => handleAboutChange('projects', e.target.value)}
+                                            className="enhanced-input" />
                                     </div>
                                 </div>
                                 <div className="form-group">
-                                    <label>Description</label>
+                                    <label>Short Introduction / Bio</label>
+                                    <textarea rows={5} value={editData.about.bio}
+                                        onChange={e => handleAboutChange('bio', e.target.value)}
+                                        className="enhanced-textarea" />
+                                </div>
+                            </div>
+
+                            <div className="form-section mt-8">
+                                <h4 className="section-label">Hero Banner Settings</h4>
+                                <div className="form-group">
+                                    <label>Hero Description Snippet</label>
                                     <input type="text" value={editData.hero.description}
-                                        onChange={e => setEditData({ ...editData, hero: { ...editData.hero, description: e.target.value } })} />
+                                        onChange={e => handleHeroChange('description', e.target.value)} />
                                 </div>
                             </div>
 
                             <div className="form-section">
-                                <h4 className="section-label">About Me Biography</h4>
-                                <div className="form-group">
-                                    <label>Bio (double line breaks = paragraphs)</label>
-                                    <textarea rows={7} value={editData.about.bio}
-                                        onChange={e => setEditData({ ...editData, about: { ...editData.about, bio: e.target.value } })} />
-                                </div>
-                                <div className="flex-group">
-                                    <div className="form-group w-50">
-                                        <label>Age / DOB Stat</label>
-                                        <input type="text" value={editData.about.age}
-                                            onChange={e => setEditData({ ...editData, about: { ...editData.about, age: e.target.value } })} />
-                                    </div>
-                                    <div className="form-group w-50">
-                                        <label>Projects Stat</label>
-                                        <input type="text" value={editData.about.projects}
-                                            onChange={e => setEditData({ ...editData, about: { ...editData.about, projects: e.target.value } })} />
-                                    </div>
-                                </div>
+                                <h4 className="section-label">Section Label Configuration</h4>
+                                <SectionConfigPanel sectionKey="about" />
                             </div>
                         </div>
                     )}
