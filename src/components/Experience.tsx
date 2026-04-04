@@ -95,8 +95,8 @@ const Experience = ({ addToRefs }: { addToRefs: (el: HTMLElement | null) => void
                 .unified-card { background: var(--card-bg); border: 1px solid var(--border-color); padding: 24px; border-radius: 16px; transition: var(--transition); position: relative; }
                 .unified-card:hover { border-color: var(--primary); transform: translateY(-2px); }
 
-                .achievement-logo-wrap { width: 48px; height: 48px; border-radius: 10px; overflow: hidden; border: 1px solid var(--border-color); background: rgba(255,255,255,0.03); flex-shrink: 0; }
-                .achievement-logo-img { width: 100%; height: 100%; object-fit: contain; padding: 3px; }
+                .achievement-logo-wrap { width: 64px; height: 64px; border-radius: 14px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); background: #ffffff; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+                .achievement-logo-img { width: 100%; height: 100%; object-fit: contain; padding: 2px; }
                 
                 .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; gap: 20px; }
                 .card-title { font-size: 1.2rem; color: #fff; margin: 0 0 4px 0; font-weight: 700; }

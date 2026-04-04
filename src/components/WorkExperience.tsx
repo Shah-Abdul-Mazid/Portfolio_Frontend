@@ -202,8 +202,8 @@ const WorkExperience = ({ addToRefs }: { addToRefs: (el: HTMLElement | null) => 
                 .unified-card { background: var(--card-bg); border: 1px solid var(--border-color); padding: 24px; border-radius: 16px; transition: var(--transition); }
                 .unified-card:hover { border-color: var(--primary); transform: translateY(-2px); }
 
-                .company-logo-wrap { width: 60px; height: 60px; border-radius: 12px; overflow: hidden; border: 1px solid var(--border-color); background: rgba(255,255,255,0.03); flex-shrink: 0; }
-                .company-logo-img { width: 100%; height: 100%; object-fit: contain; padding: 4px; }
+                .company-logo-wrap { width: 64px; height: 64px; border-radius: 14px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); background: #ffffff; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+                .company-logo-img { width: 100%; height: 100%; object-fit: contain; padding: 2px; }
 
                 .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; gap: 20px; }
                 .card-title { font-size: 1.2rem; color: #fff; margin: 0 0 4px 0; font-weight: 700; }
