@@ -265,7 +265,7 @@ const defaultData: PortfolioData = {
 
 interface PortfolioContextType {
     data: PortfolioData;
-    updateData: (newData: PortfolioData) => Promise<void>;
+    updateData: (newData: PortfolioData) => Promise<boolean>;
 }
 
 const PortfolioContext = createContext<PortfolioContextType | undefined>(undefined);
