@@ -661,11 +661,19 @@ const AdminDashboard = () => {
                                             onChange={e => handleHeroChange('name', e.target.value)}
                                             className="enhanced-input" />
                                     </div>
-                                    <div className="form-group">
-                                        <label>Professional Tagline</label>
-                                        <input type="text" value={editData.hero.title}
-                                            onChange={e => handleHeroChange('title', e.target.value)}
-                                            className="enhanced-input" />
+                                    <div className="form-group" style={{ gridColumn: '1 / -1' }}>
+                                        <label>Rotating Roles (Comma-separated)</label>
+                                        <textarea rows={2} 
+                                            value={editData.hero.roles ? editData.hero.roles.join(', ') : editData.hero.title}
+                                            onChange={e => {
+                                                const parts = e.target.value.split(',').map(s => s.trim()).filter(Boolean);
+                                                setEditData(prev => ({
+                                                    ...prev,
+                                                    hero: { ...prev.hero, title: e.target.value, roles: parts }
+                                                }));
+                                            }}
+                                            placeholder="e.g. AI Engineer, Software Developer, Researcher"
+                                            className="enhanced-input" style={{ width: '100%', padding: '10px' }} />
                                     </div>
                                     <div className="form-group">
                                         <label>Current Age / Status</label>

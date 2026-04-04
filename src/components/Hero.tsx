@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { usePortfolio, resolveUrl } from '../context/PortfolioContext';
 import { Link } from 'react-router-dom';
 import avtarImg from '../assets/avtar.png';
@@ -5,6 +6,24 @@ import avtarImg from '../assets/avtar.png';
 
 const Hero = ({ addToRefs }: { addToRefs: (el: HTMLElement | null) => void }) => {
     const { data } = usePortfolio();
+    const [roleIndex, setRoleIndex] = useState(0);
+    const [fade, setFade] = useState(true);
+
+    const roles = data.hero.roles && data.hero.roles.length > 0 ? data.hero.roles : [data.hero.title];
+
+    useEffect(() => {
+        if (roles.length <= 1) return;
+        
+        const interval = setInterval(() => {
+            setFade(false);
+            setTimeout(() => {
+                setRoleIndex((prev) => (prev + 1) % roles.length);
+                setFade(true);
+            }, 500); // fade duration matches CSS transition
+        }, 3000); // 3 seconds per role
+
+        return () => clearInterval(interval);
+    }, [roles.length]);
     
     return (
         <section id="hero" className="hero section" style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center', paddingTop: '120px' }}>
@@ -20,8 +39,14 @@ const Hero = ({ addToRefs }: { addToRefs: (el: HTMLElement | null) => void }) =>
                     <h1 className="fade-in" ref={addToRefs} style={{ fontSize: 'clamp(3rem, 10vw, 6rem)', fontWeight: 900, margin: '16px 0' }}>
                         Hi, I'm <span className="gradient-text">{data.hero.name}</span>
                     </h1>
-                    <p className="fade-in" ref={addToRefs} style={{ fontSize: '1.5rem', color: 'var(--text-secondary)', maxWidth: '800px', margin: '0 auto 10px', lineHeight: 1.6 }}>
-                        {data.hero.title}
+                    <p className="fade-in" ref={addToRefs} style={{ fontSize: '1.5rem', color: 'var(--text-secondary)', maxWidth: '800px', margin: '0 auto 10px', lineHeight: 1.6, minHeight: '38px', display: 'flex', justifyContent: 'center' }}>
+                        <span style={{ 
+                            opacity: fade ? 1 : 0, 
+                            transition: 'opacity 0.5s ease-in-out', 
+                            display: 'inline-block' 
+                        }}>
+                            {roles[roleIndex]}
+                        </span>
                     </p>
                     <p className="fade-in" ref={addToRefs} style={{ fontSize: '1.1rem', color: 'var(--text-muted)', maxWidth: '600px', margin: '0 auto 40px', lineHeight: 1.4 }}>
                         {data.hero.description}

@@ -112,6 +112,7 @@ export interface PortfolioData {
     hero: {
         name: string;
         title: string;
+        roles?: string[]; // Newly added for rotating text
         description: string;
         avatarUrl?: string; // Newly added
     };
@@ -156,6 +157,12 @@ const defaultData: PortfolioData = {
     hero: {
         name: "Shah Abdul Mazid",
         title: "Machine Learning Researcher & Software Engineer",
+        roles: [
+            "Machine Learning Researcher",
+            "Software Engineer",
+            "AI Engineer",
+            "Data Science Enthusiast"
+        ],
         description: "A CSE student focused on Intelligent Systems & Data Science."
     },
     about: {
