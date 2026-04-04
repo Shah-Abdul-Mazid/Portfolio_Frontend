@@ -101,7 +101,7 @@ const Education = ({ addToRefs }: { addToRefs: (el: HTMLElement | null) => void 
                 .unified-card { background: var(--card-bg); border: 1px solid var(--border-color); padding: 24px; border-radius: 16px; transition: var(--transition); position: relative; }
                 .unified-card:hover { border-color: var(--primary); transform: translateY(-2px); }
 
-                .school-logo-wrap { width: 44px; height: 44px; border-radius: 10px; overflow: hidden; border: 1px solid var(--border-color); background: rgba(255,255,255,0.03); flex-shrink: 0; }
+                .school-logo-wrap { width: 56px; height: 56px; border-radius: 12px; overflow: hidden; border: 1px solid var(--border-color); background: rgba(255,255,255,0.03); flex-shrink: 0; }
                 .school-logo-img { width: 100%; height: 100%; object-fit: contain; padding: 4px; }
                 
                 .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; gap: 20px; }
