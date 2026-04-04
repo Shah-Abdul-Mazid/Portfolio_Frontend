@@ -40,18 +40,19 @@ const Hero = ({ addToRefs }: { addToRefs: (el: HTMLElement | null) => void }) =>
                         Hi, I'm <span className="gradient-text">{data.hero.name}</span>
                     </h1>
                     <p className="fade-in" ref={addToRefs} style={{ fontSize: '1.5rem', color: 'var(--text-secondary)', maxWidth: '800px', margin: '0 auto 10px', lineHeight: 1.6, minHeight: '38px', display: 'flex', justifyContent: 'center' }}>
-                        <span style={{ display: 'inline-block', perspective: '400px' }}>
-                            {(roles[roleIndex] || '').split('').map((char: string, index: number) => (
-                                <span 
-                                    key={`${roleIndex}-${index}`}
-                                    className={`char-split ${fade ? 'in' : 'out'}`}
-                                    style={{ 
-                                        animationDelay: fade ? `${index * 0.03}s` : `${index * 0.015}s` 
-                                    }}
-                                >
-                                    {char === ' ' ? '\u00A0' : char}
-                                </span>
-                            ))}
+                        <span style={{ display: 'inline-flex', alignItems: 'center' }}>
+                            {(() => {
+                                const text = roles[roleIndex] || '';
+                                const middle = Math.ceil(text.length / 2);
+                                const leftPart = text.slice(0, middle);
+                                const rightPart = text.slice(middle);
+                                return (
+                                    <>
+                                        <span className={`split-half left-half ${fade ? 'in' : 'out'}`} style={{ whiteSpace: 'pre' }}>{leftPart}</span>
+                                        <span className={`split-half right-half ${fade ? 'in' : 'out'}`} style={{ whiteSpace: 'pre' }}>{rightPart}</span>
+                                    </>
+                                );
+                            })()}
                         </span>
                     </p>
                     <p className="fade-in" ref={addToRefs} style={{ fontSize: '1.1rem', color: 'var(--text-muted)', maxWidth: '600px', margin: '0 auto 40px', lineHeight: 1.4 }}>
@@ -89,25 +90,40 @@ const Hero = ({ addToRefs }: { addToRefs: (el: HTMLElement | null) => void }) =>
                     opacity: 1;
                 }
                 
-                .char-split {
+                .split-half {
                     display: inline-block;
                     opacity: 0;
-                    transform-origin: 50% 50%;
                 }
-                .char-split.in {
-                    animation: splitIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+                
+                .left-half.in {
+                    animation: splitLeftIn 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
                 }
-                .char-split.out {
-                    animation: splitOut 0.3s cubic-bezier(0.36, 0, 0.66, -0.56) forwards;
+                .right-half.in {
+                    animation: splitRightIn 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+                }
+                
+                .left-half.out {
+                    animation: splitLeftOut 0.4s cubic-bezier(0.8, 0.2, 1, 0.8) forwards;
+                }
+                .right-half.out {
+                    animation: splitRightOut 0.4s cubic-bezier(0.8, 0.2, 1, 0.8) forwards;
                 }
 
-                @keyframes splitIn {
-                    0% { opacity: 0; transform: translateY(20px) rotateX(-90deg); filter: blur(4px); }
-                    100% { opacity: 1; transform: translateY(0) rotateX(0deg); filter: blur(0px); }
+                @keyframes splitLeftIn {
+                    0% { opacity: 0; transform: translateX(-40px); filter: blur(4px); }
+                    100% { opacity: 1; transform: translateX(0); filter: blur(0px); }
                 }
-                @keyframes splitOut {
-                    0% { opacity: 1; transform: translateY(0) rotateX(0deg); filter: blur(0px); }
-                    100% { opacity: 0; transform: translateY(-20px) rotateX(90deg); filter: blur(4px); }
+                @keyframes splitRightIn {
+                    0% { opacity: 0; transform: translateX(40px); filter: blur(4px); }
+                    100% { opacity: 1; transform: translateX(0); filter: blur(0px); }
+                }
+                @keyframes splitLeftOut {
+                    0% { opacity: 1; transform: translateX(0); filter: blur(0px); }
+                    100% { opacity: 0; transform: translateX(-40px); filter: blur(4px); }
+                }
+                @keyframes splitRightOut {
+                    0% { opacity: 1; transform: translateX(0); filter: blur(0px); }
+                    100% { opacity: 0; transform: translateX(40px); filter: blur(4px); }
                 }
 
                 .btn-gradient { background: var(--gradient); color: white; border: none; padding: 14px 32px; font-size: 1rem; }
