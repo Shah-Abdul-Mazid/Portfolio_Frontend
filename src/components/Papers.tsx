@@ -36,11 +36,13 @@ const Papers = ({ addToRefs }: { addToRefs: (el: HTMLElement | null) => void }) 
                     {displayedPapers.map((paper, index) => (
                         <div key={index} className="paper-card fade-in" ref={addToRefs}>
                             <div className="paper-content">
-                                <div className="paper-meta">
-                                    <span className="year">{paper.year}</span>
-                                    {paper.venue && <span className="venue">{paper.venue}</span>}
+                                <div className="paper-header">
+                                    <h3 className="paper-title">{paper.title}</h3>
+                                    <div className="paper-meta">
+                                        <span className="year">{paper.year}</span>
+                                        {paper.venue && <span className="venue">{paper.venue}</span>}
+                                    </div>
                                 </div>
-                                <h3 className="paper-title">{paper.title}</h3>
                                 <p className="paper-authors">{paper.authors}</p>
                                 
                                 {paper.keywords && (
@@ -127,40 +129,55 @@ const Papers = ({ addToRefs }: { addToRefs: (el: HTMLElement | null) => void }) 
                 .paper-content { 
                     padding: 16px; 
                 }
+                .paper-header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: flex-start;
+                    gap: 16px;
+                    margin-bottom: 12px;
+                }
                 .paper-meta {
                     display: flex;
-                    align-items: center;
-                    gap: 8px;
-                    margin-bottom: 8px;
-                    font-size: 0.70rem;
-                    color: var(--text-secondary);
-                    flex-wrap: wrap;
+                    flex-direction: column;
+                    align-items: flex-end;
+                    gap: 4px;
+                    flex-shrink: 0;
+                    text-align: right;
+                }
+                .paper-meta .year {
+                    background: rgba(139,92,246,0.08);
+                    color: var(--primary);
+                    padding: 2px 12px;
+                    border-radius: 100px;
+                    font-size: 0.75rem;
+                    font-weight: 700;
+                    border: 1px solid rgba(139,92,246,0.2);
+                }
+                .paper-meta .venue {
+                    font-size: 0.65rem;
+                    color: var(--text-muted);
+                    font-weight: 600;
+                    text-transform: uppercase;
+                    letter-spacing: 0.05em;
+                    max-width: 140px;
+                    line-height: 1.2;
                 }
                 .paper-actions { display: flex; flex-wrap: wrap; gap: 8px; padding: 12px; border-top: 1px solid var(--border-color); background: rgba(0,0,0,0.05); }
                 .attachment-link { display: inline-flex; align-items: center; background: rgba(139, 92, 246, 0.08); color: var(--primary); padding: 6px 12px; border-radius: 10px; font-size: 0.75rem; font-weight: 600; text-decoration: none; border: 1px solid rgba(139, 92, 246, 0.15); transition: all 0.3s ease; cursor: pointer; }
                 .attachment-link:hover { background: var(--primary); color: white; transform: translateY(-2px); box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4); }
                 
-                .paper-meta .venue {
-                    font-style: italic;
-                    white-space: nowrap;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                    max-width: 140px;
-                }
                 .paper-title { 
                     font-size: 0.95rem; 
                     line-height: 1.3;
-                    margin-bottom: 8px; 
-                    color: var(--text-main);
+                    margin: 0; 
+                    color: #fff;
+                    font-weight: 700;
+                    flex: 1;
                 }
                 .paper-authors { 
                     font-size: 0.8rem; 
                     color: var(--text-secondary); 
                     margin-bottom: 12px;
-                    display: -webkit-box;
-                    -webkit-line-clamp: 2;
-                    -webkit-box-orient: vertical;
-                    overflow: hidden;
                 }
                 .paper-keywords {
                     display: flex;
