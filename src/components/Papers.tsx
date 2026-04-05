@@ -43,7 +43,7 @@ const Papers = ({ addToRefs }: { addToRefs: (el: HTMLElement | null) => void }) 
                                         {paper.venue && <span className="venue">{paper.venue}</span>}
                                     </div>
                                 </div>
-                                <p className="paper-authors">{paper.authors}</p>
+                                <p className="paper-authors"><strong>Authors:</strong> {paper.authors}</p>
                                 
                                 {paper.keywords && (
                                     <div className="paper-keywords">
