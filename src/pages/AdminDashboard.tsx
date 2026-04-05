@@ -71,7 +71,7 @@ const AdminDashboard = () => {
             const viewsRes = await fetch('/api/analytics/count');
             const viewsData = await viewsRes.json();
             
-            const msgsRes = await fetch('/api/messages');
+            const msgsRes = await fetch('/api/messages', { headers });
             const msgsData = await msgsRes.json();
 
             // Support both standard and mock message results
@@ -109,7 +109,9 @@ const AdminDashboard = () => {
     const handleDeleteMessage = async (id: string, skipConfirm = false) => {
         if (!skipConfirm && !window.confirm('Delete this message?')) return;
         try {
-            await fetch(`/api/messages/${id}`, { method: 'DELETE' });
+            const token = localStorage.getItem('admin_token');
+            const headers: HeadersInit = token ? { 'Authorization': `Bearer ${token}` } : {};
+            await fetch(`/api/messages/${id}`, { method: 'DELETE', headers });
             fetchRealTimeData();
         } catch { alert('Failed to delete message'); }
     };
@@ -127,7 +129,9 @@ const AdminDashboard = () => {
 
     const fetchVisitors = async () => {
         try {
-            const res = await fetch('/api/analytics/visitors');
+            const token = localStorage.getItem('admin_token');
+            const headers: HeadersInit = token ? { 'Authorization': `Bearer ${token}` } : {};
+            const res = await fetch('/api/analytics/visitors', { headers });
             const data = await res.json();
             setVisitors(Array.isArray(data) ? data : []);
         } catch (err) {
@@ -138,7 +142,9 @@ const AdminDashboard = () => {
     const handleClearVisitors = async () => {
         if (!window.confirm('Are you sure you want to delete all visitor records and reset the view count to 0?')) return;
         try {
-            const res = await fetch('/api/analytics/clear', { method: 'POST' });
+            const token = localStorage.getItem('admin_token');
+            const headers: HeadersInit = token ? { 'Authorization': `Bearer ${token}` } : {};
+            const res = await fetch('/api/analytics/clear', { method: 'POST', headers });
             const result = await res.json();
             if (result.success) {
                 setVisitors([]);
