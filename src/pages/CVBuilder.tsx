@@ -44,7 +44,7 @@ const CVBuilder = () => {
                 <header className="cv-header">
                     <h1 className="cv-name">{data.hero.name}</h1>
                     <div className="cv-hero-roles">
-                        {data.hero.roles.join(' | ')}
+                        {data.hero.roles?.join(' | ') || data.hero.title}
                     </div>
                     <div className="cv-contact-line">
                         <span>{data.contact.location}</span> | 
