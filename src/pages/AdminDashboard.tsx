@@ -736,7 +736,7 @@ const AdminDashboard = () => {
                                 <div key={i} className="form-section item-card">
                                     <div className="item-card-header">
                                         <h4 className="section-label">Education #{i + 1}</h4>
-                                        <button className="remove-btn" onClick={() => removeListItem('education', i)}><Minus size={14} /> Remove</button>
+                                        <button type="button" className="remove-btn" onClick={() => removeListItem('education', i)}><Minus size={14} /> Remove</button>
                                     </div>
                                     <div className="flex-group">
                                         <div className="form-group w-50">
@@ -786,7 +786,7 @@ const AdminDashboard = () => {
                                     </div>
                                 </div>
                             ))}
-                            <button className="add-btn" onClick={() => addListItem('education', { degree: '', school: '', year: '', major: '', certificateUrl: '', attachmentUrl: '', logoUrl: '' })}>
+                            <button type="button" className="add-btn" onClick={() => addListItem('education', { degree: '', school: '', year: '', major: '', certificateUrl: '', attachmentUrl: '', logoUrl: '' })}>
                                 <Plus size={16} /> Add Education
                             </button>
                         </div>
@@ -802,7 +802,7 @@ const AdminDashboard = () => {
                                 <div key={i} className="form-section item-card">
                                     <div className="item-card-header">
                                         <h4 className="section-label">Position #{i + 1}</h4>
-                                        <button className="remove-btn" onClick={() => removeListItem('work', i)}><Minus size={14} /> Remove</button>
+                                        <button type="button" className="remove-btn" onClick={() => removeListItem('work', i)}><Minus size={14} /> Remove</button>
                                     </div>
                                     <div className="flex-group">
                                         <div className="form-group w-50">
@@ -867,7 +867,7 @@ const AdminDashboard = () => {
                                     </div>
                                 </div>
                             ))}
-                            <button className="add-btn" onClick={() => addListItem('work', { role: '', company: '', startDate: '', endDate: '', details: [''], appointmentLetterUrl: '', experienceLetterUrl: '', logoUrl: '' })}>
+                            <button type="button" className="add-btn" onClick={() => addListItem('work', { role: '', company: '', startDate: '', endDate: '', details: [''], appointmentLetterUrl: '', experienceLetterUrl: '', logoUrl: '' })}>
                                 <Plus size={16} /> Add Position
                             </button>
                         </div>
@@ -883,7 +883,7 @@ const AdminDashboard = () => {
                                 <div key={i} className="form-section item-card">
                                     <div className="item-card-header">
                                         <h4 className="section-label">Achievement #{i + 1}</h4>
-                                        <button className="remove-btn" onClick={() => removeListItem('experience', i)}><Minus size={14} /> Remove</button>
+                                        <button type="button" className="remove-btn" onClick={() => removeListItem('experience', i)}><Minus size={14} /> Remove</button>
                                     </div>
                                     <div className="flex-group">
                                         <div className="form-group w-50">
@@ -933,7 +933,7 @@ const AdminDashboard = () => {
                                     </div>
                                 </div>
                             ))}
-                            <button className="add-btn" onClick={() => addListItem('experience', { role: '', company: '', period: '', desc: '', certificateUrl: '', attachmentUrl: '', logoUrl: '' })}>
+                            <button type="button" className="add-btn" onClick={() => addListItem('experience', { role: '', company: '', period: '', desc: '', certificateUrl: '', attachmentUrl: '', logoUrl: '' })}>
                                 <Plus size={16} /> Add Achievement
                             </button>
                         </div>
@@ -1025,7 +1025,7 @@ const AdminDashboard = () => {
                                     </div>
                                 </div>
                             ))}
-                            <button className="add-btn" onClick={() => addListItem('skills', { name: 'New Category', items: [''] })}>
+                            <button type="button" className="add-btn" onClick={() => addListItem('skills', { name: 'New Category', items: [''] })}>
                                 <Plus size={16} /> Add Category
                             </button>
                         </div>
@@ -1041,7 +1041,7 @@ const AdminDashboard = () => {
                                 <div key={i} className="form-section item-card">
                                     <div className="item-card-header">
                                         <h4 className="section-label">Showcase #{project.showcase}</h4>
-                                        <button className="remove-btn" onClick={() => removeListItem('projects', i)}><Minus size={14} /> Remove</button>
+                                        <button type="button" className="remove-btn" onClick={() => removeListItem('projects', i)}><Minus size={14} /> Remove</button>
                                     </div>
                                     <div className="flex-group">
                                         <div className="form-group w-50">
@@ -1118,7 +1118,7 @@ const AdminDashboard = () => {
                                     </div>
                                 </div>
                             ))}
-                            <button className="add-btn" onClick={() => addListItem('projects', { title: '', desc: '', tags: [''], showcase: editData.projects.length + 1, projectUrl: '', githubUrl: '', certificateUrl: '', thumbnailUrl: '' })}>
+                            <button type="button" className="add-btn" onClick={() => addListItem('projects', { title: '', desc: '', tags: [''], showcase: editData.projects.length + 1, projectUrl: '', githubUrl: '', certificateUrl: '', thumbnailUrl: '' })}>
                                 <Plus size={16} /> Add Project
                             </button>
                         </div>
@@ -1134,7 +1134,7 @@ const AdminDashboard = () => {
                                 <div key={i} className="form-section item-card">
                                     <div className="item-card-header">
                                         <h4 className="section-label">Paper #{i + 1}</h4>
-                                        <button className="remove-btn" onClick={() => removeListItem('papers', i)}><Minus size={14} /> Remove</button>
+                                        <button type="button" className="remove-btn" onClick={() => removeListItem('papers', i)}><Minus size={14} /> Remove</button>
                                     </div>
                                     
                                     <div className="form-group" style={{ background: 'rgba(59,130,246,0.05)', padding: '16px', borderRadius: '12px', border: '1px dashed rgba(59,130,246,0.3)' }}>
@@ -1194,7 +1194,7 @@ const AdminDashboard = () => {
                                     </div>
                                 </div>
                             ))}
-                            <button className="add-btn" onClick={() => addListItem('papers', { title: '', authors: '', venue: '', year: '', keywords: '', doi: '', documentUrl: '', certificateUrl: '' })}>
+                            <button type="button" className="add-btn" onClick={() => addListItem('papers', { title: '', authors: '', venue: '', year: '', keywords: '', doi: '', documentUrl: '', certificateUrl: '' })}>
                                 <Plus size={16} /> Add Research Paper
                             </button>
                         </div>
@@ -1210,7 +1210,7 @@ const AdminDashboard = () => {
                                 <div key={i} className="form-section item-card">
                                     <div className="item-card-header">
                                         <h4 className="section-label">Activity #{i + 1}</h4>
-                                        <button className="remove-btn" onClick={() => removeListItem('activities', i)}><Minus size={14} /> Remove</button>
+                                        <button type="button" className="remove-btn" onClick={() => removeListItem('activities', i)}><Minus size={14} /> Remove</button>
                                     </div>
                                     <div className="flex-group">
                                         <div className="form-group w-50">
@@ -1250,7 +1250,7 @@ const AdminDashboard = () => {
                                     </div>
                                 </div>
                             ))}
-                            <button className="add-btn" onClick={() => addListItem('activities', { role: '', organization: '', period: '', desc: '', certificateUrl: '', attachmentUrl: '' })}>
+                            <button type="button" className="add-btn" onClick={() => addListItem('activities', { role: '', organization: '', period: '', desc: '', certificateUrl: '', attachmentUrl: '' })}>
                                 <Plus size={16} /> Add Activity
                             </button>
                         </div>
@@ -1266,7 +1266,7 @@ const AdminDashboard = () => {
                                 <div key={i} className="form-section item-card">
                                     <div className="item-card-header">
                                         <h4 className="section-label">Reference #{i + 1}</h4>
-                                        <button className="remove-btn" onClick={() => removeListItem('references', i)}><Minus size={14} /> Remove</button>
+                                        <button type="button" className="remove-btn" onClick={() => removeListItem('references', i)}><Minus size={14} /> Remove</button>
                                     </div>
                                     <div className="flex-group">
                                         <div className="form-group w-50">
@@ -1300,7 +1300,7 @@ const AdminDashboard = () => {
                                     </div>
                                 </div>
                             ))}
-                            <button className="add-btn" onClick={() => addListItem('references', { name: '', title: '', company: '', relation: '', email: '', phone: '' })}>
+                            <button type="button" className="add-btn" onClick={() => addListItem('references', { name: '', title: '', company: '', relation: '', email: '', phone: '' })}>
                                 <Plus size={16} /> Add Reference
                             </button>
                         </div>
@@ -1316,7 +1316,7 @@ const AdminDashboard = () => {
                                 <div key={i} className="form-section item-card">
                                     <div className="item-card-header">
                                         <h4 className="section-label">Blog Post #{i + 1}</h4>
-                                        <button className="remove-btn" onClick={() => removeListItem('blogs', i)}><Minus size={14} /> Remove</button>
+                                        <button type="button" className="remove-btn" onClick={() => removeListItem('blogs', i)}><Minus size={14} /> Remove</button>
                                     </div>
                                     <div className="flex-group">
                                         <div className="form-group w-50">
@@ -1338,7 +1338,7 @@ const AdminDashboard = () => {
                                     </div>
                                 </div>
                             ))}
-                            <button className="add-btn" onClick={() => addListItem('blogs', { title: '', date: '', url: '', excerpt: '' })}>
+                            <button type="button" className="add-btn" onClick={() => addListItem('blogs', { title: '', date: '', url: '', excerpt: '' })}>
                                 <Plus size={16} /> Add Blog Post
                             </button>
                         </div>

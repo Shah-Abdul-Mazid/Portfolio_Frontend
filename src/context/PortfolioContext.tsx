@@ -341,7 +341,14 @@ export const PortfolioProvider: React.FC<{ children: ReactNode }> = ({ children 
     useEffect(() => {
         const load = async () => {
             try {
-                const res = await fetch(`${API_BASE}/portfolio`);
+                // Add timestamp to violently bypass strict Vercel Edge caching
+                const res = await fetch(`${API_BASE}/portfolio?t=${new Date().getTime()}`, {
+                    headers: {
+                        'Cache-Control': 'no-cache, no-store, must-revalidate',
+                        'Pragma': 'no-cache',
+                        'Expires': '0'
+                    }
+                });
                 if (res.ok) {
                     const dbData = await res.json();
                     if (dbData) {
