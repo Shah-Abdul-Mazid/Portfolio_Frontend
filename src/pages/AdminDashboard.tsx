@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { usePortfolio } from '../context/PortfolioContext';
 import { Mail, Eye, Calendar, Phone, Trash2, Reply, Plus, Minus, Upload, Link as LinkIcon, CheckCircle, Users } from 'lucide-react';
 import type { EducationItem, ExperienceItem, WorkItem, ProjectItem, PaperItem, SkillCategory } from '../context/PortfolioContext';
+import './AdminDashboard.css';
 
 const AdminDashboard = () => {
     const navigate = useNavigate();
