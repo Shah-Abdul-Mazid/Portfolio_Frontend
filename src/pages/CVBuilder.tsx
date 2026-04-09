@@ -62,7 +62,7 @@ const CVBuilder = () => {
                         </div>
                     </header>
 
-                    {/* Summary bar */}
+                    {/* Summary bar — from data.about.bio */}
                     <p className="cv-summary-bar">
                         {data.about.bio.split('\n')[0]} {data.hero.description}
                     </p>
@@ -71,7 +71,7 @@ const CVBuilder = () => {
                     <div className="cv-body">
                         {/* ===== LEFT COLUMN ===== */}
                         <div className="cv-col-left">
-                            {/* Education */}
+                            {/* Education — from data.education */}
                             <section className="cv-section">
                                 <h2 className="cv-section-heading">
                                     <span className="cv-heading-icon">🎓</span>
@@ -86,28 +86,14 @@ const CVBuilder = () => {
                                 ))}
                             </section>
 
-                            {/* Certifications & Achievements */}
-                            <section className="cv-section">
-                                <h2 className="cv-section-heading">
-                                    <span className="cv-heading-icon">🏆</span>
-                                    Certifications
-                                </h2>
-                                {data.experience.map((exp, idx) => (
-                                    <div className="cv-item" key={idx}>
-                                        <div className="cv-item-role">{exp.role}</div>
-                                        <p className="cv-item-text">{exp.company} ({exp.period}). {exp.desc}</p>
-                                    </div>
-                                ))}
-                            </section>
-
-                            {/* Publications */}
+                            {/* Publications — from data.papers */}
                             {data.papers && data.papers.length > 0 && (
                                 <section className="cv-section">
                                     <h2 className="cv-section-heading">
                                         <span className="cv-heading-icon">📄</span>
                                         Publications
                                     </h2>
-                                    {data.papers.slice(0, 2).map((paper, idx) => (
+                                    {data.papers.slice(0, 4).map((paper, idx) => (
                                         <div className="cv-item" key={idx}>
                                             <div className="cv-item-role">"{paper.title}"</div>
                                             <div className="cv-item-company">{paper.venue}, {paper.year}</div>
@@ -115,11 +101,30 @@ const CVBuilder = () => {
                                     ))}
                                 </section>
                             )}
+
+                            {/* Languages */}
+                            <section className="cv-section">
+                                <h2 className="cv-section-heading">
+                                    <span className="cv-heading-icon">🌐</span>
+                                    Languages
+                                </h2>
+                                <div className="cv-lang-row">
+                                    <div className="cv-lang-item">
+                                        <span className="cv-lang-dot" />
+                                        <span>Bengali (Native)</span>
+                                    </div>
+                                    <div className="cv-lang-item">
+                                        <span className="cv-lang-dot" />
+                                        <span>English (Fluent)</span>
+                                    </div>
+                                </div>
+                            </section>
+
                         </div>
 
                         {/* ===== RIGHT COLUMN ===== */}
                         <div className="cv-col-right">
-                            {/* Work Experience */}
+                            {/* Work Experience — from data.work */}
                             <section className="cv-section">
                                 <h2 className="cv-section-heading">
                                     <span className="cv-heading-icon">💼</span>
@@ -141,7 +146,21 @@ const CVBuilder = () => {
                                 ))}
                             </section>
 
-                            {/* Skills */}
+                            {/* Certifications — from data.experience */}
+                            <section className="cv-section">
+                                <h2 className="cv-section-heading">
+                                    <span className="cv-heading-icon">🏆</span>
+                                    Certifications
+                                </h2>
+                                {data.experience.map((exp, idx) => (
+                                    <div className="cv-item" key={idx}>
+                                        <div className="cv-item-role">{exp.role}</div>
+                                        <p className="cv-item-text">{exp.company} ({exp.period}). {exp.desc}</p>
+                                    </div>
+                                ))}
+                            </section>
+
+                            {/* Skills — from data.skills */}
                             <section className="cv-section">
                                 <h2 className="cv-section-heading">
                                     <span className="cv-heading-icon">⚙</span>
@@ -156,31 +175,13 @@ const CVBuilder = () => {
                                 </div>
                             </section>
 
-                            {/* Languages */}
-                            <section className="cv-section">
-                                <h2 className="cv-section-heading">
-                                    <span className="cv-heading-icon">🌐</span>
-                                    Languages
-                                </h2>
-                                <div className="cv-lang-row">
-                                    <div className="cv-lang-item">
-                                        <span className="cv-lang-dot" />
-                                        <span>Bengali (Native)</span>
-                                    </div>
-                                    <div className="cv-lang-item">
-                                        <span className="cv-lang-dot" />
-                                        <span>English (Fluent)</span>
-                                    </div>
-                                </div>
-                            </section>
-
-                            {/* Projects */}
+                            {/* Projects — from data.projects */}
                             <section className="cv-section">
                                 <h2 className="cv-section-heading">
                                     <span className="cv-heading-icon">📁</span>
                                     Projects
                                 </h2>
-                                {data.projects.slice(0, 3).map((proj, idx) => (
+                                {data.projects.slice(0, 4).map((proj, idx) => (
                                     <div className="cv-item" key={idx}>
                                         <div className="cv-item-role">{proj.title}</div>
                                         <div className="cv-item-company">Stack: {proj.tags.join(', ')}</div>
@@ -188,6 +189,8 @@ const CVBuilder = () => {
                                     </div>
                                 ))}
                             </section>
+
+
                         </div>
                     </div>
                 </div>
