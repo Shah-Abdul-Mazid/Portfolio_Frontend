@@ -120,6 +120,40 @@ const CVBuilder = () => {
                                 </div>
                             </section>
 
+                            {/* Activities / Leadership (ATS-Friendly) */}
+                            {data.activities && data.activities.length > 0 && (
+                                <section className="cv-section">
+                                    <h2 className="cv-section-heading">
+                                        <span className="cv-heading-icon">⚡</span>
+                                        Leadership & Activities
+                                    </h2>
+                                    {data.activities.map((act, idx) => (
+                                        <div className="cv-item" key={idx}>
+                                            <div className="cv-item-role">{act.role}</div>
+                                            <div className="cv-item-company">{act.organization} ({act.period})</div>
+                                            <p className="cv-item-text">{act.desc}</p>
+                                        </div>
+                                    ))}
+                                </section>
+                            )}
+
+                            {/* Relevant Coursework (Highly recommended for fresh grads) */}
+                            <section className="cv-section">
+                                <h2 className="cv-section-heading">
+                                    <span className="cv-heading-icon">📚</span>
+                                    Relevant Coursework
+                                </h2>
+                                <div className="cv-skills-tags">
+                                    <span className="cv-skill-tag">Machine Learning</span>
+                                    <span className="cv-skill-tag">Deep Learning</span>
+                                    <span className="cv-skill-tag">Computer Vision</span>
+                                    <span className="cv-skill-tag">NLP</span>
+                                    <span className="cv-skill-tag">Data Structures</span>
+                                    <span className="cv-skill-tag">Algorithms</span>
+                                    <span className="cv-skill-tag">Database Systems</span>
+                                </div>
+                            </section>
+
                         </div>
 
                         {/* ===== RIGHT COLUMN ===== */}
