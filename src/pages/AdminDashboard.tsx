@@ -220,7 +220,7 @@ const AdminDashboard = () => {
     };
 
     const removeListItem = (collection: string, index: number) => {
-        if (!window.confirm(`Delete this ${collection} item?`)) return;
+        // window.confirm removed to prevent browser popup blockers from breaking the function
         setEditData(prev => {
             const list = [...(prev as any)[collection]];
             list.splice(index, 1);
