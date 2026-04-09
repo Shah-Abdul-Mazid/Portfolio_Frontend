@@ -45,7 +45,7 @@ const CVBuilder = () => {
                 <header className="cv-header-enhancv">
                     <div className="cv-header-content">
                         <h1 className="cv-name">{data.hero.name}</h1>
-                        <div className="cv-title">{data.hero.title}</div>
+                        <div className="cv-title">{data.hero.roles?.join(', ') || data.hero.title}</div>
                         
                         <div className="cv-contact-grid">
                             <div className="cv-contact-item">
@@ -173,7 +173,7 @@ const CVBuilder = () => {
                         <section className="cv-section">
                             <h2 className="cv-section-heading">KEY ACHIEVEMENTS</h2>
                             {/* Merge experience (certifications) and activities */}
-                            {[...data.experience, ...data.activities].slice(0, 3).map((ach, idx) => (
+                            {[...data.experience, ...data.activities].map((ach, idx) => (
                                 <div className="cv-ach-item" key={idx}>
                                     <div className="cv-ach-icon">
                                         {idx % 2 === 0 ? <Star /> : <Award />}
@@ -203,7 +203,7 @@ const CVBuilder = () => {
                         {/* PROJECTS */}
                         <section className="cv-section">
                             <h2 className="cv-section-heading">PROJECTS</h2>
-                            {data.projects.slice(0, 3).map((proj, idx) => (
+                            {data.projects.map((proj, idx) => (
                                 <div className="cv-item" key={idx}>
                                     <div className="cv-item-title">{proj.title}</div>
                                     <div className="cv-meta-row">
