@@ -3,6 +3,7 @@ import { Analytics } from '@vercel/analytics/react';
 import Portfolio from './pages/Portfolio';
 import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
+import CVBuilder from './pages/CVBuilder';
 import { PortfolioProvider } from './context/PortfolioContext';
 import { useVisitorTracker } from './hooks/useVisitorTracker';
 
@@ -34,6 +35,7 @@ function App() {
                         <Route path="/blogs" element={<Portfolio />} />
                         <Route path="/references" element={<Portfolio />} />
                         <Route path="/contact" element={<Portfolio />} />
+                        <Route path="/cv" element={<CVBuilder />} />
                         <Route path="/login/admin" element={<AdminLogin />} />
                         <Route path="/admin/dashboard" element={<AdminDashboard />} />
                         <Route path="*" element={<Navigate to="/" replace />} />

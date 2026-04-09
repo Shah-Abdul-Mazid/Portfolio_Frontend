@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { usePortfolio, resolveUrl } from '../context/PortfolioContext';
 import { Link } from 'react-router-dom';
+import { FileText } from 'lucide-react';
 import avtarImg from '../assets/avtar.png';
 
 
@@ -76,6 +77,9 @@ const Hero = ({ addToRefs }: { addToRefs: (el: HTMLElement | null) => void }) =>
                     </p>
                     <div className="hero-btns fade-in" ref={addToRefs}>
                         <Link to="/projects" className="btn btn-primary btn-gradient">View My Work</Link>
+                        <Link to="/cv" className="btn btn-secondary btn-outline" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            <FileText size={18} /> Generate ATS CV
+                        </Link>
                         <Link to="/contact" className="btn btn-secondary btn-outline">Get In Touch</Link>
                     </div>
 
