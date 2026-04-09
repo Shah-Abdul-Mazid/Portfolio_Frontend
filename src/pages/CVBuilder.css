@@ -1,124 +1,145 @@
 .cv-builder-container {
-    background-color: #f3f4f6;
+    background-color: #f8fafc;
     min-height: 100vh;
-    padding: 2rem 1rem;
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
-    color: #000;
+    padding: 3rem 1rem;
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: #1e293b;
+    -webkit-print-color-adjust: exact;
 }
 
 .cv-controls {
-    max-width: 800px;
-    margin: 0 auto 1rem auto;
+    max-width: 820px;
+    margin: 0 auto 2rem auto;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
 .cv-controls .btn {
-    padding: 10px 20px;
+    padding: 12px 24px;
     border-radius: 8px;
     text-decoration: none;
-    font-weight: 500;
-    transition: all 0.2s;
+    font-weight: 600;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     cursor: pointer;
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     border: none;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
 }
 
 .cv-controls .btn-back {
-    background-color: #e5e7eb;
-    color: #4b5563;
+    background-color: white;
+    color: #475569;
+    border: 1px solid #e2e8f0;
 }
 
 .cv-controls .btn-back:hover {
-    background-color: #d1d5db;
+    background-color: #f1f5f9;
 }
 
 .cv-controls .btn-print {
-    background-color: #3b82f6;
+    background-color: #0f172a;
     color: white;
 }
 
 .cv-controls .btn-print:hover {
-    background-color: #2563eb;
+    background-color: #1e293b;
+    transform: translateY(-1px);
 }
 
 .cv-document {
-    max-width: 800px;
+    max-width: 820px;
     margin: 0 auto;
     background-color: white;
-    padding: 2rem 3rem;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    padding: 4rem 4.5rem;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05);
     border-radius: 4px;
 }
 
-.cv-document h1, 
-.cv-document h2, 
-.cv-document h3, 
-.cv-document h4, 
-.cv-document p, 
-.cv-document ul, 
-.cv-document li {
-    margin: 0;
-    padding: 0;
-    color: #1a1a1a;
-}
-
-.cv-document a {
-    color: #1a1a1a;
-    text-decoration: none;
-}
-
-.cv-document a:hover {
-    text-decoration: underline;
-}
-
+/* Header Styling */
 .cv-header {
     text-align: center;
-    margin-bottom: 1.5rem;
-    border-bottom: 1px solid #ccc;
-    padding-bottom: 1rem;
+    margin-bottom: 2.25rem;
 }
 
 .cv-name {
-    font-size: 24pt;
-    font-weight: 700;
+    font-size: 32pt;
+    font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 1px;
     margin-bottom: 0.25rem;
+    color: #0f172a;
+    letter-spacing: -1px;
 }
 
-.cv-contact {
+.cv-hero-roles {
+    font-size: 11.5pt;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    color: #475569;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.cv-contact-line {
     font-size: 10pt;
     display: flex;
-    flex-wrap: wrap;
     justify-content: center;
     gap: 12px;
+    color: #64748b;
+    font-weight: 500;
 }
 
-.cv-contact-item {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
+.cv-contact-line a {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.2s;
 }
 
-.cv-section {
-    margin-bottom: 1.25rem;
+.cv-contact-line a:hover {
+    color: #0f172a;
+    text-decoration: underline;
+}
+
+/* Section Styling - Overriding global section/min-height defaults */
+.cv-builder-container .cv-section, 
+.cv-builder-container section {
+    min-height: 0 !important;
+    padding: 0 !important;
+    margin: 0 0 1.5rem 0 !important;
+    display: block !important;
+    justify-content: initial !important;
+    align-items: initial !important;
+    position: relative;
+    z-index: auto;
+    background: transparent !important;
+    overflow-x: visible !important;
 }
 
 .cv-section-title {
     font-size: 13pt;
-    font-weight: 700;
+    font-weight: 800;
     text-transform: uppercase;
-    border-bottom: 1px solid #000;
-    margin-bottom: 0.5rem;
-    padding-bottom: 0.2rem;
+    margin-bottom: 0.6rem;
+    display: flex;
+    flex-direction: column;
+    color: #0f172a;
+    letter-spacing: 0.5px;
 }
 
+.cv-section-title::after {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 1.5px;
+    background-color: #0f172a;
+    margin-top: 0.15rem;
+}
+
+/* Item Styling */
 .cv-item {
-    margin-bottom: 0.75rem;
+    margin-bottom: 1.25rem;
 }
 
 .cv-item-header {
@@ -129,70 +150,68 @@
 }
 
 .cv-item-title {
-    font-size: 11pt;
-    font-weight: 700;
+    font-size: 11.5pt;
+    font-weight: 800;
+    color: #0f172a;
 }
 
 .cv-item-subtitle {
-    font-size: 10pt;
-    font-style: italic;
+    font-size: 10.5pt;
+    font-weight: 700;
+    color: #334155;
 }
 
 .cv-item-date {
     font-size: 10pt;
-    text-transform: uppercase;
+    font-weight: 700;
+    color: #64748b;
 }
 
 .cv-item-desc {
-    font-size: 10pt;
-    margin-bottom: 0.25rem;
-    line-height: 1.4;
+    font-size: 10.5pt;
+    line-height: 1.6;
+    margin-top: 0.25rem;
+    color: #475569;
 }
 
 .cv-item-list {
-    padding-left: 1.25rem;
-    font-size: 10pt;
+    padding-left: 1.5rem;
+    margin-top: 0.4rem;
 }
 
 .cv-item-list li {
-    margin-bottom: 0.15rem;
-    line-height: 1.4;
+    font-size: 10.5pt;
+    margin-bottom: 0.3rem;
+    line-height: 1.6;
+    color: #475569;
 }
 
-.cv-skills-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
+/* Skills Formatting */
+.cv-skills-summary {
+    font-size: 10.5pt;
+    line-height: 1.8;
 }
 
-.cv-skill-category {
-    font-size: 10pt;
-    line-height: 1.4;
+.cv-skills-summary li {
+    list-style: disc;
+    margin-left: 1.5rem;
+    color: #475569;
 }
 
-/* Print Styles - crucial for ATS and clean PDF export */
+/* Print Styles */
 @media print {
     body {
+        background-color: white !important;
         margin: 0;
         padding: 0;
-        background-color: white;
     }
     
     .cv-builder-container {
         padding: 0;
-        background-color: white;
-        min-height: auto;
+        background-color: white !important;
     }
 
-    .cv-controls,
-    header,
-    footer,
-    #theme-toggle,
-    .floating-contact,
-    .intelligence-matrix,
-    .mobile-drawer,
-    .mobile-backdrop,
-    .mobile-toggle {
+    .cv-controls {
         display: none !important;
     }
 
@@ -200,13 +219,13 @@
         padding: 0;
         margin: 0;
         box-shadow: none;
-        max-width: 100%;
         width: 100%;
+        max-width: 100%;
         border-radius: 0;
     }
 
     @page {
-        size: auto;
+        size: A4;
         margin: 15mm;
     }
 }
