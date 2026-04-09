@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { usePortfolio, resolveUrl } from '../context/PortfolioContext';
 import { Link } from 'react-router-dom';
-import { Printer, ArrowLeft, Phone, Mail, Link2, MapPin, Calendar, Star, Award, Layout, Maximize2 } from 'lucide-react';
+import { Printer, ArrowLeft, Phone, Mail, Link2, MapPin, Calendar, Star, Award, Maximize2 } from 'lucide-react';
 import './CVBuilder.css';
 
 const CVBuilder = () => {
