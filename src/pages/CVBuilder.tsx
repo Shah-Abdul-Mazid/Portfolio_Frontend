@@ -154,9 +154,9 @@ const CVBuilder = () => {
                     </table>
                 </section>
 
-                {/* ===== PORTFOLIO OF RELEVANT PROJECTS ===== */}
+                {/* ===== PROJECTS ===== */}
                 <section className="cv-section">
-                    <h2 className="cv-section-heading-classic">Portfolio of most relevant projects</h2>
+                    <h2 className="cv-section-heading-classic">Projects</h2>
                     <table className="cv-table">
                         <tbody>
                             {data.projects.slice(0, 4).map((proj, idx) => (
