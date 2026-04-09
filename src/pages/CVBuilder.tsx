@@ -58,6 +58,13 @@ const CVBuilder = () => {
                     </div>
                 </header>
 
+                {/* ===== PROFESSIONAL SUMMARY ===== */}
+                <section className="cv-section" style={{ marginBottom: '20px' }}>
+                    <p style={{ fontSize: '10.5pt', lineHeight: '1.45', textAlign: 'justify', margin: 0 }}>
+                        {data.about.bio.split('\n')[0]} {data.hero.description}
+                    </p>
+                </section>
+
                 {/* ===== EDUCATION ===== */}
                 <section className="cv-section">
                     <h2 className="cv-section-heading-classic">Education</h2>
