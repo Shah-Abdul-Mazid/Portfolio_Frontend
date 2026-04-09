@@ -137,6 +137,8 @@ export interface PortfolioData {
         whatsapp: string;
         messenger: string;
         facebook: string;
+        github?: string;
+        linkedin?: string;
     };
 }
 
@@ -276,7 +278,9 @@ const defaultData: PortfolioData = {
         location: "Mohammadpur, Dhaka-1207",
         whatsapp: "https://wa.me/8801531329222",
         messenger: "https://m.me/shahabdulmazid.ezan",
-        facebook: "https://facebook.com/shahabdulmazid.ezan"
+        facebook: "https://facebook.com/shahabdulmazid.ezan",
+        github: "https://github.com/shamazid",
+        linkedin: "https://linkedin.com/in/shahabdulmazid"
     }
 };
 

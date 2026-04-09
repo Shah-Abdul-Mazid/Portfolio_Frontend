@@ -7,7 +7,7 @@ import './CVBuilder.css';
 const CVBuilder = () => {
     const { data } = usePortfolio();
     const [isCompact, setIsCompact] = useState(true);
-    const [isATS, setIsATS] = useState(false);
+    const [cvLayout, setCvLayout] = useState<'modern' | 'ats' | 'job'>('modern');
     const [docType, setDocType] = useState<'resume' | 'cv'>('resume');
 
     useEffect(() => {
@@ -38,7 +38,6 @@ const CVBuilder = () => {
                     Back
                 </Link>
                 
-                {/* Document Type Selector */}
                 <div className="doc-type-selector">
                     <button 
                         onClick={() => { setDocType('resume'); setIsCompact(true); }}
@@ -54,15 +53,29 @@ const CVBuilder = () => {
                     </button>
                 </div>
 
-                <div style={{ display: 'flex', gap: '8px' }}>
+                <div className="layout-selector">
                     <button 
-                        onClick={() => setIsATS(!isATS)} 
-                        className={`btn ${isATS ? 'btn-active' : 'btn-back'}`}
+                        onClick={() => setCvLayout('modern')}
+                        className={`layout-btn ${cvLayout === 'modern' ? 'active' : ''}`}
                     >
-                        <Layout size={14} />
-                        {isATS ? "Modern" : "ATS"}
+                        Modern
                     </button>
-                    {!isATS && (
+                    <button 
+                        onClick={() => setCvLayout('ats')}
+                        className={`layout-btn ${cvLayout === 'ats' ? 'active' : ''}`}
+                    >
+                        ATS
+                    </button>
+                    <button 
+                        onClick={() => setCvLayout('job')}
+                        className={`layout-btn ${cvLayout === 'job' ? 'active' : ''}`}
+                    >
+                        Job
+                    </button>
+                </div>
+
+                <div style={{ display: 'flex', gap: '8px' }}>
+                    {cvLayout === 'modern' && (
                         <button 
                             onClick={() => setIsCompact(!isCompact)} 
                             className={`btn ${isCompact ? 'btn-active' : 'btn-back'}`}
@@ -77,9 +90,9 @@ const CVBuilder = () => {
                 </div>
             </div>
 
-            <div className={`cv-document ${isCompact && !isATS ? 'compact-mode' : ''} ${isATS ? 'ats-mode' : ''}`}>
+            <div className={`cv-document ${isCompact && cvLayout === 'modern' ? 'compact-mode' : ''} ${cvLayout}-mode`}>
                 {/* ===== ATS HEADER ===== */}
-                {isATS && (
+                {cvLayout === 'ats' && (
                     <header className="cv-header-ats">
                         <div className="cv-header-ats-info">
                             <h1 className="cv-name">{data.hero.name}</h1>
@@ -114,8 +127,45 @@ const CVBuilder = () => {
                     </header>
                 )}
 
+                {/* ===== JOB MODE HEADER (Formal Single Column) ===== */}
+                {cvLayout === 'job' && (
+                    <header className="cv-header-job">
+                        <div className="cv-header-job-left">
+                            <h1 className="cv-name-job">{data.hero.name}</h1>
+                            {data.education && data.education.length > 0 && (
+                                <div className="cv-header-job-edu">
+                                    <div className="cv-job-edu-degree">{data.education[0].degree}</div>
+                                    <div className="cv-job-edu-school">{data.education[0].school}</div>
+                                </div>
+                            )}
+                        </div>
+                        <div className="cv-header-job-right">
+                            <div className="cv-contact-item-job">
+                                <Phone size={12} />
+                                <span>{data.contact.phone}</span>
+                            </div>
+                            <div className="cv-contact-item-job">
+                                <Mail size={12} />
+                                <a href={`mailto:${data.contact.email}`}>{data.contact.email}</a>
+                            </div>
+                            {data.contact.github && (
+                                <div className="cv-contact-item-job">
+                                    <Link2 size={12} />
+                                    <a href={data.contact.github} target="_blank" rel="noopener noreferrer">GitHub Profile</a>
+                                </div>
+                            )}
+                            {data.contact.linkedin && (
+                                <div className="cv-contact-item-job">
+                                    <Link2 size={12} />
+                                    <a href={data.contact.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn Profile</a>
+                                </div>
+                            )}
+                        </div>
+                    </header>
+                )}
+
                 {/* ===== MODERN HEADER ===== */}
-                {!isATS && (
+                {cvLayout === 'modern' && (
                     <header className="cv-header-enhancv">
                         <div className="cv-header-content">
                             <h1 className="cv-name">{data.hero.name}</h1>
@@ -132,7 +182,7 @@ const CVBuilder = () => {
                                 </div>
                                 <div className="cv-contact-item">
                                     <Link2 />
-                                    <a href="https://shahabdulmazid.vercel.app" target="_blank" rel="noopener noreferrer">shahabdulmazid.vercel.app</a>
+                                    <a href={data.contact.linkedin || "#"} target="_blank" rel="noopener noreferrer">LinkedIn Profile</a>
                                 </div>
                                 <div className="cv-contact-item">
                                     <MapPin />
@@ -146,106 +196,129 @@ const CVBuilder = () => {
                     </header>
                 )}
 
-                {/* ===== ATS BODY (Single Column) ===== */}
-                {isATS && (
-                    <div className="cv-body-ats">
-                        <section className="cv-section-ats">
-                            <h2 className="cv-section-heading-ats">CAREER OBJECTIVE</h2>
-                            <p className="cv-text-paragraph">{data.hero.description}</p>
-                        </section>
-
-                        <section className="cv-section-ats">
-                            <h2 className="cv-section-heading-ats">PROFILE SUMMARY</h2>
-                            <p className="cv-text-paragraph">{data.about.bio}</p>
-                        </section>
-
-                        <section className="cv-section-ats">
-                            <h2 className="cv-section-heading-ats">WORK EXPERIENCE</h2>
-                            {data.work.map((wk, idx) => (
-                                <div className="cv-item-ats" key={idx}>
-                                    <div className="cv-item-header-ats">
-                                        <div className="cv-item-title-ats">{wk.role}</div>
-                                        <div className="cv-item-date-ats">{wk.startDate} – {wk.endDate || 'Present'}</div>
+                {/* ===== SINGLE COLUMN BODY (ATS & JOB) ===== */}
+                {(cvLayout === 'ats' || cvLayout === 'job') && (
+                    <div className={`cv-body-${cvLayout}`}>
+                        
+                        {/* EDUCATION - Top for Job Mode */}
+                        <section className={`cv-section-${cvLayout}`}>
+                            <h2 className={`cv-section-heading-${cvLayout}`}>EDUCATION</h2>
+                            {data.education.map((edu, idx) => (
+                                <div className={`cv-item-${cvLayout}`} key={idx}>
+                                    <div className={`cv-item-header-${cvLayout}`}>
+                                        <div className={`cv-item-title-${cvLayout}`}>
+                                            {cvLayout === 'job' && '• '}{edu.degree}
+                                        </div>
+                                        <div className={`cv-item-date-${cvLayout}`}>{edu.year}</div>
                                     </div>
-                                    <div className="cv-item-company-ats">{wk.company}</div>
+                                    <div className={`cv-item-school-${cvLayout}`}>{edu.school}</div>
+                                    <div className={`cv-item-desc-${cvLayout}`}>{edu.major}</div>
+                                </div>
+                            ))}
+                        </section>
+
+                        {/* EXPERIENCE */}
+                        <section className={`cv-section-${cvLayout}`}>
+                            <h2 className={`cv-section-heading-${cvLayout}`}>EXPERIENCE</h2>
+                            {data.work.map((wk, idx) => (
+                                <div className={`cv-item-${cvLayout}`} key={idx}>
+                                    <div className={`cv-item-header-${cvLayout}`}>
+                                        <div className={`cv-item-title-${cvLayout}`}>
+                                            {cvLayout === 'job' && '• '}{wk.role}
+                                        </div>
+                                        <div className={`cv-item-date-${cvLayout}`}>{wk.startDate} – {wk.endDate || 'Present'}</div>
+                                    </div>
+                                    <div className={`cv-item-company-${cvLayout}`}>{wk.company}</div>
                                     {wk.details && wk.details.length > 0 && (
                                         <ul className="cv-item-bullets">
-                                            {wk.details.map((d, i) => <li key={i}>{d}</li>)}
+                                            {wk.details.map((d, i) => <li key={i}>{cvLayout === 'job' ? '- ' : ''}{d}</li>)}
                                         </ul>
                                     )}
                                 </div>
                             ))}
                         </section>
 
-                        <section className="cv-section-ats">
-                            <h2 className="cv-section-heading-ats">EDUCATION</h2>
-                            {data.education.map((edu, idx) => (
-                                <div className="cv-item-ats" key={idx}>
-                                    <div className="cv-item-header-ats">
-                                        <div className="cv-item-title-ats">{edu.degree}</div>
-                                        <div className="cv-item-date-ats">{edu.year}</div>
+                        {/* PROJECTS */}
+                        <section className={`cv-section-${cvLayout}`}>
+                            <h2 className={`cv-section-heading-${cvLayout}`}>PROJECTS</h2>
+                            {data.projects.map((proj, idx) => (
+                                <div className={`cv-item-${cvLayout}`} key={idx}>
+                                    <div className={`cv-item-header-${cvLayout}`}>
+                                        <div className={`cv-item-title-${cvLayout}`}>
+                                            {cvLayout === 'job' && '• '}{proj.title}
+                                        </div>
+                                        <div className={`cv-item-date-${cvLayout}`}>2024</div>
                                     </div>
-                                    <div className="cv-item-company-ats">{edu.school}</div>
-                                    <div className="cv-item-desc-text">{edu.major}</div>
+                                    <div className={`cv-item-desc-text`}>{proj.desc}</div>
+                                    <div className={`cv-item-tags-${cvLayout}`}>
+                                        <strong>Technologies:</strong> {proj.tags.join(', ')}
+                                    </div>
                                 </div>
                             ))}
                         </section>
 
                         {/* Research Papers (CV Only) */}
                         {docType === 'cv' && data.papers && data.papers.length > 0 && (
-                            <section className="cv-section-ats">
-                                <h2 className="cv-section-heading-ats">RESEARCH PAPERS</h2>
+                            <section className={`cv-section-${cvLayout}`}>
+                                <h2 className={`cv-section-heading-${cvLayout}`}>RESEARCH PAPERS</h2>
                                 {data.papers.map((paper, idx) => (
-                                    <div className="cv-item-ats" key={idx}>
-                                        <div className="cv-item-header-ats">
-                                            <div className="cv-item-title-ats">{paper.title}</div>
-                                            <div className="cv-item-date-ats">{paper.year}</div>
+                                    <div className={`cv-item-${cvLayout}`} key={idx}>
+                                        <div className={`cv-item-header-${cvLayout}`}>
+                                            <div className={`cv-item-title-${cvLayout}`}>
+                                                {cvLayout === 'job' && '• '}{paper.title}
+                                            </div>
+                                            <div className={`cv-item-date-${cvLayout}`}>{paper.year}</div>
                                         </div>
-                                        <div className="cv-item-desc-text">
+                                        <div className={`cv-item-desc-text`}>
                                             {paper.authors}. "{paper.title}." <em>{paper.venue}</em>, {paper.year}. 
-                                            {paper.doi && <span style={{ marginLeft: '5px' }}>DOI: {paper.doi}</span>}
                                         </div>
                                     </div>
                                 ))}
                             </section>
                         )}
 
-                        <section className="cv-section-ats">
-                            <h2 className="cv-section-heading-ats">SKILLS</h2>
-                            <div className="cv-skills-ats">
+                        {/* SKILLS */}
+                        <section className={`cv-section-${cvLayout}`}>
+                            <h2 className={`cv-section-heading-${cvLayout}`}>TECHNICAL SKILLS</h2>
+                            <div className="cv-skills-classic">
                                 {data.skills.map((group, idx) => (
-                                    <div className="cv-skill-group-ats" key={idx}>
+                                    <div className="cv-skill-group-classic" key={idx}>
                                         <strong>{group.name}:</strong> {group.items.join(', ')}
                                     </div>
                                 ))}
                             </div>
                         </section>
 
-                        <section className="cv-section-ats">
-                            <h2 className="cv-section-heading-ats">PROJECTS</h2>
-                            {data.projects.map((proj, idx) => (
-                                <div className="cv-item-ats" key={idx}>
-                                    <div className="cv-item-header-ats">
-                                        <div className="cv-item-title-ats">{proj.title}</div>
-                                        <div className="cv-item-date-ats">2024</div>
+                        {/* POSITIONS OF RESPONSIBILITY (Job Mode) */}
+                        {(cvLayout === 'job' || docType === 'cv') && data.activities && data.activities.length > 0 && (
+                            <section className={`cv-section-${cvLayout}`}>
+                                <h2 className={`cv-section-heading-${cvLayout}`}>POSITIONS OF RESPONSIBILITY</h2>
+                                {data.activities.map((ach, idx) => (
+                                    <div className={`cv-item-${cvLayout}`} key={idx}>
+                                        <div className={`cv-item-header-${cvLayout}`}>
+                                            <div className={`cv-item-title-${cvLayout}`}>
+                                                {cvLayout === 'job' && '• '}{ach.role}
+                                            </div>
+                                            <div className={`cv-item-date-${cvLayout}`}>{ach.period}</div>
+                                        </div>
+                                        <div className={`cv-item-company-${cvLayout}`}>{ach.organization}</div>
+                                        <div className={`cv-item-desc-text`}>{ach.desc}</div>
                                     </div>
-                                    <div className="cv-item-desc-text">{proj.desc}</div>
-                                    <div className="cv-item-tags-ats">Technologies: {proj.tags.join(', ')}</div>
-                                </div>
-                            ))}
-                        </section>
+                                ))}
+                            </section>
+                        )}
 
                         {/* References (CV Only) */}
                         {docType === 'cv' && data.references && data.references.length > 0 && (
-                            <section className="cv-section-ats">
-                                <h2 className="cv-section-heading-ats">PROFESSIONAL REFERENCES</h2>
+                            <section className={`cv-section-${cvLayout}`}>
+                                <h2 className={`cv-section-heading-${cvLayout}`}>PROFESSIONAL REFERENCES</h2>
                                 <div className="cv-references-grid-ats">
                                     {data.references.map((ref, idx) => (
-                                        <div className="cv-item-ats" key={idx}>
-                                            <div className="cv-item-title-ats">{ref.name}</div>
-                                            <div className="cv-item-desc-text">
+                                        <div className={`cv-item-${cvLayout}`} key={idx}>
+                                            <div className={`cv-item-title-${cvLayout}`}>{ref.name}</div>
+                                            <div className={`cv-item-desc-text`}>
                                                 {ref.title}, {ref.company}<br/>
-                                                Email: {ref.email} {ref.phone && `| Phone: ${ref.phone}`}
+                                                {ref.email}
                                             </div>
                                         </div>
                                     ))}
@@ -256,7 +329,7 @@ const CVBuilder = () => {
                 )}
 
                 {/* ===== MODERN BODY (Two Columns) ===== */}
-                {!isATS && (
+                {cvLayout === 'modern' && (
                     <div className="cv-body">
                         
                         {/* ===== LEFT COLUMN ===== */}
