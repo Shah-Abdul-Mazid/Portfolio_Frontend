@@ -39,6 +39,37 @@
     color: #fff;
 }
 
+/* ===== Doc Type Selector ===== */
+.doc-type-selector {
+    display: flex;
+    background: #e5e7eb;
+    padding: 3px;
+    border-radius: 8px;
+    gap: 2px;
+}
+
+.type-btn {
+    padding: 6px 16px;
+    border: none;
+    background: transparent;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #4b5563;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.type-btn.active {
+    background: #fff;
+    color: #111827;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.type-btn:hover:not(.active) {
+    color: #111827;
+}
+
 /* ===== Enhancv Document ===== */
 .cv-document {
     max-width: 900px;
@@ -328,123 +359,162 @@
     border: 1px solid #111827;
 }
 
-/* ===== Compact One-Page Mode ===== */
-.compact-mode {
-    padding: 28px 36px !important;
+/* ===== ATS-Friendly Mode ===== */
+.ats-mode {
+    padding: 40px 50px !important;
+    max-width: 850px !important;
+    font-family: 'Times New Roman', Times, serif; /* Traditional serif font for ATS */
+    color: #1a1a1a;
 }
 
-.compact-mode .cv-header-enhancv {
-    margin-bottom: 12px !important;
+.ats-mode .cv-header-ats {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 25px;
+    border-bottom: none;
 }
 
-.compact-mode .cv-name {
-    font-size: 20pt !important;
+.ats-mode .cv-name {
+    font-family: 'Inter', sans-serif;
+    font-size: 28pt;
+    text-transform: none;
+    letter-spacing: -0.5px;
+    margin-bottom: 10px;
+    color: #000;
 }
 
-.compact-mode .cv-title {
-    font-size: 9pt !important;
-    margin-bottom: 6px !important;
+.ats-mode .cv-contact-ats {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 9.5pt;
+    color: #000;
 }
 
-.compact-mode .cv-header-badge {
-    width: 68px !important;
-    height: 68px !important;
-    font-size: 22px !important;
+.ats-mode .cv-contact-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 2px 0;
 }
 
-.compact-mode .cv-contact-grid {
-    font-size: 7.5pt !important;
-    gap: 4px 12px !important;
+/* Specific styling for links to get the "boxed" effect from the image */
+.ats-mode .cv-contact-item a {
+    color: #000;
+    text-decoration: none;
+    border: 1.5px solid #00cfe8; /* Cyan border seen in image */
+    padding: 1px 6px;
+    border-radius: 2px;
+    font-weight: 500;
 }
 
-.compact-mode .cv-body {
-    gap: 22px !important;
+.ats-mode .cv-contact-item svg {
+    color: #000;
+    width: 12px;
+    height: 12px;
+    flex-shrink: 0;
 }
 
-.compact-mode .cv-section,
-.compact-mode section.cv-section {
-    margin: 0 0 10px 0 !important;
+.ats-mode .cv-header-photo {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid #f3f4f6;
 }
 
-.compact-mode .cv-section-heading {
-    font-size: 9pt !important;
-    margin-bottom: 7px !important;
-    padding-bottom: 3px !important;
+.ats-mode .cv-header-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
-.compact-mode .cv-item {
-    padding-bottom: 6px !important;
-    margin-bottom: 6px !important;
+.ats-mode .cv-section-ats {
+    margin-bottom: 20px;
 }
 
-.compact-mode .cv-item-title {
-    font-size: 8.5pt !important;
-    margin-bottom: 1px !important;
+.ats-mode .cv-section-heading-ats {
+    font-family: 'Inter', sans-serif;
+    font-size: 12pt;
+    font-weight: 700;
+    color: #4f46e5; /* Professional Purple/Blue */
+    text-transform: uppercase;
+    border-top: 1.5px solid #d1d5db;
+    padding-top: 8px;
+    margin-bottom: 12px;
 }
 
-.compact-mode .cv-item-company {
-    font-size: 8pt !important;
+.ats-mode .cv-text-paragraph {
+    font-size: 10.5pt;
+    color: #262626;
+    line-height: 1.6;
+    text-align: left;
 }
 
-.compact-mode .cv-meta-row {
-    font-size: 7pt !important;
-    gap: 8px !important;
-    margin-top: 2px !important;
-    margin-bottom: 3px !important;
+.ats-mode .cv-item-ats {
+    margin-bottom: 15px;
 }
 
-.compact-mode .cv-text-paragraph,
-.compact-mode .cv-item-desc-text {
-    font-size: 7.8pt !important;
-    line-height: 1.35 !important;
+.ats-mode .cv-item-header-ats {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 2px;
 }
 
-.compact-mode .cv-item-bullets {
-    margin: 2px 0 0 0 !important;
-    padding-left: 12px !important;
+.ats-mode .cv-item-title-ats {
+    font-weight: 700;
+    font-size: 11pt;
+    color: #000;
 }
 
-.compact-mode .cv-item-bullets li {
-    font-size: 7.8pt !important;
-    line-height: 1.35 !important;
-    margin-bottom: 1px !important;
+.ats-mode .cv-item-date-ats {
+    font-size: 9.5pt;
+    color: #4b5563;
+    font-weight: 500;
 }
 
-.compact-mode .cv-ach-item {
-    padding-bottom: 6px !important;
-    margin-bottom: 6px !important;
-    gap: 7px !important;
+.ats-mode .cv-item-company-ats {
+    font-weight: 700;
+    font-size: 10.5pt;
+    color: #111827;
+    margin-bottom: 5px;
 }
 
-.compact-mode .cv-ach-icon svg {
-    width: 12px !important;
-    height: 12px !important;
+.ats-mode .cv-item-desc-text {
+    font-size: 10pt;
+    color: #4b5563;
+    margin-bottom: 5px;
 }
 
-.compact-mode .cv-skill-tag {
-    font-size: 7.5pt !important;
-    padding: 1px 0 !important;
+.ats-mode .cv-item-bullets {
+    margin-top: 5px;
+    padding-left: 20px;
 }
 
-.compact-mode .cv-skills-grid {
-    gap: 6px 10px !important;
+.ats-mode .cv-item-bullets li {
+    font-size: 10.5pt;
+    margin-bottom: 4px;
+    list-style-type: disc;
+    color: #262626;
 }
 
-.compact-mode .cv-lang-item {
-    margin-bottom: 7px !important;
+.ats-mode .cv-skills-ats {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
 }
 
-.compact-mode .cv-lang-name {
-    font-size: 8pt !important;
+.ats-mode .cv-skill-group-ats {
+    font-size: 10.5pt;
+    color: #262626;
 }
 
-.compact-mode .cv-lang-prof {
-    font-size: 7pt !important;
-}
-
-.compact-mode .cv-dot {
-    width: 10px !important;
-    height: 10px !important;
+.ats-mode .cv-item-tags-ats {
+    font-size: 9.5pt;
+    color: #6b7280;
+    margin-top: 4px;
 }
 
 /* ===== Print Alignment ===== */
@@ -454,5 +524,6 @@
     .cv-controls { display: none !important; }
     .cv-document { padding: 0; margin: 0; box-shadow: none; max-width: 100%; width: 100%; }
     .cv-document.compact-mode { padding: 0 !important; }
+    .cv-document.ats-mode { padding: 0 !important; }
     @page { size: A4; margin: 12mm; }
 }
