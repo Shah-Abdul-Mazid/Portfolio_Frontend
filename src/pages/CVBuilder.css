@@ -1,9 +1,9 @@
 .cv-builder-container {
-    background-color: #e8ecf1;
+    background-color: #f3f4f6;
     min-height: 100vh;
     padding: 2rem 1rem;
-    font-family: 'Times New Roman', Times, serif;
-    color: #000;
+    font-family: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    color: #1f2937;
     -webkit-print-color-adjust: exact;
 }
 
@@ -13,7 +13,6 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-family: sans-serif;
 }
 
 .cv-controls .btn {
@@ -36,65 +35,111 @@
 }
 
 .cv-controls .btn-print {
-    background-color: #1a4f8b;
+    background-color: #007aff;
     color: #fff;
 }
 
-/* ===== Classic Document ===== */
+/* ===== Enhancv Document ===== */
 .cv-document {
-    max-width: 850px;
+    max-width: 900px;
     margin: 0 auto;
     background-color: #fff;
-    padding: 48px 56px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    padding: 56px 60px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
 }
 
 /* ===== Header ===== */
-.cv-header-classic {
-    text-align: center;
-    margin-bottom: 24px;
+.cv-header-enhancv {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 28px;
 }
 
-.cv-name-classic {
+.cv-header-content {
+    flex: 1;
+}
+
+.cv-name {
     font-size: 26pt;
-    font-weight: bold;
-    font-style: italic;
-    color: #1a4f8b;
-    margin: 0 0 6px 0;
-    letter-spacing: 0.5px;
-}
-
-.cv-contact-box {
-    font-size: 10.5pt;
-    font-style: italic;
-    line-height: 1.5;
+    font-weight: 800;
+    text-transform: uppercase;
     color: #000;
+    margin: 0 0 2px 0;
+    letter-spacing: -0.5px;
 }
 
-.cv-contact-row {
-    margin-bottom: 2px;
+.cv-title {
+    font-size: 11pt;
+    font-weight: 700;
+    color: #0084ff;
+    margin: 0 0 12px 0;
 }
 
-.cv-contact-sep {
-    margin: 0 6px;
-    color: #1a4f8b;
-    font-weight: bold;
-}
-
-.cv-contact-box a {
+.cv-header-badge {
+    width: 96px;
+    height: 96px;
+    background-color: #0084ff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    font-weight: 600;
     color: #000;
+    flex-shrink: 0;
+    margin-left: 20px;
+}
+
+/* Contact Details Structure */
+.cv-contact-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 16px;
+    font-size: 8.5pt;
+    color: #4b5563;
+    font-weight: 500;
+}
+
+.cv-contact-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.cv-contact-item svg {
+    color: #0084ff;
+    width: 10px;
+    height: 10px;
+}
+
+.cv-contact-item a {
+    color: #4b5563;
     text-decoration: none;
 }
-.cv-contact-box a:hover {
-    text-decoration: underline;
+
+/* ===== Body Columns ===== */
+.cv-body {
+    display: flex;
+    gap: 36px;
 }
 
-/* ===== Sections ===== */
+.cv-col-left {
+    flex: 1.15;
+    min-width: 0;
+}
+
+.cv-col-right {
+    flex: 1;
+    min-width: 0;
+}
+
+/* ===== Section Headings ===== */
 .cv-builder-container .cv-section,
 .cv-builder-container section.cv-section {
     min-height: 0 !important;
     padding: 0 !important;
-    margin: 0 0 16px 0 !important;
+    margin: 0 0 20px 0 !important;
     display: block !important;
     justify-content: initial !important;
     align-items: initial !important;
@@ -104,115 +149,183 @@
     overflow-x: visible !important;
 }
 
-.cv-section-heading-classic {
-    font-size: 12pt;
-    font-weight: bold;
-    font-style: italic;
-    color: #1a4f8b;
-    margin: 0 0 6px 0;
-    padding-bottom: 2px;
-    border-bottom: 1.5px solid #1a4f8b;
+.cv-section-heading {
+    font-size: 10.5pt;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: #000;
+    padding-bottom: 4px;
+    border-bottom: 2px solid #000;
+    margin: 0 0 12px 0;
 }
 
-/* ===== Item Structure ===== */
-.cv-item-classic {
+/* ===== Global Text ===== */
+.cv-text-paragraph {
+    font-size: 8.5pt;
+    color: #4b5563;
+    line-height: 1.5;
+    text-align: justify;
+    margin: 0;
+}
+
+/* ===== Standard Items (Experience, Education, Projects) ===== */
+.cv-item {
+    padding-bottom: 12px;
     margin-bottom: 12px;
+    border-bottom: 1px dashed #d1d5db;
 }
 
-.cv-item-row-1, .cv-item-row-2 {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
+.cv-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
 }
 
-/* Row 1 details */
 .cv-item-title {
-    font-size: 11pt;
-    font-weight: bold;
-}
-.cv-item-org-right {
-    font-size: 11pt;
-    font-style: italic;
-}
-.cv-item-date-right {
-    font-size: 10pt;
-    font-style: italic;
-    white-space: nowrap;
+    font-weight: 800;
+    font-size: 9.5pt;
+    color: #000;
+    margin-bottom: 2px;
 }
 
-/* Row 2 details */
-.cv-item-subtitle {
-    font-size: 10pt;
-    font-style: italic;
-}
-.cv-item-location-right {
-    font-size: 10pt;
-    font-style: italic;
+.cv-item-company {
+    font-weight: 700;
+    font-size: 9pt;
+    color: #0084ff;
 }
 
-/* Descriptions */
-.cv-item-desc {
-    font-size: 10pt;
-    margin-top: 4px;
+.cv-meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 7.5pt;
+    color: #6b7280;
+    margin-top: 3px;
+    margin-bottom: 6px;
+}
+
+.cv-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.cv-meta-item svg {
+    width: 9px;
+    height: 9px;
+}
+
+.cv-item-desc-text {
+    font-size: 8.5pt;
+    color: #4b5563;
     line-height: 1.45;
 }
 
 .cv-item-bullets {
-    padding-left: 18px;
+    padding-left: 14px;
     margin: 4px 0 0 0;
 }
 
 .cv-item-bullets li {
-    font-size: 10pt;
+    font-size: 8.5pt;
+    color: #4b5563;
     line-height: 1.45;
-    margin-bottom: 2px;
+    margin-bottom: 3px;
+    list-style-type: square;
 }
 
-/* ===== Skills / Tabular Data ===== */
-.cv-table {
-    width: 100%;
-    border-collapse: collapse;
+/* ===== Achievements / Certifications ===== */
+.cv-ach-item {
+    display: flex;
+    gap: 10px;
+    border-bottom: 1px dashed #d1d5db;
+    padding-bottom: 12px;
+    margin-bottom: 12px;
 }
 
-.cv-table td {
-    padding: 4px 0;
-    vertical-align: top;
-    font-size: 10pt;
-    line-height: 1.4;
+.cv-ach-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
 }
 
-.cv-label-col {
-    font-weight: bold;
-    width: 28%;
+.cv-ach-icon {
+    color: #0084ff;
+    flex-shrink: 0;
+    margin-top: 2px;
 }
 
-.cv-data-col {
-    width: 72%;
+.cv-ach-icon svg {
+    width: 14px;
+    height: 14px;
 }
 
-/* ===== Print Optimization ===== */
+.cv-ach-content {
+    flex: 1;
+}
+
+/* ===== Skills ===== */
+.cv-skills-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 14px;
+}
+
+.cv-skill-tag {
+    font-size: 8.5pt;
+    font-weight: 600;
+    color: #374151;
+    padding: 3px 0;
+    border-top: 1px solid #d1d5db;
+    border-bottom: 1px solid #d1d5db;
+    white-space: nowrap;
+}
+
+/* ===== Languages ===== */
+.cv-lang-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.cv-lang-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.cv-lang-name {
+    font-size: 9pt;
+    font-weight: 800;
+    color: #000;
+}
+
+.cv-lang-prof {
+    font-size: 8pt;
+    color: #6b7280;
+}
+
+.cv-lang-dots {
+    display: flex;
+    gap: 5px;
+}
+
+.cv-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #e5e7eb;
+}
+
+.cv-dot.filled {
+    background-color: #0084ff;
+}
+
+/* ===== Print Alignment ===== */
 @media print {
-    body {
-        background: #fff !important;
-        margin: 0;
-        padding: 0;
-    }
-    .cv-builder-container {
-        padding: 0;
-        background: #fff !important;
-    }
-    .cv-controls {
-        display: none !important;
-    }
-    .cv-document {
-        padding: 0;
-        margin: 0;
-        box-shadow: none;
-        max-width: 100%;
-        width: 100%;
-    }
-    @page {
-        size: A4;
-        margin: 15mm;
-    }
+    body { background: #fff !important; margin: 0; padding: 0; }
+    .cv-builder-container { padding: 0; background: #fff !important; }
+    .cv-controls { display: none !important; }
+    .cv-document { padding: 0; margin: 0; box-shadow: none; max-width: 100%; width: 100%; }
+    @page { size: A4; margin: 15mm; }
 }
