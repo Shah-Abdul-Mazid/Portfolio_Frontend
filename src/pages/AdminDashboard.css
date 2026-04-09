@@ -322,12 +322,16 @@
     
     .admin-sidebar {
         position: fixed;
-        left: -280px;
-        z-index: 1000;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        transform: translateX(-100%);
+        z-index: 1001; /* Above mobile header */
+        box-shadow: 20px 0 30px rgba(0,0,0,0.5);
     }
     
     .admin-sidebar.open {
-        transform: translateX(280px);
+        transform: translateX(0);
     }
     
     .admin-mobile-header {
