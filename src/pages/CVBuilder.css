@@ -321,11 +321,138 @@
     background-color: #0084ff;
 }
 
+/* ===== Toggle Button ===== */
+.cv-controls .btn-active {
+    background-color: #111827;
+    color: #fff;
+    border: 1px solid #111827;
+}
+
+/* ===== Compact One-Page Mode ===== */
+.compact-mode {
+    padding: 28px 36px !important;
+}
+
+.compact-mode .cv-header-enhancv {
+    margin-bottom: 12px !important;
+}
+
+.compact-mode .cv-name {
+    font-size: 20pt !important;
+}
+
+.compact-mode .cv-title {
+    font-size: 9pt !important;
+    margin-bottom: 6px !important;
+}
+
+.compact-mode .cv-header-badge {
+    width: 68px !important;
+    height: 68px !important;
+    font-size: 22px !important;
+}
+
+.compact-mode .cv-contact-grid {
+    font-size: 7.5pt !important;
+    gap: 4px 12px !important;
+}
+
+.compact-mode .cv-body {
+    gap: 22px !important;
+}
+
+.compact-mode .cv-section,
+.compact-mode section.cv-section {
+    margin: 0 0 10px 0 !important;
+}
+
+.compact-mode .cv-section-heading {
+    font-size: 9pt !important;
+    margin-bottom: 7px !important;
+    padding-bottom: 3px !important;
+}
+
+.compact-mode .cv-item {
+    padding-bottom: 6px !important;
+    margin-bottom: 6px !important;
+}
+
+.compact-mode .cv-item-title {
+    font-size: 8.5pt !important;
+    margin-bottom: 1px !important;
+}
+
+.compact-mode .cv-item-company {
+    font-size: 8pt !important;
+}
+
+.compact-mode .cv-meta-row {
+    font-size: 7pt !important;
+    gap: 8px !important;
+    margin-top: 2px !important;
+    margin-bottom: 3px !important;
+}
+
+.compact-mode .cv-text-paragraph,
+.compact-mode .cv-item-desc-text {
+    font-size: 7.8pt !important;
+    line-height: 1.35 !important;
+}
+
+.compact-mode .cv-item-bullets {
+    margin: 2px 0 0 0 !important;
+    padding-left: 12px !important;
+}
+
+.compact-mode .cv-item-bullets li {
+    font-size: 7.8pt !important;
+    line-height: 1.35 !important;
+    margin-bottom: 1px !important;
+}
+
+.compact-mode .cv-ach-item {
+    padding-bottom: 6px !important;
+    margin-bottom: 6px !important;
+    gap: 7px !important;
+}
+
+.compact-mode .cv-ach-icon svg {
+    width: 12px !important;
+    height: 12px !important;
+}
+
+.compact-mode .cv-skill-tag {
+    font-size: 7.5pt !important;
+    padding: 1px 0 !important;
+}
+
+.compact-mode .cv-skills-grid {
+    gap: 6px 10px !important;
+}
+
+.compact-mode .cv-lang-item {
+    margin-bottom: 7px !important;
+}
+
+.compact-mode .cv-lang-name {
+    font-size: 8pt !important;
+}
+
+.compact-mode .cv-lang-prof {
+    font-size: 7pt !important;
+}
+
+.compact-mode .cv-dot {
+    width: 10px !important;
+    height: 10px !important;
+}
+
 /* ===== Print Alignment ===== */
 @media print {
     body { background: #fff !important; margin: 0; padding: 0; }
     .cv-builder-container { padding: 0; background: #fff !important; }
     .cv-controls { display: none !important; }
     .cv-document { padding: 0; margin: 0; box-shadow: none; max-width: 100%; width: 100%; }
-    @page { size: A4; margin: 15mm; }
+    .cv-document.compact-mode { padding: 0 !important; }
+    @page { size: A4; margin: 12mm; }
 }

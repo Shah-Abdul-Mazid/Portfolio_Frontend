@@ -1,11 +1,12 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
 import { Link } from 'react-router-dom';
-import { Printer, ArrowLeft, Phone, Mail, Link2, MapPin, Calendar, Star, Award } from 'lucide-react';
+import { Printer, ArrowLeft, Phone, Mail, Link2, MapPin, Calendar, Star, Award, Layout, Maximize2 } from 'lucide-react';
 import './CVBuilder.css';
 
 const CVBuilder = () => {
     const { data } = usePortfolio();
+    const [isCompact, setIsCompact] = useState(true);
 
     useEffect(() => {
         document.title = `${data.hero.name} | Curriculum Vitae`;
@@ -34,13 +35,23 @@ const CVBuilder = () => {
                     <ArrowLeft size={16} />
                     Back to Portfolio
                 </Link>
-                <button onClick={handlePrint} className="btn btn-print">
-                    <Printer size={16} />
-                    Save as PDF
-                </button>
+                <div style={{ display: 'flex', gap: '10px' }}>
+                    <button 
+                        onClick={() => setIsCompact(!isCompact)} 
+                        className={`btn ${isCompact ? 'btn-active' : 'btn-back'}`}
+                        title={isCompact ? "Switch to Standard View" : "Switch to One-Page Mode"}
+                    >
+                        {isCompact ? <Maximize2 size={16} /> : <Layout size={16} />}
+                        {isCompact ? "Standard View" : "One-Page Mode"}
+                    </button>
+                    <button onClick={handlePrint} className="btn btn-print">
+                        <Printer size={16} />
+                        Save as PDF
+                    </button>
+                </div>
             </div>
 
-            <div className="cv-document">
+            <div className={`cv-document ${isCompact ? 'compact-mode' : ''}`}>
                 {/* ===== HEADER ===== */}
                 <header className="cv-header-enhancv">
                     <div className="cv-header-content">

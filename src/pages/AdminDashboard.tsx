@@ -211,6 +211,12 @@ const AdminDashboard = () => {
         }));
     };
 
+    // Centralized notification helper for local edits
+    const showNotification = (msg: string) => {
+        setSaveStatus(msg);
+        setTimeout(() => setSaveStatus(''), 2500);
+    };
+
     const updateListItem = (collection: string, index: number, field: string, value: any) => {
         setEditData(prev => {
             const list = [...(prev as any)[collection]];
@@ -226,6 +232,7 @@ const AdminDashboard = () => {
             list.splice(index, 1);
             return { ...prev, [collection]: list };
         });
+        showNotification('🗑️ Successfully removed card');
     };
 
     const addListItem = (collection: string, defaultItem: any) => {
@@ -233,6 +240,7 @@ const AdminDashboard = () => {
             ...prev,
             [collection]: [...(prev as any)[collection], defaultItem]
         }));
+        showNotification(`📝 Added new ${collection} item`);
     };
 
     const handleSave = async () => {
@@ -266,6 +274,7 @@ const AdminDashboard = () => {
             work[workIndex] = { ...work[workIndex], details: [...work[workIndex].details, ''] };
             return { ...prev, work };
         });
+        showNotification('📝 Added work detail');
     };
     const removeWorkDetail = (workIndex: number, detailIndex: number) => {
         setEditData(prev => {
@@ -274,6 +283,7 @@ const AdminDashboard = () => {
             work[workIndex] = { ...work[workIndex], details };
             return { ...prev, work };
         });
+        showNotification('🗑️ Removed work detail');
     };
 
     // ── Skill helpers ─────────────────────────────────────────────────────────
@@ -294,6 +304,7 @@ const AdminDashboard = () => {
             );
             return { ...prev, skills };
         });
+        showNotification('📝 Added skill');
     };
     const removeSkillItem = (catIndex: number, itemIndex: number) => {
         setEditData(prev => {
@@ -302,6 +313,7 @@ const AdminDashboard = () => {
             );
             return { ...prev, skills };
         });
+        showNotification('🗑️ Removed skill');
     };
 
     // ── Project tag helpers ───────────────────────────────────────────────────
