@@ -9,7 +9,7 @@ const CVBuilder = () => {
 
     useEffect(() => {
         document.title = `${data.hero.name} | Curriculum Vitae`;
-        document.body.style.backgroundColor = '#e8ecf1';
+        document.body.style.backgroundColor = '#f0f0f0';
         return () => {
             document.title = 'Shah Abdul Mazid | Portfolio';
             document.body.style.backgroundColor = '';
@@ -17,6 +17,14 @@ const CVBuilder = () => {
     }, [data.hero.name]);
 
     const handlePrint = () => window.print();
+
+    // Reorganize skills into comma-separated strings for tabular display
+    const programmingSkills = data.skills
+        .find(s => s.name === 'Programming Languages')?.items.join(', ') || '';
+    const otherSkills = data.skills
+        .filter(s => s.name !== 'Programming Languages')
+        .map(group => group.items.join(', '))
+        .join(', ');
 
     return (
         <div className="cv-builder-container">
@@ -32,202 +40,152 @@ const CVBuilder = () => {
             </div>
 
             <div className="cv-document">
-                {/* Navy left accent bar */}
-                <div className="cv-accent-bar" />
-
-                <div className="cv-content">
-                    {/* ===== HEADER ===== */}
-                    <header className="cv-header">
-                        <h1 className="cv-name">{data.hero.name}</h1>
-                        <div className="cv-subtitle">
-                            {data.hero.roles?.join(' | ') || data.hero.title}
+                {/* ===== HEADER ===== */}
+                <header className="cv-header-classic">
+                    <h1 className="cv-name-classic">{data.hero.name}</h1>
+                    <div className="cv-contact-box">
+                        <div className="cv-contact-row">
+                            <span>Residence/domicile: {data.contact.location}</span>
                         </div>
                         <div className="cv-contact-row">
-                            <span className="cv-contact-item">
-                                <span className="cv-contact-icon">📞</span>
-                                {data.contact.phone}
-                            </span>
-                            <span className="cv-contact-item">
-                                <span className="cv-contact-icon">📍</span>
-                                {data.contact.location}
-                            </span>
-                            <a className="cv-contact-item" href={`mailto:${data.contact.email}`}>
-                                <span className="cv-contact-icon">✉</span>
-                                {data.contact.email}
-                            </a>
-                            <a className="cv-contact-item" href="https://shahabdulmazid.vercel.app" target="_blank" rel="noopener noreferrer">
-                                <span className="cv-contact-icon">🔗</span>
-                                shahabdulmazid.vercel.app
-                            </a>
+                            <span>E-mail: <a href={`mailto:${data.contact.email}`}>{data.contact.email}</a></span>
+                            <span className="cv-contact-sep">*</span>
+                            <span>Telephone number: {data.contact.phone}</span>
                         </div>
-                    </header>
-
-                    {/* Summary bar — from data.about.bio */}
-                    <p className="cv-summary-bar">
-                        {data.about.bio.split('\n')[0]} {data.hero.description}
-                    </p>
-
-                    {/* ===== TWO-COLUMN BODY ===== */}
-                    <div className="cv-body">
-                        {/* ===== LEFT COLUMN ===== */}
-                        <div className="cv-col-left">
-                            {/* Education — from data.education */}
-                            <section className="cv-section">
-                                <h2 className="cv-section-heading">
-                                    <span className="cv-heading-icon">🎓</span>
-                                    Education
-                                </h2>
-                                {data.education.map((edu, idx) => (
-                                    <div className="cv-item" key={idx}>
-                                        <div className="cv-item-role">{edu.degree}</div>
-                                        <div className="cv-item-company">{edu.school}</div>
-                                        <p className="cv-item-text">{edu.year} — {edu.major}</p>
-                                    </div>
-                                ))}
-                            </section>
-
-                            {/* Publications — from data.papers */}
-                            {data.papers && data.papers.length > 0 && (
-                                <section className="cv-section">
-                                    <h2 className="cv-section-heading">
-                                        <span className="cv-heading-icon">📄</span>
-                                        Publications
-                                    </h2>
-                                    {data.papers.slice(0, 4).map((paper, idx) => (
-                                        <div className="cv-item" key={idx}>
-                                            <div className="cv-item-role">"{paper.title}"</div>
-                                            <div className="cv-item-company">{paper.venue}, {paper.year}</div>
-                                        </div>
-                                    ))}
-                                </section>
-                            )}
-
-                            {/* Languages */}
-                            <section className="cv-section">
-                                <h2 className="cv-section-heading">
-                                    <span className="cv-heading-icon">🌐</span>
-                                    Languages
-                                </h2>
-                                <div className="cv-lang-row">
-                                    <div className="cv-lang-item">
-                                        <span className="cv-lang-dot" />
-                                        <span>Bengali (Native)</span>
-                                    </div>
-                                    <div className="cv-lang-item">
-                                        <span className="cv-lang-dot" />
-                                        <span>English (Fluent)</span>
-                                    </div>
-                                </div>
-                            </section>
-
-                            {/* Activities / Leadership (ATS-Friendly) */}
-                            {data.activities && data.activities.length > 0 && (
-                                <section className="cv-section">
-                                    <h2 className="cv-section-heading">
-                                        <span className="cv-heading-icon">⚡</span>
-                                        Leadership & Activities
-                                    </h2>
-                                    {data.activities.map((act, idx) => (
-                                        <div className="cv-item" key={idx}>
-                                            <div className="cv-item-role">{act.role}</div>
-                                            <div className="cv-item-company">{act.organization} ({act.period})</div>
-                                            <p className="cv-item-text">{act.desc}</p>
-                                        </div>
-                                    ))}
-                                </section>
-                            )}
-
-                            {/* Relevant Coursework (Highly recommended for fresh grads) */}
-                            <section className="cv-section">
-                                <h2 className="cv-section-heading">
-                                    <span className="cv-heading-icon">📚</span>
-                                    Relevant Coursework
-                                </h2>
-                                <div className="cv-skills-tags">
-                                    <span className="cv-skill-tag">Machine Learning</span>
-                                    <span className="cv-skill-tag">Deep Learning</span>
-                                    <span className="cv-skill-tag">Computer Vision</span>
-                                    <span className="cv-skill-tag">NLP</span>
-                                    <span className="cv-skill-tag">Data Structures</span>
-                                    <span className="cv-skill-tag">Algorithms</span>
-                                    <span className="cv-skill-tag">Database Systems</span>
-                                </div>
-                            </section>
-
-                        </div>
-
-                        {/* ===== RIGHT COLUMN ===== */}
-                        <div className="cv-col-right">
-                            {/* Work Experience — from data.work */}
-                            <section className="cv-section">
-                                <h2 className="cv-section-heading">
-                                    <span className="cv-heading-icon">💼</span>
-                                    Work Experience
-                                </h2>
-                                {data.work.map((wk, idx) => (
-                                    <div className="cv-item" key={idx}>
-                                        <div className="cv-item-row">
-                                            <span className="cv-item-role">{wk.role}</span>
-                                            <span className="cv-item-date">{wk.startDate} – {wk.endDate || 'Present'}</span>
-                                        </div>
-                                        <div className="cv-item-company">{wk.company}, Dhaka</div>
-                                        {wk.details && wk.details.length > 0 && (
-                                            <ul className="cv-item-list">
-                                                {wk.details.map((d, i) => <li key={i}>{d}</li>)}
-                                            </ul>
-                                        )}
-                                    </div>
-                                ))}
-                            </section>
-
-                            {/* Certifications — from data.experience */}
-                            <section className="cv-section">
-                                <h2 className="cv-section-heading">
-                                    <span className="cv-heading-icon">🏆</span>
-                                    Certifications
-                                </h2>
-                                {data.experience.map((exp, idx) => (
-                                    <div className="cv-item" key={idx}>
-                                        <div className="cv-item-role">{exp.role}</div>
-                                        <p className="cv-item-text">{exp.company} ({exp.period}). {exp.desc}</p>
-                                    </div>
-                                ))}
-                            </section>
-
-                            {/* Skills — from data.skills */}
-                            <section className="cv-section">
-                                <h2 className="cv-section-heading">
-                                    <span className="cv-heading-icon">⚙</span>
-                                    Skills
-                                </h2>
-                                <div className="cv-skills-tags">
-                                    {data.skills.map((group) =>
-                                        group.items.map((skill, sIdx) => (
-                                            <span className="cv-skill-tag" key={sIdx}>{skill}</span>
-                                        ))
-                                    )}
-                                </div>
-                            </section>
-
-                            {/* Projects — from data.projects */}
-                            <section className="cv-section">
-                                <h2 className="cv-section-heading">
-                                    <span className="cv-heading-icon">📁</span>
-                                    Projects
-                                </h2>
-                                {data.projects.slice(0, 4).map((proj, idx) => (
-                                    <div className="cv-item" key={idx}>
-                                        <div className="cv-item-role">{proj.title}</div>
-                                        <div className="cv-item-company">Stack: {proj.tags.join(', ')}</div>
-                                        <p className="cv-item-text">{proj.desc}</p>
-                                    </div>
-                                ))}
-                            </section>
-
-
+                        <div className="cv-contact-row">
+                            <span>Website: <a href="https://shahabdulmazid.vercel.app" target="_blank" rel="noopener noreferrer">shahabdulmazid.vercel.app</a></span>
                         </div>
                     </div>
-                </div>
+                </header>
+
+                {/* ===== EDUCATION ===== */}
+                <section className="cv-section">
+                    <h2 className="cv-section-heading-classic">Education</h2>
+                    {data.education.map((edu, idx) => (
+                        <div className="cv-item-classic" key={idx}>
+                            <div className="cv-item-row-1">
+                                <span className="cv-item-title">{edu.degree}</span>
+                                <span className="cv-item-org-right">{edu.school}</span>
+                            </div>
+                            <div className="cv-item-row-2">
+                                <span className="cv-item-subtitle">{edu.major}</span>
+                                <span className="cv-item-date-right">{edu.year}</span>
+                            </div>
+                        </div>
+                    ))}
+                </section>
+
+                {/* ===== WORK EXPERIENCE ===== */}
+                <section className="cv-section">
+                    <h2 className="cv-section-heading-classic">Work experience</h2>
+                    {data.work.map((wk, idx) => (
+                        <div className="cv-item-classic" key={idx}>
+                            <div className="cv-item-row-1">
+                                <span className="cv-item-title">{wk.company}</span>
+                                <span className="cv-item-date-right">{wk.startDate} – {wk.endDate || 'Present'}</span>
+                            </div>
+                            <div className="cv-item-row-2">
+                                <span className="cv-item-subtitle">{wk.role}</span>
+                                <span className="cv-item-location-right">Dhaka, Bangladesh</span>
+                            </div>
+                            {wk.details && wk.details.length > 0 && (
+                                <ul className="cv-item-bullets">
+                                    {wk.details.map((d, i) => <li key={i}>{d}</li>)}
+                                </ul>
+                            )}
+                        </div>
+                    ))}
+                </section>
+
+                {/* ===== EXTRACURRICULAR / ACHIEVEMENTS ===== */}
+                <section className="cv-section">
+                    <h2 className="cv-section-heading-classic">Certifications & Activities</h2>
+                    {data.experience.map((exp, idx) => (
+                        <div className="cv-item-classic" key={idx}>
+                            <div className="cv-item-row-1">
+                                <span className="cv-item-title">{exp.role}: {exp.company}</span>
+                                <span className="cv-item-date-right">{exp.period}</span>
+                            </div>
+                            <p className="cv-item-desc">{exp.desc}</p>
+                        </div>
+                    ))}
+                    {data.activities.map((act, idx) => (
+                        <div className="cv-item-classic" key={idx}>
+                            <div className="cv-item-row-1">
+                                <span className="cv-item-title">{act.role}: {act.organization}</span>
+                                <span className="cv-item-date-right">{act.period}</span>
+                            </div>
+                            <p className="cv-item-desc">{act.desc}</p>
+                        </div>
+                    ))}
+                </section>
+
+                {/* ===== TECHNICAL SKILLS ===== */}
+                <section className="cv-section">
+                    <h2 className="cv-section-heading-classic">Technical skills</h2>
+                    <table className="cv-table">
+                        <tbody>
+                            <tr>
+                                <td className="cv-label-col">Programming Languages</td>
+                                <td className="cv-data-col">{programmingSkills}</td>
+                            </tr>
+                            <tr>
+                                <td className="cv-label-col">Frameworks & Tools</td>
+                                <td className="cv-data-col">{otherSkills}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                {/* ===== LANGUAGE PROFICIENCIES ===== */}
+                <section className="cv-section">
+                    <h2 className="cv-section-heading-classic">Language proficiencies</h2>
+                    <table className="cv-table">
+                        <tbody>
+                            <tr>
+                                <td className="cv-label-col">Bengali</td>
+                                <td className="cv-data-col">Native</td>
+                            </tr>
+                            <tr>
+                                <td className="cv-label-col">English</td>
+                                <td className="cv-data-col">Fluent (Professional Working Proficiency)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                {/* ===== PORTFOLIO OF RELEVANT PROJECTS ===== */}
+                <section className="cv-section">
+                    <h2 className="cv-section-heading-classic">Portfolio of most relevant projects</h2>
+                    <table className="cv-table">
+                        <tbody>
+                            {data.projects.slice(0, 4).map((proj, idx) => (
+                                <tr key={idx}>
+                                    <td className="cv-label-col">{proj.title}</td>
+                                    <td className="cv-data-col">{proj.desc} ({proj.tags.join(', ')})</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </section>
+
+                {/* ===== PUBLICATIONS ===== */}
+                {data.papers && data.papers.length > 0 && (
+                    <section className="cv-section">
+                        <h2 className="cv-section-heading-classic">Publications</h2>
+                        <table className="cv-table">
+                            <tbody>
+                                {data.papers.slice(0, 3).map((paper, idx) => (
+                                    <tr key={idx}>
+                                        <td className="cv-label-col">Paper</td>
+                                        <td className="cv-data-col">"{paper.title}", {paper.venue} ({paper.year})</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </section>
+                )}
+
             </div>
         </div>
     );
