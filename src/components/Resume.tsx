@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef } from 'react'; // Refined imports for build
 import { usePortfolio, resolveUrl } from '../context/PortfolioContext';
 import { Mail, Phone, MapPin, Linkedin, Github, Download } from 'lucide-react';
 import html2canvas from 'html2canvas';
