@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { usePortfolio, resolveUrl } from '../context/PortfolioContext';
+import { usePortfolio } from '../context/PortfolioContext';
 import { Download } from 'lucide-react';
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
