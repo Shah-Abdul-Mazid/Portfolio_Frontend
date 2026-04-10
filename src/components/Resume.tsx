@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import { usePortfolio, resolveUrl } from '../context/PortfolioContext';
-import { Mail, Phone, MapPin, Download } from 'lucide-react';
+import { Download } from 'lucide-react';
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
 
@@ -38,327 +38,282 @@ const Resume = () => {
     };
 
     return (
-        <div className="resume-modern-wrapper">
-            <div className="resume-actions">
-                <button onClick={downloadPDF} className="btn-vibe-download">
+        <div className="resume-kuster-view">
+            <div className="resume-kuster-actions">
+                <button onClick={downloadPDF} className="btn-kuster-download">
                     <Download size={18} />
-                    Download PDF
+                    <span>Download PDF Resume</span>
                 </button>
             </div>
 
-            <div className="resume-modern-canvas" ref={resumeRef}>
-                {/* LEFT SIDEBAR */}
-                <aside className="modern-sidebar">
-                    <div className="sidebar-photo-section">
-                        <div className="photo-container-dark">
-                            <img 
-                                src={data.hero.avatarUrl ? resolveUrl(data.hero.avatarUrl) : '/assets/avtar.png'} 
-                                alt={data.hero.name} 
-                                crossOrigin="anonymous"
-                            />
-                        </div>
+            <div className="resume-kuster-container" ref={resumeRef}>
+                {/* TITLE HEADLINE */}
+                <div className="kuster-header">
+                    <div className="header-title-box">
+                        <span className="huge-name">{data.hero.name.toUpperCase()}</span>
+                        <div className="vertical-rule"></div>
+                        <span className="resume-title-text">RESUME</span>
                     </div>
+                    <p className="subtitle-text">{data.hero.title}</p>
+                </div>
 
-                    <div className="sidebar-content">
-                        <div className="sidebar-group">
-                            <div className="s-icon-row"><MapPin size={12} className="white-icon" /> <span>{data.contact.location}</span></div>
-                            <div className="s-icon-row"><Phone size={12} className="white-icon" /> <span>{data.contact.phone}</span></div>
-                            <div className="s-icon-row"><Mail size={12} className="white-icon" /> <span className="small-text">{data.contact.email}</span></div>
-                        </div>
-
-                        <div className="sidebar-divider"></div>
-
-                        <div className="sidebar-group">
-                            <h3 className="sidebar-title">PROFESSIONAL SUMMARY</h3>
-                            <p className="summary-text">{data.about.bio}</p>
-                        </div>
-
-                        {/* SKILLS in Sidebar as per common sidebar templates */}
-                        <div className="sidebar-divider"></div>
-                        <div className="sidebar-group">
-                            <h3 className="sidebar-title">SKILLS</h3>
-                            {data.skills.map((cat, i) => (
-                                <div key={i} className="skill-tag-sidebar">
-                                    <strong>{cat.name}:</strong> {cat.items.join(', ')}
-                                </div>
-                            ))}
-                        </div>
+                {/* META SECTION */}
+                <div className="kuster-meta">
+                    <div className="meta-row">
+                        <div className="meta-left"><strong>Status:</strong> Artificial Intelligence Engineer</div>
+                        <div className="meta-right">{data.contact.location}</div>
                     </div>
-                </aside>
+                    <div className="meta-row">
+                        <div className="meta-left"><strong>Fields:</strong> AI, ML, Software Engineering, CV</div>
+                        <div className="meta-right">github.com/{data.contact.github?.split('/').pop()}</div>
+                    </div>
+                    <div className="meta-row">
+                        <div className="meta-left"><strong>Techs:</strong> {data.skills[0]?.items.slice(0, 6).join(', ')}</div>
+                        <div className="meta-right">{data.contact.email}</div>
+                    </div>
+                    <div className="meta-row">
+                        <div className="meta-left"><strong>Activities:</strong> {data.activities[0]?.organization || 'Open Source Contribution'}</div>
+                        <div className="meta-right">{data.contact.phone}</div>
+                    </div>
+                    <div className="meta-hr"></div>
+                </div>
 
-                {/* MAIN CONTENT AREA */}
-                <main className="modern-main">
-                    <header className="main-header">
-                        <h1 className="main-name">{data.hero.name}</h1>
-                        <p className="main-headline">{data.hero.title}</p>
-                    </header>
+                {/* SUMMARY */}
+                <section className="kuster-section">
+                    <h2 className="section-headline">Summary</h2>
+                    <p className="summary-p">{data.about.bio}</p>
+                </section>
 
-                    <section className="main-section">
-                        <h2 className="section-title">WORK EXPERIENCE</h2>
-                        <div className="section-hr"></div>
-                        {data.work.map((w, i) => (
-                            <div key={i} className="main-item">
-                                <p className="item-dates">{formatDate(w.startDate)} — {w.endDate ? formatDate(w.endDate) : 'Present'}</p>
-                                <h3 className="item-title">{w.role}, <span className="comp-name">{w.company}</span> | <span className="loc-name">Dhaka</span></h3>
-                                <ul className="item-bullets">
-                                    {w.details.map((d, di) => <li key={di}>{d}</li>)}
-                                </ul>
+                {/* EXPERIENCE */}
+                <section className="kuster-section">
+                    <h2 className="section-headline">Experience</h2>
+                    {data.work.map((w, i) => (
+                        <div key={i} className="kuster-event">
+                            <div className="event-top">
+                                <span className="event-name"><strong>{w.role}</strong> - <span className="inst-name">{w.company}</span></span>
+                                <span className="event-date">{formatDate(w.startDate)} - {w.endDate ? formatDate(w.endDate) : 'present'}</span>
                             </div>
-                        ))}
-                    </section>
-
-                    <section className="main-section">
-                        <h2 className="section-title">EDUCATION</h2>
-                        <div className="section-hr"></div>
-                        {data.education.map((e, i) => (
-                            <div key={i} className="main-item">
-                                <p className="item-dates">{e.year}</p>
-                                <h3 className="item-title">{e.degree}, <span className="comp-name">{e.school}</span></h3>
-                                {e.major && <p className="item-subtitle">Major in {e.major}</p>}
-                            </div>
-                        ))}
-                    </section>
-
-                    <section className="main-section">
-                        <h2 className="section-title">PROJECTS & RESEARCH</h2>
-                        <div className="section-hr"></div>
-                        <ul className="item-bullets condensed">
-                            {data.papers.slice(0, 3).map((p, i) => (
-                                <li key={`p-${i}`}><strong>Research:</strong> {p.title}</li>
-                            ))}
-                            {data.projects.slice(0, 3).map((pr, i) => (
-                                <li key={`pr-${i}`}><strong>Project:</strong> {pr.title}</li>
-                            ))}
-                        </ul>
-                    </section>
-
-                    <section className="main-section">
-                        <h2 className="section-title">LANGUAGES</h2>
-                        <div className="section-hr"></div>
-                        <div className="lang-grid">
-                            <div className="lang-item"><span>Bangla</span> <strong>Native</strong></div>
-                            <div className="lang-item"><span>English</span> <strong>Native</strong></div>
+                            <div className="event-hr"></div>
+                            <ul className="event-bullets">
+                                {w.details.map((d, di) => <li key={di}>{d}</li>)}
+                            </ul>
                         </div>
-                    </section>
-                </main>
+                    ))}
+                </section>
+
+                {/* EDUCATION */}
+                <section className="kuster-section">
+                    <h2 className="section-headline">Education</h2>
+                    {data.education.map((e, i) => (
+                        <div key={i} className="kuster-event">
+                            <div className="event-top">
+                                <span className="event-name"><strong>{e.degree}</strong> - <span className="inst-name">{e.school}</span></span>
+                                <span className="event-date">{e.year}</span>
+                            </div>
+                            <div className="event-hr"></div>
+                            <p className="edu-desc">{e.major ? `Major in ${e.major}` : ''}</p>
+                        </div>
+                    ))}
+                </section>
+
+                {/* PROJECTS (as optional extra section) */}
+                <section className="kuster-section">
+                    <h2 className="section-headline">Projects & Publications</h2>
+                    <ul className="footer-bullets">
+                        {data.projects.slice(0, 4).map((p, i) => (
+                            <li key={i}>{p.title}</li>
+                        ))}
+                    </ul>
+                </section>
+
+                {/* ARTIFICIAL FOOTER */}
+                <div className="kuster-footer-box">
+                    <span>{data.contact.github}</span>
+                    <span className="dot">•</span>
+                    <span>{data.contact.linkedin}</span>
+                </div>
             </div>
 
             <style>{`
-                @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap');
+                @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700;800;900&display=swap');
 
-                .resume-modern-wrapper {
-                    padding: 50px 20px;
-                    background: #f0f2f5;
+                .resume-kuster-view {
+                    padding: 40px 10px;
+                    background: #f4f4f4;
                     min-height: 100vh;
                     display: flex;
                     flex-direction: column;
                     align-items: center;
-                    font-family: 'Roboto', sans-serif;
+                    font-family: 'Raleway', sans-serif;
                 }
 
-                .resume-actions {
+                .resume-kuster-actions {
                     width: 210mm;
                     margin-bottom: 20px;
                     display: flex;
                     justify-content: flex-end;
                 }
 
-                .btn-vibe-download {
-                    background: #4a9eba;
+                .btn-kuster-download {
+                    background: #0096ff;
                     color: white;
                     border: none;
-                    padding: 10px 20px;
-                    border-radius: 6px;
+                    padding: 8px 16px;
+                    border-radius: 4px;
                     display: flex;
                     align-items: center;
-                    gap: 10px;
-                    font-weight: 700;
+                    gap: 8px;
+                    font-weight: 600;
                     cursor: pointer;
-                    box-shadow: 0 4px 12px rgba(74, 158, 186, 0.3);
-                    transition: 0.3s;
                 }
 
-                .btn-vibe-download:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(74, 158, 186, 0.4); }
-
-                .resume-modern-canvas {
+                .resume-kuster-container {
                     width: 210mm;
                     min-height: 297mm;
                     background: white;
-                    display: flex;
-                    box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-                    border-radius: 4px;
-                    overflow: hidden;
+                    padding: 12.5mm 15mm;
+                    box-sizing: border-box;
+                    color: #111;
+                    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+                    line-height: 1.4;
                 }
 
-                /* SIDEBAR STYLES */
-                .modern-sidebar {
-                    width: 75mm;
-                    background: #4a9eba;
-                    color: white;
-                    display: flex;
-                    flex-direction: column;
+                .kuster-header {
+                    text-align: center;
+                    margin-bottom: 20px;
                 }
 
-                .sidebar-photo-section {
-                    background: #3d464d;
-                    padding: 30px;
-                    display: flex;
-                    justify-content: center;
-                }
-
-                .photo-container-dark {
-                    width: 130px;
-                    height: 160px;
-                    background: #fff;
-                    padding: 5px;
-                    border-radius: 2px;
-                }
-
-                .photo-container-dark img { width: 100%; height: 100%; object-fit: cover; }
-
-                .sidebar-content { padding: 30px; }
-
-                .sidebar-group { margin-bottom: 25px; }
-
-                .s-icon-row {
+                .header-title-box {
                     display: flex;
                     align-items: center;
-                    gap: 12px;
-                    margin-bottom: 12px;
-                    font-size: 11px;
-                    font-weight: 400;
-                }
-
-                .white-icon { color: #fff; opacity: 0.9; }
-
-                .sidebar-divider {
-                    height: 1px;
-                    background: rgba(255,255,255,0.3);
-                    margin-bottom: 25px;
-                }
-
-                .sidebar-title {
-                    font-size: 14px;
-                    font-weight: 900;
-                    margin: 0 0 15px 0;
-                    letter-spacing: 1px;
-                }
-
-                .summary-text {
-                    font-size: 10.5px;
-                    line-height: 1.6;
-                    opacity: 0.95;
-                    text-align: justify;
-                }
-
-                .skill-tag-sidebar {
-                    font-size: 10px;
-                    margin-bottom: 8px;
-                    line-height: 1.4;
-                    opacity: 0.9;
-                }
-
-                /* MAIN STYLES */
-                .modern-main {
-                    flex: 1;
-                    padding: 40px 35px;
-                    display: flex;
-                    flex-direction: column;
-                }
-
-                .main-header { margin-bottom: 40px; }
-
-                .main-name {
-                    font-size: 42px;
-                    font-weight: 900;
-                    color: #4a9eba;
-                    margin: 0 0 4px 0;
-                    letter-spacing: -1px;
-                }
-
-                .main-headline {
-                    font-size: 18px;
-                    font-weight: 700;
-                    color: #333;
-                    opacity: 0.8;
-                }
-
-                .main-section { margin-bottom: 30px; }
-
-                .section-title {
-                    font-size: 16px;
-                    font-weight: 900;
-                    color: #111;
-                    margin: 0 0 5px 0;
-                    letter-spacing: 0.5px;
-                }
-
-                .section-hr {
-                    height: 2px;
-                    background: #4a9eba;
-                    width: 100%;
-                    margin-bottom: 15px;
-                    opacity: 0.6;
-                }
-
-                .main-item { margin-bottom: 18px; }
-
-                .item-dates {
-                    font-size: 10px;
-                    color: #777;
-                    font-weight: 700;
-                    margin-bottom: 4px;
-                }
-
-                .item-title {
-                    font-size: 13px;
-                    font-weight: 700;
-                    color: #333;
-                    margin: 0 0 6px 0;
-                }
-
-                .comp-name { color: #4a9eba; }
-                .loc-name { color: #888; font-weight: 400; }
-
-                .item-subtitle {
-                    font-size: 11px;
-                    color: #555;
-                    font-weight: 500;
-                    margin-top: -3px;
-                }
-
-                .item-bullets {
-                    margin: 0;
-                    padding-left: 15px;
-                    font-size: 10.5px;
-                    color: #444;
-                    line-height: 1.6;
-                }
-
-                .item-bullets li { margin-bottom: 4px; }
-                .item-bullets.condensed li { margin-bottom: 2px; }
-
-                .lang-grid {
-                    display: grid;
-                    grid-template-columns: 1fr 1fr;
+                    justify-content: center;
                     gap: 15px;
                 }
 
-                .lang-item {
-                    font-size: 11px;
-                    display: flex;
-                    justify-content: space-between;
-                    background: #f8f9fa;
-                    padding: 8px 12px;
-                    border-radius: 4px;
+                .huge-name {
+                    font-size: 38px;
+                    font-weight: 300;
+                    letter-spacing: 2px;
                 }
 
-                .small-text { font-size: 9.5px; }
+                .vertical-rule {
+                    width: 1mm;
+                    height: 10mm;
+                    background: #0096ff;
+                }
+
+                .resume-title-text {
+                    font-size: 38px;
+                    font-weight: 300;
+                    letter-spacing: 2px;
+                }
+
+                .subtitle-text {
+                    font-size: 13px;
+                    margin-top: 5px;
+                    font-weight: 500;
+                    text-transform: uppercase;
+                }
+
+                .kuster-meta {
+                    margin-bottom: 20px;
+                }
+
+                .meta-row {
+                    display: flex;
+                    justify-content: space-between;
+                    font-size: 11px;
+                    margin-bottom: 2px;
+                }
+
+                .meta-left { font-weight: 400; }
+                .meta-right { font-weight: 700; text-align: right; }
+
+                .meta-hr {
+                    height: 1px;
+                    background: #e1e1e1;
+                    margin-top: 6px;
+                }
+
+                .kuster-section {
+                    margin-bottom: 20px;
+                }
+
+                .section-headline {
+                    color: #0096ff;
+                    font-size: 18px;
+                    font-weight: 800;
+                    text-align: center;
+                    margin: 0 0 10px 0;
+                }
+
+                .summary-p {
+                    font-size: 11.5px;
+                    text-align: justify;
+                }
+
+                .kuster-event {
+                    margin-bottom: 12px;
+                }
+
+                .event-top {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    font-size: 12px;
+                }
+
+                .event-name { font-weight: 400; }
+                .inst-name { color: #6e6e6e; }
+                .event-date { color: #0096ff; font-weight: 600; }
+
+                .event-hr {
+                    height: 1px;
+                    background: #e1e1e1;
+                    margin: 2px 0 6px 0;
+                }
+
+                .event-bullets {
+                    padding-left: 15px;
+                    margin: 0;
+                    font-size: 11px;
+                    color: #333;
+                }
+
+                .event-bullets li::marker { content: "• "; color: #333; }
+                .event-bullets li { margin-bottom: 2px; }
+
+                .edu-desc {
+                    font-size: 11px;
+                    margin: 0;
+                    padding-left: 10px;
+                    font-style: italic;
+                }
+
+                .footer-bullets {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    gap: 5px;
+                    font-size: 11px;
+                    padding-left: 15px;
+                }
+
+                .kuster-footer-box {
+                    margin-top: 40px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    gap: 15px;
+                    font-size: 11px;
+                    color: #0096ff;
+                }
+
+                .dot { font-weight: 900; }
 
                 @media print {
-                    .resume-modern-wrapper { padding: 0; background: white; }
-                    .resume-actions { display: none; }
-                    .resume-modern-canvas { box-shadow: none; border: none; width: 100%; }
+                    .resume-kuster-view { padding: 0; background: white; }
+                    .resume-kuster-actions { display: none; }
+                    .resume-kuster-container { box-shadow: none; border: none; padding: 0; width: 100%; min-height: auto; }
                 }
             `}</style>
         </div>
