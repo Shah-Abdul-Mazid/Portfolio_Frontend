@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import type { MouseEvent } from 'react';
 import { usePortfolio, resolveUrl } from '../context/PortfolioContext';
-import { ExternalLink, ChevronDown, ChevronUp, FileText, Image as ImageIcon } from 'lucide-react';
+import { ExternalLink, ChevronDown, ChevronUp, FileText } from 'lucide-react';
 import { isImageUrl, isPdfUrl, getPdfViewerUrl } from '../utils/filePreview';
 
 const Papers = ({ addToRefs }: { addToRefs: (el: HTMLElement | null) => void }) => {

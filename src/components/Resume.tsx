@@ -1,6 +1,6 @@
-import React, { useRef } from 'react';
+import { useRef } from 'react';
 import { usePortfolio, resolveUrl } from '../context/PortfolioContext';
-import { Mail, Phone, MapPin, Linkedin, Github, Download, Globe } from 'lucide-react';
+import { Mail, Phone, MapPin, Linkedin, Github, Download } from 'lucide-react';
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
 
