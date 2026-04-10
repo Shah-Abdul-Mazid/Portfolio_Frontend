@@ -48,8 +48,8 @@ const References = ({ addToRefs }: { addToRefs: (el: HTMLElement | null) => void
                 .ref-content h3 { font-size: 1.2rem; font-weight: 700; color: var(--text-main); margin-bottom: 4px; }
                 .ref-title { font-size: 0.95rem; color: var(--primary); font-weight: 600; margin-bottom: 2px; line-height: 1.3; }
                 .ref-company { font-size: 0.85rem; color: var(--text-color); margin-bottom: 12px; font-weight: 500; }
-                .ref-relation { font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
-                .ref-relation .badge { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); }
+                .ref-relation { font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
+                .ref-relation .badge { background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); padding: 3px 10px; border-radius: 6px; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); font-weight: 700; display: inline-flex; align-items: center; height: fit-content; }
                 .ref-contact { display: flex; flex-direction: column; gap: 8px; border-top: 1px dashed rgba(255, 255, 255, 0.1); padding-top: 16px; }
                 .ref-link { color: var(--text-secondary); text-decoration: none; font-size: 0.85rem; display: flex; align-items: center; gap: 8px; transition: color 0.2s; }
                 .ref-link:hover { color: var(--primary-glow); text-decoration: underline; }

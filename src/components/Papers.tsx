@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import type { MouseEvent } from 'react';
-import { usePortfolio } from '../context/PortfolioContext';
+import { usePortfolio, resolveUrl } from '../context/PortfolioContext';
 import { ExternalLink, ChevronDown, ChevronUp, FileText, Image as ImageIcon } from 'lucide-react';
+import { isImageUrl, isPdfUrl, getPdfViewerUrl } from '../utils/filePreview';
 
 const Papers = ({ addToRefs }: { addToRefs: (el: HTMLElement | null) => void }) => {
     const { data } = usePortfolio();
@@ -53,25 +54,33 @@ const Papers = ({ addToRefs }: { addToRefs: (el: HTMLElement | null) => void }) 
                                     </div>
                                 )}
                             </div>
-                            <div className="paper-actions">
-                                {paper.doi && (
-                                    <a href={paper.doi.startsWith('http') ? paper.doi : `https://doi.org/${paper.doi}`} 
-                                       target="_blank" rel="noreferrer" className="attachment-link">
-                                        <ExternalLink size={14} style={{ marginRight: '6px' }} />
-                                        Read Paper
-                                    </a>
-                                )}
-                                {paper.documentUrl && (
-                                    <button onClick={() => setSelectedFile(paper.documentUrl as string)} className="attachment-link">
-                                        <FileText size={14} style={{ marginRight: '6px' }} />
-                                        Preview PDF
-                                    </button>
-                                )}
+                            <div className="paper-actions" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', flex: 1 }}>
+                                    {paper.doi && (
+                                        <a href={paper.doi.startsWith('http') ? paper.doi : `https://doi.org/${paper.doi}`} 
+                                           target="_blank" rel="noreferrer" className="attachment-link">
+                                            <ExternalLink size={14} style={{ marginRight: '6px' }} />
+                                            Read
+                                        </a>
+                                    )}
+                                    {paper.documentUrl && (
+                                        <button onClick={() => setSelectedFile(resolveUrl(paper.documentUrl as string))} className="attachment-link">
+                                            <FileText size={14} style={{ marginRight: '6px' }} />
+                                            PDF
+                                        </button>
+                                    )}
+                                </div>
                                 {paper.certificateUrl && (
-                                    <button onClick={() => setSelectedFile(paper.certificateUrl as string)} className="attachment-link">
-                                        <ImageIcon size={14} style={{ marginRight: '6px' }} />
-                                        Certificate
-                                    </button>
+                                    <div className="card-previews" style={{ display: 'flex', gap: '8px', flexShrink: 0 }}>
+                                        <div className="mini-thumbnail" onClick={() => setSelectedFile(resolveUrl(paper.certificateUrl as string))}>
+                                            {isImageUrl(paper.certificateUrl as string) ? (
+                                                <img src={resolveUrl(paper.certificateUrl as string)} alt="Certificate" />
+                                            ) : (
+                                                <div className="mini-pdf-tag"><FileText size={16} /></div>
+                                            )}
+                                            <div className="thumbnail-overlay"><ExternalLink size={14} /></div>
+                                        </div>
+                                    </div>
                                 )}
                             </div>
                         </div>
@@ -95,8 +104,8 @@ const Papers = ({ addToRefs }: { addToRefs: (el: HTMLElement | null) => void }) 
                 <div className="image-modal-overlay" onClick={closeModal}>
                     <div className="image-modal-content">
                         <button className="close-modal-btn" onClick={() => setSelectedFile(null)}>✖</button>
-                        {selectedFile.toLowerCase().endsWith('.pdf') ? (
-                            <iframe src={selectedFile} className="pdf-viewer" title="Document Viewer" />
+                        {isPdfUrl(selectedFile) ? (
+                            <iframe src={getPdfViewerUrl(selectedFile)} className="pdf-viewer" title="Document Viewer" />
                         ) : (
                             <img src={selectedFile} alt="Fullscreen View" className="fullscreen-image" />
                         )}
@@ -193,6 +202,23 @@ const Papers = ({ addToRefs }: { addToRefs: (el: HTMLElement | null) => void }) 
                     border-radius: 100px;
                     color: var(--text-muted);
                 }
+
+                .mini-thumbnail { 
+                    position: relative; 
+                    width: 48px; height: 60px; 
+                    border-radius: 8px; 
+                    overflow: hidden; 
+                    border: 1px solid var(--border-color); 
+                    background: rgba(0,0,0,0.3); 
+                    cursor: pointer; 
+                    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+                    box-shadow: 0 4px 8px rgba(0,0,0,0.3); 
+                }
+                .mini-thumbnail img { width: 100%; height: 100%; object-fit: cover; }
+                .mini-pdf-tag { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: #ef4444; color: white; font-weight: 700; font-size: 0.7rem; }
+                .thumbnail-overlay { position: absolute; inset: 0; background: var(--gradient); opacity: 0; display: flex; align-items: center; justify-content: center; transition: 0.3s; color: white; }
+                .mini-thumbnail:hover { border-color: var(--primary); scale: 1.1; transform: translateY(-2px); box-shadow: 0 8px 16px rgba(139,92,246,0.3); }
+                .mini-thumbnail:hover .thumbnail-overlay { opacity: 0.9; }
 
                 .image-modal-overlay { position: fixed; inset: 0; background: rgba(3,7,18,0.9); z-index: 9999; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(8px); padding: 40px; animation: modalFadeIn 0.3s ease-out; }
                 .image-modal-content { position: relative; max-width: 1200px; width: 100%; max-height: 90vh; background: #0f172a; border-radius: 16px; padding: 12px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); }

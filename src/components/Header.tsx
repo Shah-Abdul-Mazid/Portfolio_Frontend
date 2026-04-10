@@ -9,6 +9,7 @@ const Header = () => {
         { to: '/experience', label: 'Experience' },
         { to: '/achievements', label: 'Achievements' },
         { to: '/activities', label: 'Activities' },
+        { to: '/resume', label: 'Resume' },
     ];
 
     const portfolioLinks = [

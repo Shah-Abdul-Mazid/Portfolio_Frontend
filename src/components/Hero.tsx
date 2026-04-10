@@ -115,6 +115,7 @@ const Hero = ({ addToRefs }: { addToRefs: (el: HTMLElement | null) => void }) =>
                     </p>
                     <div className="hero-btns fade-in" ref={addToRefs}>
                         <Link to="/projects" className="btn btn-primary btn-gradient">View My Work</Link>
+                        <Link to="/resume" className="btn btn-secondary btn-outline">My Resume</Link>
                         <Link to="/contact" className="btn btn-secondary btn-outline">Get In Touch</Link>
                     </div>
 
