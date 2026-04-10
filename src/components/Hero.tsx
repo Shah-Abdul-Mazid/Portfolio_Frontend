@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { usePortfolio, resolveUrl } from '../context/PortfolioContext';
 import { Link } from 'react-router-dom';
-import { FileText, Clock, Settings, Moon, Sun } from 'lucide-react';
+import { Settings, Moon } from 'lucide-react';
 import avtarImg from '../assets/avtar.png';
 
 
