@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { usePortfolio, resolveUrl } from '../context/PortfolioContext';
 import { Link } from 'react-router-dom';
-import { FileText } from 'lucide-react';
+import { FileText, Clock, Settings, Moon, Sun } from 'lucide-react';
 import avtarImg from '../assets/avtar.png';
 
 
@@ -11,6 +11,25 @@ const Hero = ({ addToRefs }: { addToRefs: (el: HTMLElement | null) => void }) =>
     const [fade, setFade] = useState(true);
 
     const roles = data.hero.roles && data.hero.roles.length > 0 ? data.hero.roles : [data.hero.title];
+    const [currentTime, setCurrentTime] = useState(new Date());
+
+    useEffect(() => {
+        const timer = setInterval(() => setCurrentTime(new Date()), 1000);
+        return () => clearInterval(timer);
+    }, []);
+
+    const formatTime = (date: Date) => {
+        const options: Intl.DateTimeFormatOptions = { 
+            weekday: 'short', 
+            month: 'short', 
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: true 
+        };
+        return date.toLocaleString('en-US', options).replace(/,/g, '');
+    };
 
     useEffect(() => {
         if (roles.length <= 1) return;
@@ -36,6 +55,25 @@ const Hero = ({ addToRefs }: { addToRefs: (el: HTMLElement | null) => void }) =>
                 </div>
                 
                 <div className="hero-content">
+                    <div className="time-pill-container fade-in" ref={addToRefs}>
+                        <div className="time-pill">
+                            <span className="time-text">{formatTime(currentTime)}</span>
+                            <div className="pill-divider"></div>
+                            <div className="theme-toggle-mini">
+                                <Moon size={14} className="moon-icon" />
+                                <div className="toggle-slider">
+                                    <div className="slider-thumb">
+                                        <div className="thumb-dots"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <Link to="/login/admin" className="admin-pill-btn">
+                                <Settings size={14} />
+                                <span>Admin</span>
+                            </Link>
+                        </div>
+                    </div>
+
                     <div className="badge fade-in" ref={addToRefs}>Available for new opportunities</div>
                     <h1 className="fade-in" ref={addToRefs} style={{ fontSize: 'clamp(3rem, 10vw, 6rem)', fontWeight: 900, margin: '16px 0' }}>
                         Hi, I'm <span className="gradient-text">{data.hero.name}</span>
@@ -77,9 +115,6 @@ const Hero = ({ addToRefs }: { addToRefs: (el: HTMLElement | null) => void }) =>
                     </p>
                     <div className="hero-btns fade-in" ref={addToRefs}>
                         <Link to="/projects" className="btn btn-primary btn-gradient">View My Work</Link>
-                        <Link to="/cv" className="btn btn-secondary btn-outline" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                            <FileText size={18} /> Generate ATS CV
-                        </Link>
                         <Link to="/contact" className="btn btn-secondary btn-outline">Get In Touch</Link>
                     </div>
 
@@ -87,6 +122,75 @@ const Hero = ({ addToRefs }: { addToRefs: (el: HTMLElement | null) => void }) =>
             </div>
             <style>{`
                 .hero-grid { display: block; }
+                .time-pill-container { display: flex; justify-content: center; margin-bottom: 24px; }
+                .time-pill { 
+                    display: flex; 
+                    align-items: center; 
+                    gap: 12px; 
+                    background: rgba(13, 13, 18, 0.6); 
+                    backdrop-filter: blur(10px);
+                    border: 1px solid rgba(255, 255, 255, 0.1);
+                    padding: 6px 6px 6px 20px;
+                    border-radius: 100px;
+                    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+                }
+                .time-text { 
+                    font-family: 'JetBrains Mono', 'Fira Code', monospace; 
+                    font-size: 0.85rem; 
+                    color: rgba(255, 255, 255, 0.9);
+                    letter-spacing: 0.5px;
+                }
+                .pill-divider { width: 1px; height: 16px; background: rgba(255, 255, 255, 0.1); }
+                
+                .theme-toggle-mini {
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    padding-right: 4px;
+                }
+                .moon-icon { color: rgba(255, 255, 255, 0.6); }
+                .toggle-slider {
+                    width: 32px;
+                    height: 18px;
+                    background: rgba(255, 255, 255, 0.1);
+                    border-radius: 10px;
+                    position: relative;
+                }
+                .slider-thumb {
+                    position: absolute;
+                    right: 2px;
+                    top: 2px;
+                    width: 14px;
+                    height: 14px;
+                    background: #fff;
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+                .thumb-dots {
+                    width: 6px;
+                    height: 6px;
+                    background: #ccc;
+                    border-radius: 50%;
+                }
+
+                .admin-pill-btn {
+                    display: flex;
+                    align-items: center;
+                    gap: 6px;
+                    background: linear-gradient(135deg, #a78bfa 0%, #f472b6 100%);
+                    color: white;
+                    padding: 6px 16px;
+                    border-radius: 100px;
+                    font-size: 0.85rem;
+                    font-weight: 600;
+                    text-decoration: none;
+                    transition: transform 0.2s;
+                    box-shadow: 0 0 15px rgba(167, 139, 250, 0.3);
+                }
+                .admin-pill-btn:hover { transform: scale(1.05); color: white; }
+
                 .badge { display: inline-block; padding: 10px 24px; background: var(--primary-glow); border: 1px solid var(--border-color); border-radius: 100px; color: var(--primary); font-size: 0.8125rem; font-weight: 600; margin-bottom: 24px; }
                 .hero-btns { display: flex; gap: 16px; margin-top: 40px; justify-content: center; }
                 .image-wrapper { position: relative; width: 140px; height: 140px; margin: 0 auto; }
