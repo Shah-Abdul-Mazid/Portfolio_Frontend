@@ -1,6 +1,6 @@
-import { useRef } from 'react'; // Refined imports for build
+import { useRef } from 'react';
 import { usePortfolio, resolveUrl } from '../context/PortfolioContext';
-import { Mail, Phone, MapPin, Linkedin, Github, Download } from 'lucide-react';
+import { Mail, Phone, MapPin, Linkedin, Github, Download, Globe } from 'lucide-react';
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
 
@@ -34,42 +34,23 @@ const Resume = () => {
     const formatDate = (dateStr: string) => {
         if (!dateStr) return 'Present';
         const date = new Date(dateStr);
-        return date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+        return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
     };
 
     return (
-        <div className="resume-viewer-wrapper">
-            <div className="resume-toolbar">
-                <button onClick={downloadPDF} className="btn-save-pdf">
+        <div className="resume-modern-wrapper">
+            <div className="resume-actions">
+                <button onClick={downloadPDF} className="btn-vibe-download">
                     <Download size={18} />
-                    Download PDF Resume
+                    Download PDF
                 </button>
             </div>
 
-            <div className="resume-container" ref={resumeRef}>
-                {/* Header: Name and Photo */}
-                <div className="resume-top-section">
-                    <div className="header-text">
-                        <h1 className="name-main">{data.hero.name}</h1>
-                        <p className="headline-main">{data.hero.title}</p>
-                        <p className="school-main">{data.education[0]?.school || 'East West University'}</p>
-                        
-                        <div className="contact-list">
-                            <div className="c-row">
-                                <div className="c-cell"><MapPin size={11} className="blue-icon" /> <span>{data.contact.location}</span></div>
-                            </div>
-                            <div className="c-row">
-                                <div className="c-cell"><Mail size={11} className="blue-icon" /> <span>{data.contact.email}</span></div>
-                                <div className="c-cell"><Phone size={11} className="blue-icon" /> <span>{data.contact.phone}</span></div>
-                            </div>
-                            <div className="c-row">
-                                <div className="c-cell"><Linkedin size={11} className="blue-icon" /> <span>{data.contact.linkedin?.split('/').pop() || data.hero.name}</span></div>
-                                <div className="c-cell"><Github size={11} className="blue-icon" /> <span>github.com/{data.contact.github?.split('/').pop() || data.hero.name}</span></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="header-photo-box">
-                        <div className="photo-inner">
+            <div className="resume-modern-canvas" ref={resumeRef}>
+                {/* LEFT SIDEBAR */}
+                <aside className="modern-sidebar">
+                    <div className="sidebar-photo-section">
+                        <div className="photo-container-dark">
                             <img 
                                 src={data.hero.avatarUrl ? resolveUrl(data.hero.avatarUrl) : '/assets/avtar.png'} 
                                 alt={data.hero.name} 
@@ -77,302 +58,307 @@ const Resume = () => {
                             />
                         </div>
                     </div>
-                </div>
 
-                <div className="resume-grid-layout">
-                    {/* LEFT COLUMN: 60% */}
-                    <div className="column-main">
-                        <section className="res-block">
-                            <h2 className="res-header">Professional Experience</h2>
-                            {data.work.map((w, i) => (
-                                <div key={i} className="res-item">
-                                    <h3 className="res-item-h1">{w.role}</h3>
-                                    <p className="res-item-h2">{w.company}</p>
-                                    <div className="res-meta">
-                                        <span>📅 {formatDate(w.startDate)} – {w.endDate ? formatDate(w.endDate) : 'Present'}</span>
-                                        <span>📍 Dhaka, Bangladesh</span>
-                                    </div>
-                                    <ul className="res-list">
-                                        {w.details.map((d, di) => <li key={di}>{d}</li>)}
-                                    </ul>
+                    <div className="sidebar-content">
+                        <div className="sidebar-group">
+                            <div className="s-icon-row"><MapPin size={12} className="white-icon" /> <span>{data.contact.location}</span></div>
+                            <div className="s-icon-row"><Phone size={12} className="white-icon" /> <span>{data.contact.phone}</span></div>
+                            <div className="s-icon-row"><Mail size={12} className="white-icon" /> <span className="small-text">{data.contact.email}</span></div>
+                        </div>
+
+                        <div className="sidebar-divider"></div>
+
+                        <div className="sidebar-group">
+                            <h3 className="sidebar-title">PROFESSIONAL SUMMARY</h3>
+                            <p className="summary-text">{data.about.description || data.about.bio}</p>
+                        </div>
+
+                        {/* SKILLS in Sidebar as per common sidebar templates */}
+                        <div className="sidebar-divider"></div>
+                        <div className="sidebar-group">
+                            <h3 className="sidebar-title">SKILLS</h3>
+                            {data.skills.map((cat, i) => (
+                                <div key={i} className="skill-tag-sidebar">
+                                    <strong>{cat.name}:</strong> {cat.items.join(', ')}
                                 </div>
                             ))}
-                        </section>
-
-                        <section className="res-block">
-                            <h2 className="res-header">Education</h2>
-                            {data.education.map((e, i) => (
-                                <div key={i} className="res-item">
-                                    <h3 className="res-item-h1">{e.degree}</h3>
-                                    <p className="res-item-h2">{e.school} {e.major ? `- ${e.major}` : ''}</p>
-                                    <div className="res-meta">
-                                        <span>📅 {e.year}</span>
-                                        <span>📍 Dhaka, Bangladesh</span>
-                                    </div>
-                                </div>
-                            ))}
-                        </section>
-
-                        <section className="res-block">
-                            <h2 className="res-header">Achievements</h2>
-                            {data.experience.map((ex, i) => (
-                                <div key={i} className="res-item tight">
-                                    <h3 className="res-item-h1">{ex.role}</h3>
-                                    <p className="res-desc">{ex.desc}</p>
-                                </div>
-                            ))}
-                        </section>
-
-                        <section className="res-block">
-                            <h2 className="res-header">Extra-Curricular Activities</h2>
-                            <ul className="res-list wide-spacing">
-                                {data.activities.map((act, i) => (
-                                    <li key={i}>
-                                        <strong>{act.role}</strong> at {act.organization}.
-                                    </li>
-                                ))}
-                            </ul>
-                        </section>
+                        </div>
                     </div>
+                </aside>
 
-                    {/* RIGHT COLUMN: 40% */}
-                    <div className="column-side">
-                        <section className="res-block">
-                            <h2 className="res-header">Technical Skills</h2>
-                            {data.skills.map((s, i) => (
-                                <div key={i} className="res-skill-cat">
-                                    <p className="res-skill-p">{s.name}</p>
-                                    <ul className="res-skill-ul">
-                                        {s.items.map((it, ii) => <li key={ii}>{it}</li>)}
-                                    </ul>
-                                </div>
+                {/* MAIN CONTENT AREA */}
+                <main className="modern-main">
+                    <header className="main-header">
+                        <h1 className="main-name">{data.hero.name}</h1>
+                        <p className="main-headline">{data.hero.title}</p>
+                    </header>
+
+                    <section className="main-section">
+                        <h2 className="section-title">WORK EXPERIENCE</h2>
+                        <div className="section-hr"></div>
+                        {data.work.map((w, i) => (
+                            <div key={i} className="main-item">
+                                <p className="item-dates">{formatDate(w.startDate)} — {w.endDate ? formatDate(w.endDate) : 'Present'}</p>
+                                <h3 className="item-title">{w.role}, <span className="comp-name">{w.company}</span> | <span className="loc-name">Dhaka</span></h3>
+                                <ul className="item-bullets">
+                                    {w.details.map((d, di) => <li key={di}>{d}</li>)}
+                                </ul>
+                            </div>
+                        ))}
+                    </section>
+
+                    <section className="main-section">
+                        <h2 className="section-title">EDUCATION</h2>
+                        <div className="section-hr"></div>
+                        {data.education.map((e, i) => (
+                            <div key={i} className="main-item">
+                                <p className="item-dates">{e.year}</p>
+                                <h3 className="item-title">{e.degree}, <span className="comp-name">{e.school}</span></h3>
+                                {e.major && <p className="item-subtitle">Major in {e.major}</p>}
+                            </div>
+                        ))}
+                    </section>
+
+                    <section className="main-section">
+                        <h2 className="section-title">PROJECTS & RESEARCH</h2>
+                        <div className="section-hr"></div>
+                        <ul className="item-bullets condensed">
+                            {data.papers.slice(0, 3).map((p, i) => (
+                                <li key={`p-${i}`}><strong>Research:</strong> {p.title}</li>
                             ))}
-                        </section>
+                            {data.projects.slice(0, 3).map((pr, i) => (
+                                <li key={`pr-${i}`}><strong>Project:</strong> {pr.title}</li>
+                            ))}
+                        </ul>
+                    </section>
 
-                        <section className="res-block">
-                            <h2 className="res-header">Research Papers</h2>
-                            <ul className="res-list">
-                                {data.papers.map((p, i) => <li key={i}>{p.title}</li>)}
-                            </ul>
-                        </section>
-
-                        <section className="res-block">
-                            <h2 className="res-header">Projects</h2>
-                            <ul className="res-list">
-                                {data.projects.map((pr, i) => <li key={i}>{pr.title}</li>)}
-                            </ul>
-                        </section>
-                    </div>
-                </div>
+                    <section className="main-section">
+                        <h2 className="section-title">LANGUAGES</h2>
+                        <div className="section-hr"></div>
+                        <div className="lang-grid">
+                            <div className="lang-item"><span>Bangla</span> <strong>Native</strong></div>
+                            <div className="lang-item"><span>English</span> <strong>Native</strong></div>
+                        </div>
+                    </section>
+                </main>
             </div>
 
             <style>{`
-                @import url('https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600;700;800&display=swap');
+                @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap');
 
-                .resume-viewer-wrapper {
-                    padding: 40px 10px;
-                    background: #525659;
+                .resume-modern-wrapper {
+                    padding: 50px 20px;
+                    background: #f0f2f5;
                     min-height: 100vh;
                     display: flex;
                     flex-direction: column;
                     align-items: center;
+                    font-family: 'Roboto', sans-serif;
                 }
 
-                .resume-toolbar {
+                .resume-actions {
                     width: 210mm;
                     margin-bottom: 20px;
                     display: flex;
                     justify-content: flex-end;
                 }
 
-                .btn-save-pdf {
-                    background: #1a73e8;
+                .btn-vibe-download {
+                    background: #4a9eba;
                     color: white;
                     border: none;
-                    padding: 8px 16px;
-                    border-radius: 4px;
+                    padding: 10px 20px;
+                    border-radius: 6px;
                     display: flex;
                     align-items: center;
-                    gap: 8px;
-                    font-weight: 600;
+                    gap: 10px;
+                    font-weight: 700;
                     cursor: pointer;
-                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                    box-shadow: 0 4px 12px rgba(74, 158, 186, 0.3);
+                    transition: 0.3s;
                 }
 
-                .resume-container {
+                .btn-vibe-download:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(74, 158, 186, 0.4); }
+
+                .resume-modern-canvas {
                     width: 210mm;
                     min-height: 297mm;
                     background: white;
-                    padding: 10mm 12mm;
-                    box-sizing: border-box;
-                    color: #333;
-                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                    box-shadow: 0 0 10px rgba(0,0,0,0.5);
-                    line-height: 1.15;
                     display: flex;
-                    flex-direction: column;
-                }
-
-                .resume-top-section {
-                    display: flex;
-                    justify-content: space-between;
-                    margin-bottom: 12px;
-                }
-
-                .header-text { flex: 1; }
-
-                .name-main {
-                    font-size: 28px;
-                    font-weight: 800;
-                    color: #2c3e50;
-                    margin: 0 0 2px 0;
-                    text-transform: uppercase;
-                    letter-spacing: -0.5px;
-                }
-
-                .headline-main {
-                    font-size: 13px;
-                    color: #1a73e8;
-                    font-weight: 700;
-                    margin: 0 0 1px 0;
-                }
-
-                .school-main {
-                    font-size: 13px;
-                    color: #1a73e8;
-                    font-weight: 700;
-                    margin: 0 0 8px 0;
-                }
-
-                .contact-list {
-                    display: flex;
-                    flex-direction: column;
-                    gap: 1px;
-                }
-
-                .c-row { display: flex; gap: 15px; }
-
-                .c-cell {
-                    display: flex;
-                    align-items: center;
-                    gap: 4px;
-                    font-size: 9.5px;
-                    color: #444;
-                    font-weight: 600;
-                }
-
-                .blue-icon { color: #1a73e8; flex-shrink: 0; }
-
-                .header-photo-box {
-                    width: 85px;
-                    height: 100px;
-                    background: #eee;
-                    border: 1px solid #ccc;
-                    border-radius: 2px;
+                    box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+                    border-radius: 4px;
                     overflow: hidden;
                 }
 
-                .photo-inner img {
-                    width: 100%;
-                    height: 100%;
-                    object-fit: cover;
-                }
-
-                .resume-grid-layout {
+                /* SIDEBAR STYLES */
+                .modern-sidebar {
+                    width: 75mm;
+                    background: #4a9eba;
+                    color: white;
                     display: flex;
-                    gap: 20px;
+                    flex-direction: column;
                 }
 
-                .column-main { flex: 1.4; }
-                .column-side { flex: 1; }
+                .sidebar-photo-section {
+                    background: #3d464d;
+                    padding: 30px;
+                    display: flex;
+                    justify-content: center;
+                }
 
-                .res-block { margin-bottom: 12px; }
+                .photo-container-dark {
+                    width: 130px;
+                    height: 160px;
+                    background: #fff;
+                    padding: 5px;
+                    border-radius: 2px;
+                }
 
-                .res-header {
+                .photo-container-dark img { width: 100%; height: 100%; object-fit: cover; }
+
+                .sidebar-content { padding: 30px; }
+
+                .sidebar-group { margin-bottom: 25px; }
+
+                .s-icon-row {
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    margin-bottom: 12px;
+                    font-size: 11px;
+                    font-weight: 400;
+                }
+
+                .white-icon { color: #fff; opacity: 0.9; }
+
+                .sidebar-divider {
+                    height: 1px;
+                    background: rgba(255,255,255,0.3);
+                    margin-bottom: 25px;
+                }
+
+                .sidebar-title {
                     font-size: 14px;
-                    font-weight: 800;
-                    color: #2c3e50;
-                    border-bottom: 1.5px solid #1a73e8;
-                    padding-bottom: 1px;
-                    margin: 0 0 6px 0;
-                    text-transform: capitalize;
+                    font-weight: 900;
+                    margin: 0 0 15px 0;
+                    letter-spacing: 1px;
                 }
 
-                .res-item { margin-bottom: 8px; }
-                .res-item.tight { margin-bottom: 4px; }
+                .summary-text {
+                    font-size: 10.5px;
+                    line-height: 1.6;
+                    opacity: 0.95;
+                    text-align: justify;
+                }
 
-                .res-item-h1 {
-                    font-size: 11.5px;
+                .skill-tag-sidebar {
+                    font-size: 10px;
+                    margin-bottom: 8px;
+                    line-height: 1.4;
+                    opacity: 0.9;
+                }
+
+                /* MAIN STYLES */
+                .modern-main {
+                    flex: 1;
+                    padding: 40px 35px;
+                    display: flex;
+                    flex-direction: column;
+                }
+
+                .main-header { margin-bottom: 40px; }
+
+                .main-name {
+                    font-size: 42px;
+                    font-weight: 900;
+                    color: #4a9eba;
+                    margin: 0 0 4px 0;
+                    letter-spacing: -1px;
+                }
+
+                .main-headline {
+                    font-size: 18px;
                     font-weight: 700;
                     color: #333;
-                    margin: 0 0 0 0;
+                    opacity: 0.8;
                 }
 
-                .res-item-h2 {
-                    font-size: 10.5px;
-                    color: #1a73e8;
+                .main-section { margin-bottom: 30px; }
+
+                .section-title {
+                    font-size: 16px;
+                    font-weight: 900;
+                    color: #111;
+                    margin: 0 0 5px 0;
+                    letter-spacing: 0.5px;
+                }
+
+                .section-hr {
+                    height: 2px;
+                    background: #4a9eba;
+                    width: 100%;
+                    margin-bottom: 15px;
+                    opacity: 0.6;
+                }
+
+                .main-item { margin-bottom: 18px; }
+
+                .item-dates {
+                    font-size: 10px;
+                    color: #777;
                     font-weight: 700;
-                    margin: 0 0 1px 0;
+                    margin-bottom: 4px;
                 }
 
-                .res-meta {
+                .item-title {
+                    font-size: 13px;
+                    font-weight: 700;
+                    color: #333;
+                    margin: 0 0 6px 0;
+                }
+
+                .comp-name { color: #4a9eba; }
+                .loc-name { color: #888; font-weight: 400; }
+
+                .item-subtitle {
+                    font-size: 11px;
+                    color: #555;
+                    font-weight: 500;
+                    margin-top: -3px;
+                }
+
+                .item-bullets {
+                    margin: 0;
+                    padding-left: 15px;
+                    font-size: 10.5px;
+                    color: #444;
+                    line-height: 1.6;
+                }
+
+                .item-bullets li { margin-bottom: 4px; }
+                .item-bullets.condensed li { margin-bottom: 2px; }
+
+                .lang-grid {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    gap: 15px;
+                }
+
+                .lang-item {
+                    font-size: 11px;
                     display: flex;
                     justify-content: space-between;
-                    font-size: 9px;
-                    color: #777;
-                    margin-bottom: 3px;
-                    font-weight: 600;
+                    background: #f8f9fa;
+                    padding: 8px 12px;
+                    border-radius: 4px;
                 }
 
-                .res-list {
-                    margin: 0;
-                    padding-left: 12px;
-                    font-size: 9.5px;
-                    color: #444;
-                    line-height: 1.3;
-                }
-
-                .res-list li { margin-bottom: 1px; }
-                .res-list.wide-spacing li { margin-bottom: 3px; }
-
-                .res-desc {
-                    font-size: 9.5px;
-                    color: #555;
-                    margin: 1px 0 0 0;
-                    line-height: 1.2;
-                }
-
-                .res-skill-cat { margin-bottom: 6px; }
-
-                .res-skill-p {
-                    font-size: 10px;
-                    font-weight: 700;
-                    color: #555;
-                    margin: 0 0 1px 0;
-                }
-
-                .res-skill-ul {
-                    list-style: none;
-                    margin: 0;
-                    padding-left: 8px;
-                    font-size: 9px;
-                    color: #444;
-                    display: flex;
-                    flex-wrap: wrap;
-                    gap: 4px;
-                }
-
-                .res-skill-ul li::before {
-                    content: "•";
-                    color: #1a73e8;
-                    font-weight: bold;
-                    margin-right: 4px;
-                }
+                .small-text { font-size: 9.5px; }
 
                 @media print {
-                    .resume-viewer-wrapper { padding: 0; background: white; }
-                    .resume-toolbar { display: none; }
-                    .resume-container { box-shadow: none; border: none; padding: 0; margin: 0; width: 100%; min-height: auto; }
+                    .resume-modern-wrapper { padding: 0; background: white; }
+                    .resume-actions { display: none; }
+                    .resume-modern-canvas { box-shadow: none; border: none; width: 100%; }
                 }
             `}</style>
         </div>
