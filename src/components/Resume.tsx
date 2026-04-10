@@ -201,7 +201,7 @@ const Resume = () => {
 
                 .resume-container {
                     width: 210mm;
-                    height: 297mm;
+                    min-height: 297mm;
                     background: white;
                     padding: 10mm 12mm;
                     box-sizing: border-box;
@@ -209,7 +209,6 @@ const Resume = () => {
                     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
                     box-shadow: 0 0 10px rgba(0,0,0,0.5);
                     line-height: 1.15;
-                    overflow: hidden;
                     display: flex;
                     flex-direction: column;
                 }
@@ -282,7 +281,6 @@ const Resume = () => {
                 .resume-grid-layout {
                     display: flex;
                     gap: 20px;
-                    flex: 1;
                 }
 
                 .column-main { flex: 1.4; }
