@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import { usePortfolio, resolveUrl } from '../context/PortfolioContext';
-import { Mail, Phone, MapPin, Linkedin, Github, Download, Globe } from 'lucide-react';
+import { Mail, Phone, MapPin, Download } from 'lucide-react';
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
 
@@ -70,7 +70,7 @@ const Resume = () => {
 
                         <div className="sidebar-group">
                             <h3 className="sidebar-title">PROFESSIONAL SUMMARY</h3>
-                            <p className="summary-text">{data.about.description || data.about.bio}</p>
+                            <p className="summary-text">{data.about.bio}</p>
                         </div>
 
                         {/* SKILLS in Sidebar as per common sidebar templates */}
