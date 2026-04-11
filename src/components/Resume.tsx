@@ -100,15 +100,15 @@ const Resume = () => {
                 <div className="rv-body">
                     {data.about.bio && <p className="rv-summary">{data.about.bio.split('\n\n')[0]}</p>}
                     {data.skills.length > 0 && (
-                        <section className="rv-sec">
+                        <div className="rv-sec">
                             <div className="rv-sec-hd">Skills</div>
                             {data.skills.map((c, i) => (
                                 <p key={i} className="rv-skill-row"><b>{c.name}:</b> {c.items.join(', ')}</p>
                             ))}
-                        </section>
+                        </div>
                     )}
                     {sortedWork.length > 0 && (
-                        <section className="rv-sec">
+                        <div className="rv-sec">
                             <div className="rv-sec-hd">Technical Experience</div>
                             {sortedWork.map((w, i) => (
                                 <div key={i} className="rv-item">
@@ -117,10 +117,10 @@ const Resume = () => {
                                     <ul className="rv-ul">{w.details.map((d, j) => <li key={j}>{d}</li>)}</ul>
                                 </div>
                             ))}
-                        </section>
+                        </div>
                     )}
                     {data.education.length > 0 && (
-                        <section className="rv-sec">
+                        <div className="rv-sec">
                             <div className="rv-sec-hd">Education</div>
                             {data.education.map((e, i) => (
                                 <div key={i} className="rv-item">
@@ -129,10 +129,10 @@ const Resume = () => {
                                     {e.major && <p className="rv-sm" style={{ color: '#4b5563', fontStyle: 'italic', fontSize: '11.5px', marginTop: '2px' }}>• {e.major}</p>}
                                 </div>
                             ))}
-                        </section>
+                        </div>
                     )}
                     {data.projects.length > 0 && (
-                        <section className="rv-sec">
+                        <div className="rv-sec">
                             <div className="rv-sec-hd">Projects</div>
                             {data.projects.slice(0, 5).map((p, i) => (
                                 <div key={i} className="rv-item">
@@ -141,10 +141,10 @@ const Resume = () => {
                                     {p.tags.length > 0 && <p className="rv-sm" style={{ color: '#3d5a80', margin: 0, fontStyle: 'italic', fontSize: '11px' }}>Tech: {p.tags.join(', ')}</p>}
                                 </div>
                             ))}
-                        </section>
+                        </div>
                     )}
                     {data.papers && data.papers.length > 0 && (
-                        <section className="rv-sec">
+                        <div className="rv-sec">
                             <div className="rv-sec-hd">Publications</div>
                             {data.papers.slice(0, 3).map((p, i) => (
                                 <div key={i} className="rv-item">
@@ -153,10 +153,10 @@ const Resume = () => {
                                     {p.link && <p className="rv-sm" style={{ color: '#3d5a80', margin: 0, fontSize: '11px' }}><a href={p.link} target="_blank" rel="noopener noreferrer">{p.link.replace('https://', '')}</a></p>}
                                 </div>
                             ))}
-                        </section>
+                        </div>
                     )}
                     {data.experience && data.experience.length > 0 && (
-                        <section className="rv-sec">
+                        <div className="rv-sec">
                             <div className="rv-sec-hd">Competitions & Awards</div>
                             {data.experience.map((e, i) => (
                                 <div key={i} className="rv-item">
@@ -165,12 +165,12 @@ const Resume = () => {
                                     <p className="rv-sm" style={{ color: '#1a1a1a', margin: '1px 0 0' }}>{e.desc}</p>
                                 </div>
                             ))}
-                        </section>
+                        </div>
                     )}
-                    <section className="rv-sec">
+                    <div className="rv-sec">
                         <div className="rv-sec-hd">Languages</div>
                         <p className="rv-skill-row"><b>Bengali:</b> Native &nbsp;·&nbsp; <b>English:</b> Professional Working Proficiency</p>
-                    </section>
+                    </div>
                 </div>
             </div>
 
@@ -220,12 +220,12 @@ const Resume = () => {
                 .rv-contact-row a:hover { text-decoration: underline; }
                 .rv-body { padding: 0; }
                 .rv-summary { font-size: 12.5px; color: #1a1a1a; line-height: 1.4; margin: 0 0 15px; text-align: justify; }
-                .rv-sec { margin-bottom: 15px; min-height: auto; padding-top: 0; display: block; }
-                .rv-sec-hd { font-size: 13px; font-weight: 700; text-transform: uppercase; color: #3d5a80; margin-bottom: 5px; display: flex; align-items: center; gap: 8px; }
+                .rv-sec { margin-bottom: 8px !important; min-height: 0 !important; padding: 0 !important; display: block; overflow: visible; }
+                .rv-sec-hd { font-size: 13px; font-weight: 700; text-transform: uppercase; color: #3d5a80; margin-bottom: 3px; display: flex; align-items: center; gap: 8px; }
                 .rv-sec-hd::after { content: ""; flex: 1; height: 1px; background: #3d5a80; margin-left: 8px; opacity: 0.3; }
                 .rv-skill-row { font-size: 11.5px; margin: 0 0 3px; color: #374151; }
                 .rv-skill-row b { color: #1a1a1a; }
-                .rv-item { margin-bottom: 10px; }
+                .rv-item { margin-bottom: 6px; }
                 .rv-item-top { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; margin-bottom: 1px; }
                 .rv-item-sub { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; margin-bottom: 2px; }
                 .rv-bold { font-weight: 700; font-size: 13px; color: #1a1a1a; }
