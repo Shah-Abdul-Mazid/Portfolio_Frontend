@@ -44,13 +44,42 @@ const Resume = () => {
         setBusy(true);
         try {
             const canvas = await html2canvas(sheetRef.current, {
-                scale: 3, useCORS: true, logging: false,
-                backgroundColor: '#ffffff', windowWidth: 794,
+                scale: 4, 
+                useCORS: true, 
+                logging: false,
+                backgroundColor: '#ffffff', 
+                windowWidth: 1200,
+                onclone: (clonedDoc) => {
+                    const sheet = clonedDoc.querySelector('.rv-sheet') as HTMLElement;
+                    if (sheet) {
+                        sheet.style.width = '794px';
+                        sheet.style.padding = '0.5in';
+                        sheet.style.margin = '0';
+                    }
+                }
             });
-            const img = canvas.toDataURL('image/png');
+
+            const imgData = canvas.toDataURL('image/png', 1.0);
             const pdf = new jsPDF('p', 'mm', 'a4');
-            const w = pdf.internal.pageSize.getWidth();
-            pdf.addImage(img, 'PNG', 0, 0, w, (canvas.height * w) / canvas.width);
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = pdf.internal.pageSize.getHeight();
+            const imgHeight = (canvas.height * pdfWidth) / canvas.width;
+            
+            let heightLeft = imgHeight;
+            let position = 0;
+
+            // Add first page
+            pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, imgHeight);
+            heightLeft -= pdfHeight;
+
+            // Add extra pages if needed
+            while (heightLeft > 0) {
+                position = heightLeft - imgHeight;
+                pdf.addPage();
+                pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, imgHeight);
+                heightLeft -= pdfHeight;
+            }
+
             pdf.save(`${data.hero.name.replace(/\s+/g, '_')}_Resume.pdf`);
         } catch (e) { console.error(e); }
         finally { setBusy(false); }
@@ -260,7 +289,7 @@ const Resume = () => {
                 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
                 @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
                 @media print { .rv-page { background: white; padding: 0; } .rv-toolbar, .ats-overlay { display: none; } .rv-sheet { box-shadow: none; width: 100%; padding: 0.5in; } }
-                @media (max-width: 820px) { .rv-hd { grid-template-columns: 1fr; text-align: center; gap: 10px; } .rv-hd-left, .rv-hd-right { text-align: center; align-items: center; } .rv-item-top, .rv-item-sub { flex-direction: column; align-items: center; text-align: center; } }
+                @media screen and (max-width: 650px) { .rv-hd { grid-template-columns: 1fr; text-align: center; gap: 10px; } .rv-hd-left, .rv-hd-right { text-align: center; align-items: center; } .rv-item-top, .rv-item-sub { flex-direction: column; align-items: center; text-align: center; } }
             `}</style>
         </div>
     );
