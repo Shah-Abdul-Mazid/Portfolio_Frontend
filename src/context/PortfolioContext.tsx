@@ -59,6 +59,7 @@ export interface PaperItem {
     year: string;
     keywords: string;
     doi: string;
+    link?: string; // Newly added to support publication URLs
     documentUrl?: string; // New: PDF/Document viewer link
     certificateUrl?: string; // New: Certificate/Image viewer link
 }

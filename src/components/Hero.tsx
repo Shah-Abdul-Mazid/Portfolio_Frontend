@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { usePortfolio, resolveUrl } from '../context/PortfolioContext';
 import { Link } from 'react-router-dom';
-import { Settings, Moon } from 'lucide-react';
+import { Moon } from 'lucide-react';
 import avtarImg from '../assets/avtar.png';
 
 

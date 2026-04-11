@@ -107,7 +107,7 @@ const AdminDashboard = () => {
         }
     };
 
-    const handleDeleteMessage = async (id: string, skipConfirm = true) => {
+    const handleDeleteMessage = async (id: string) => {
         try {
             const token = localStorage.getItem('admin_token');
             const headers: HeadersInit = token ? { 'Authorization': `Bearer ${token}` } : {};
@@ -121,7 +121,7 @@ const AdminDashboard = () => {
 
     const handleReplyAndDelete = async (id: string, email: string) => {
         window.location.href = `mailto:${email}?subject=RE: Portfolio Inquiry`;
-        handleDeleteMessage(id, true);
+        handleDeleteMessage(id);
     };
 
     const fetchVisitors = async () => {
