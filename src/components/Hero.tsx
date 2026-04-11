@@ -67,10 +67,7 @@ const Hero = ({ addToRefs }: { addToRefs: (el: HTMLElement | null) => void }) =>
                                     </div>
                                 </div>
                             </div>
-                            <Link to="/login/admin" className="admin-pill-btn">
-                                <Settings size={14} />
-                                <span>Admin</span>
-                            </Link>
+
                         </div>
                     </div>
 
@@ -176,21 +173,7 @@ const Hero = ({ addToRefs }: { addToRefs: (el: HTMLElement | null) => void }) =>
                     border-radius: 50%;
                 }
 
-                .admin-pill-btn {
-                    display: flex;
-                    align-items: center;
-                    gap: 6px;
-                    background: linear-gradient(135deg, #a78bfa 0%, #f472b6 100%);
-                    color: white;
-                    padding: 6px 16px;
-                    border-radius: 100px;
-                    font-size: 0.85rem;
-                    font-weight: 600;
-                    text-decoration: none;
-                    transition: transform 0.2s;
-                    box-shadow: 0 0 15px rgba(167, 139, 250, 0.3);
-                }
-                .admin-pill-btn:hover { transform: scale(1.05); color: white; }
+
 
                 .badge { display: inline-block; padding: 10px 24px; background: var(--primary-glow); border: 1px solid var(--border-color); border-radius: 100px; color: var(--primary); font-size: 0.8125rem; font-weight: 600; margin-bottom: 24px; }
                 .hero-btns { display: flex; gap: 16px; margin-top: 40px; justify-content: center; }

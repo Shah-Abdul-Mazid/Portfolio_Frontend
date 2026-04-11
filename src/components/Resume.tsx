@@ -1,320 +1,266 @@
-import { useRef } from 'react';
+import { useRef, useState, useMemo } from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
-import { Download } from 'lucide-react';
+import { Download, Loader, CheckCircle2, AlertCircle, Info, X, Zap } from 'lucide-react';
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
 
+const fmtDate = (s: string) => {
+    if (!s) return 'Present';
+    const d = new Date(s);
+    if (isNaN(d.getTime())) return s;
+    return d.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+};
+
 const Resume = () => {
     const { data } = usePortfolio();
-    const resumeRef = useRef<HTMLDivElement>(null);
+    const sheetRef = useRef<HTMLDivElement>(null);
+    const [busy, setBusy] = useState(false);
+    const [showAts, setShowAts] = useState(false);
 
-    const downloadPDF = async () => {
-        if (!resumeRef.current) return;
-        
+    // --- ATS SCORING LOGIC ---
+    const atsScore = useMemo(() => {
+        let score = 50; 
+        const tips: { type: 'plus' | 'minus' | 'tip', text: string }[] = [];
+
+        if (data.contact.email && data.contact.phone) { score += 10; tips.push({ type: 'plus', text: 'Professional contact info complete.' }); }
+        if (data.contact.linkedin && data.contact.github) { score += 5; tips.push({ type: 'plus', text: 'Social professional profiles linked.' }); }
+        if (data.about.bio.length > 200) { score += 10; tips.push({ type: 'plus', text: 'Well-defined professional statement.' }); }
+
+        const allText = JSON.stringify(data).toLowerCase();
+        const keywords = ['rag', 'llm', 'fastapi', 'python', 'nlp', 'automation', 'scalable', 'deployment'];
+        const found = keywords.filter(k => allText.includes(k));
+        if (found.length > 4) { score += 10; tips.push({ type: 'plus', text: `Strong keyword density (${found.length} core tags).` }); }
+        if (data.work.some(w => w.details.length >= 4)) { score += 10; tips.push({ type: 'plus', text: 'Detailed professional bullet points.' }); }
+        if (data.papers && data.papers.length > 0) { score += 20; tips.push({ type: 'plus', text: 'Academic publications found (High Impact).' }); }
+        if (data.projects.length >= 3) { score += 5; tips.push({ type: 'plus', text: 'Project portfolio demonstrated.' }); }
+        if (data.education.length >= 2) { score += 5; tips.push({ type: 'plus', text: 'Education history complete.' }); }
+        score += 5; tips.push({ type: 'plus', text: 'Single-column, ATS-parsable formatting.' });
+
+        return { total: Math.min(score, 100), tips };
+    }, [data]);
+
+    const downloadDynamic = async () => {
+        if (!sheetRef.current) return;
+        setBusy(true);
         try {
-            const canvas = await html2canvas(resumeRef.current, {
-                scale: 3,
-                useCORS: true,
-                logging: false,
-                backgroundColor: '#ffffff'
+            const canvas = await html2canvas(sheetRef.current, {
+                scale: 3, useCORS: true, logging: false,
+                backgroundColor: '#ffffff', windowWidth: 794,
             });
-            
-            const imgData = canvas.toDataURL('image/png');
+            const img = canvas.toDataURL('image/png');
             const pdf = new jsPDF('p', 'mm', 'a4');
-            const pdfWidth = pdf.internal.pageSize.getWidth();
-            const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-            
-            pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+            const w = pdf.internal.pageSize.getWidth();
+            pdf.addImage(img, 'PNG', 0, 0, w, (canvas.height * w) / canvas.width);
             pdf.save(`${data.hero.name.replace(/\s+/g, '_')}_Resume.pdf`);
-        } catch (error) {
-            console.error('Failed to generate PDF:', error);
-        }
+        } catch (e) { console.error(e); }
+        finally { setBusy(false); }
     };
 
-    const formatDate = (dateStr: string) => {
-        if (!dateStr) return 'Present';
-        const date = new Date(dateStr);
-        return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
-    };
+    const em  = data.contact.email   || '';
+    const ph  = data.contact.phone   || '';
+    const loc = data.contact.location || '';
+    const city = loc.split(',')[1]?.trim() || 'Bangladesh';
+
+    const sortedWork = [...data.work].sort((a, b) => {
+        if (!a.endDate && b.endDate)  return -1;
+        if (a.endDate  && !b.endDate) return  1;
+        return new Date(b.startDate).getTime() - new Date(a.startDate).getTime();
+    });
 
     return (
-        <div className="resume-kuster-view">
-            <div className="resume-kuster-actions">
-                <button onClick={downloadPDF} className="btn-kuster-download">
-                    <Download size={18} />
-                    <span>Download PDF Resume</span>
+        <div className="rv-page">
+            <div className="rv-toolbar">
+                <button onClick={() => setShowAts(true)} className="rv-btn rv-solid" style={{ background: '#10b981', border: 'none' }}>
+                    <Zap size={14} fill="white" /> Check ATS Score
+                </button>
+                <button onClick={downloadDynamic} disabled={busy} className="rv-btn rv-solid">
+                    {busy ? <Loader size={14} className="rv-spin" /> : <Download size={14} />}
+                    {busy ? 'Generating…' : 'Download CV (Professional)'}
                 </button>
             </div>
 
-            <div className="resume-kuster-container" ref={resumeRef}>
-                {/* TITLE HEADLINE */}
-                <div className="kuster-header">
-                    <div className="header-title-box">
-                        <span className="huge-name">{data.hero.name.toUpperCase()}</span>
-                        <div className="vertical-rule"></div>
-                        <span className="resume-title-text">RESUME</span>
+            <div className="rv-sheet" ref={sheetRef}>
+                <div className="rv-hd">
+                    <div className="rv-hd-left">
+                        <div className="rv-contact-row"><span>{ph}</span></div>
+                        <div className="rv-contact-row"><span>{city}</span></div>
+                        <div className="rv-contact-row"><a href={`mailto:${em}`}>{em}</a></div>
                     </div>
-                    <p className="subtitle-text">{data.hero.title}</p>
+                    <div className="rv-hd-mid">
+                        <h1 className="rv-name">{data.hero.name}</h1>
+                        <p className="rv-role">{data.hero.title}</p>
+                    </div>
+                    <div className="rv-hd-right">
+                        <div className="rv-contact-row"><a href="https://shahabdulmazid.vercel.app" target="_blank" rel="noopener noreferrer">Portfolio: shahabdulmazid.vercel.app</a></div>
+                        <div className="rv-contact-row"><a href={data.contact.github} target="_blank" rel="noopener noreferrer">GitHub: github.com/Shah-Abdul-Mazid</a></div>
+                        <div className="rv-contact-row"><a href={data.contact.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn: linkedin.com/in/shahabdulmazid</a></div>
+                    </div>
                 </div>
 
-                {/* META SECTION */}
-                <div className="kuster-meta">
-                    <div className="meta-row">
-                        <div className="meta-left"><strong>Status:</strong> Artificial Intelligence Engineer</div>
-                        <div className="meta-right">{data.contact.location}</div>
-                    </div>
-                    <div className="meta-row">
-                        <div className="meta-left"><strong>Fields:</strong> AI, ML, Software Engineering, CV</div>
-                        <div className="meta-right">github.com/{data.contact.github?.split('/').pop()}</div>
-                    </div>
-                    <div className="meta-row">
-                        <div className="meta-left"><strong>Techs:</strong> {data.skills[0]?.items.slice(0, 6).join(', ')}</div>
-                        <div className="meta-right">{data.contact.email}</div>
-                    </div>
-                    <div className="meta-row">
-                        <div className="meta-left"><strong>Activities:</strong> {data.activities[0]?.organization || 'Open Source Contribution'}</div>
-                        <div className="meta-right">{data.contact.phone}</div>
-                    </div>
-                    <div className="meta-hr"></div>
-                </div>
-
-                {/* SUMMARY */}
-                <section className="kuster-section">
-                    <h2 className="section-headline">Summary</h2>
-                    <p className="summary-p">{data.about.bio}</p>
-                </section>
-
-                {/* EXPERIENCE */}
-                <section className="kuster-section">
-                    <h2 className="section-headline">Experience</h2>
-                    {data.work.map((w, i) => (
-                        <div key={i} className="kuster-event">
-                            <div className="event-top">
-                                <span className="event-name"><strong>{w.role}</strong> - <span className="inst-name">{w.company}</span></span>
-                                <span className="event-date">{formatDate(w.startDate)} - {w.endDate ? formatDate(w.endDate) : 'present'}</span>
-                            </div>
-                            <div className="event-hr"></div>
-                            <ul className="event-bullets">
-                                {w.details.map((d, di) => <li key={di}>{d}</li>)}
-                            </ul>
-                        </div>
-                    ))}
-                </section>
-
-                {/* EDUCATION */}
-                <section className="kuster-section">
-                    <h2 className="section-headline">Education</h2>
-                    {data.education.map((e, i) => (
-                        <div key={i} className="kuster-event">
-                            <div className="event-top">
-                                <span className="event-name"><strong>{e.degree}</strong> - <span className="inst-name">{e.school}</span></span>
-                                <span className="event-date">{e.year}</span>
-                            </div>
-                            <div className="event-hr"></div>
-                            <p className="edu-desc">{e.major ? `Major in ${e.major}` : ''}</p>
-                        </div>
-                    ))}
-                </section>
-
-                {/* PROJECTS (as optional extra section) */}
-                <section className="kuster-section">
-                    <h2 className="section-headline">Projects & Publications</h2>
-                    <ul className="footer-bullets">
-                        {data.projects.slice(0, 4).map((p, i) => (
-                            <li key={i}>{p.title}</li>
-                        ))}
-                    </ul>
-                </section>
-
-                {/* ARTIFICIAL FOOTER */}
-                <div className="kuster-footer-box">
-                    <span>{data.contact.github}</span>
-                    <span className="dot">•</span>
-                    <span>{data.contact.linkedin}</span>
+                <div className="rv-body">
+                    {data.about.bio && <p className="rv-summary">{data.about.bio.split('\n\n')[0]}</p>}
+                    {data.skills.length > 0 && (
+                        <section className="rv-sec">
+                            <div className="rv-sec-hd">Skills</div>
+                            {data.skills.map((c, i) => (
+                                <p key={i} className="rv-skill-row"><b>{c.name}:</b> {c.items.join(', ')}</p>
+                            ))}
+                        </section>
+                    )}
+                    {sortedWork.length > 0 && (
+                        <section className="rv-sec">
+                            <div className="rv-sec-hd">Technical Experience</div>
+                            {sortedWork.map((w, i) => (
+                                <div key={i} className="rv-item">
+                                    <div className="rv-item-top"><span className="rv-bold">{w.role}</span><span className="rv-meta-date">{fmtDate(w.startDate)} — {w.endDate ? fmtDate(w.endDate) : 'Present'}</span></div>
+                                    <div className="rv-item-sub"><span className="rv-muted">{w.company}</span><span className="rv-meta">{city}</span></div>
+                                    <ul className="rv-ul">{w.details.map((d, j) => <li key={j}>{d}</li>)}</ul>
+                                </div>
+                            ))}
+                        </section>
+                    )}
+                    {data.education.length > 0 && (
+                        <section className="rv-sec">
+                            <div className="rv-sec-hd">Education</div>
+                            {data.education.map((e, i) => (
+                                <div key={i} className="rv-item">
+                                    <div className="rv-item-top"><span className="rv-bold">{e.degree}</span><span className="rv-meta">{e.year}</span></div>
+                                    <div className="rv-item-sub"><span className="rv-muted">{e.school}</span><span className="rv-meta">Dhaka, Bangladesh</span></div>
+                                    {e.major && <p className="rv-sm" style={{ color: '#4b5563', fontStyle: 'italic', fontSize: '11.5px', marginTop: '2px' }}>• {e.major}</p>}
+                                </div>
+                            ))}
+                        </section>
+                    )}
+                    {data.projects.length > 0 && (
+                        <section className="rv-sec">
+                            <div className="rv-sec-hd">Projects</div>
+                            {data.projects.slice(0, 5).map((p, i) => (
+                                <div key={i} className="rv-item">
+                                    <div className="rv-proj-hd"><span className="rv-proj-title">{p.title}</span>{p.projectUrl && <span className="rv-proj-link">&nbsp;· {p.projectUrl.replace('https://', '')}</span>}</div>
+                                    <p className="rv-sm" style={{ color: '#374151', margin: '1px 0 2px' }}>{p.desc}</p>
+                                    {p.tags.length > 0 && <p className="rv-sm" style={{ color: '#3d5a80', margin: 0, fontStyle: 'italic', fontSize: '11px' }}>Tech: {p.tags.join(', ')}</p>}
+                                </div>
+                            ))}
+                        </section>
+                    )}
+                    {data.papers && data.papers.length > 0 && (
+                        <section className="rv-sec">
+                            <div className="rv-sec-hd">Publications</div>
+                            {data.papers.slice(0, 3).map((p, i) => (
+                                <div key={i} className="rv-item">
+                                    <div className="rv-item-top"><span className="rv-bold">{p.title}</span><span className="rv-meta">{p.year}</span></div>
+                                    <p className="rv-sm" style={{ color: '#1a1a1a', margin: '2px 0 1px' }}>{p.venue}</p>
+                                    {p.link && <p className="rv-sm" style={{ color: '#3d5a80', margin: 0, fontSize: '11px' }}><a href={p.link} target="_blank" rel="noopener noreferrer">{p.link.replace('https://', '')}</a></p>}
+                                </div>
+                            ))}
+                        </section>
+                    )}
+                    {data.experience && data.experience.length > 0 && (
+                        <section className="rv-sec">
+                            <div className="rv-sec-hd">Competitions & Awards</div>
+                            {data.experience.map((e, i) => (
+                                <div key={i} className="rv-item">
+                                    <div className="rv-item-top"><span className="rv-bold">{e.role}</span><span className="rv-meta">{e.period}</span></div>
+                                    <div className="rv-item-sub"><span className="rv-muted">{e.company}</span></div>
+                                    <p className="rv-sm" style={{ color: '#1a1a1a', margin: '1px 0 0' }}>{e.desc}</p>
+                                </div>
+                            ))}
+                        </section>
+                    )}
+                    <section className="rv-sec">
+                        <div className="rv-sec-hd">Languages</div>
+                        <p className="rv-skill-row"><b>Bengali:</b> Native &nbsp;·&nbsp; <b>English:</b> Professional Working Proficiency</p>
+                    </section>
                 </div>
             </div>
 
+            {showAts && (
+                <div className="ats-overlay" onClick={() => setShowAts(false)}>
+                    <div className="ats-panel" onClick={e => e.stopPropagation()}>
+                        <div className="ats-hd">
+                            <div className="ats-hd-txt"><h3>ATS Insight Analyzer</h3><p>Real-time professional score</p></div>
+                            <button className="ats-close" onClick={() => setShowAts(false)}><X size={20}/></button>
+                        </div>
+                        <div className="ats-score-box">
+                            <div className="ats-circle"><span className="ats-num">{atsScore.total}</span><span className="ats-pct">%</span></div>
+                            <div className="ats-label">{atsScore.total >= 80 ? 'Excellent' : atsScore.total >= 60 ? 'Professional' : 'Needs Optimization'}</div>
+                        </div>
+                        <div className="ats-tips">
+                            {atsScore.tips.map((t, i) => (
+                                <div key={i} className={`ats-tip ats-${t.type}`}>
+                                    {t.type === 'plus' ? <CheckCircle2 size={16} /> : t.type === 'tip' ? <Info size={16}/> : <AlertCircle size={16}/>}
+                                    <span>{t.text}</span>
+                                </div>
+                            ))}
+                        </div>
+                        <div className="ats-footer"><p>Calculated based on formatting, keywords, and sections for AI roles.</p></div>
+                    </div>
+                </div>
+            )}
+
             <style>{`
-                @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700;800;900&display=swap');
-
-                .resume-kuster-view {
-                    padding: 40px 10px;
-                    background: #f4f4f4;
-                    min-height: 100vh;
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    font-family: 'Raleway', sans-serif;
-                }
-
-                .resume-kuster-actions {
-                    width: 210mm;
-                    margin-bottom: 20px;
-                    display: flex;
-                    justify-content: flex-end;
-                }
-
-                .btn-kuster-download {
-                    background: #0096ff;
-                    color: white;
-                    border: none;
-                    padding: 8px 16px;
-                    border-radius: 4px;
-                    display: flex;
-                    align-items: center;
-                    gap: 8px;
-                    font-weight: 600;
-                    cursor: pointer;
-                }
-
-                .resume-kuster-container {
-                    width: 210mm;
-                    min-height: 297mm;
-                    background: white;
-                    padding: 12.5mm 15mm;
-                    box-sizing: border-box;
-                    color: #111;
-                    box-shadow: 0 0 20px rgba(0,0,0,0.1);
-                    line-height: 1.4;
-                }
-
-                .kuster-header {
-                    text-align: center;
-                    margin-bottom: 20px;
-                }
-
-                .header-title-box {
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    gap: 15px;
-                }
-
-                .huge-name {
-                    font-size: 38px;
-                    font-weight: 300;
-                    letter-spacing: 2px;
-                }
-
-                .vertical-rule {
-                    width: 1mm;
-                    height: 10mm;
-                    background: #0096ff;
-                }
-
-                .resume-title-text {
-                    font-size: 38px;
-                    font-weight: 300;
-                    letter-spacing: 2px;
-                }
-
-                .subtitle-text {
-                    font-size: 13px;
-                    margin-top: 5px;
-                    font-weight: 500;
-                    text-transform: uppercase;
-                }
-
-                .kuster-meta {
-                    margin-bottom: 20px;
-                }
-
-                .meta-row {
-                    display: flex;
-                    justify-content: space-between;
-                    font-size: 11px;
-                    margin-bottom: 2px;
-                }
-
-                .meta-left { font-weight: 400; }
-                .meta-right { font-weight: 700; text-align: right; }
-
-                .meta-hr {
-                    height: 1px;
-                    background: #e1e1e1;
-                    margin-top: 6px;
-                }
-
-                .kuster-section {
-                    margin-bottom: 20px;
-                }
-
-                .section-headline {
-                    color: #0096ff;
-                    font-size: 18px;
-                    font-weight: 800;
-                    text-align: center;
-                    margin: 0 0 10px 0;
-                }
-
-                .summary-p {
-                    font-size: 11.5px;
-                    text-align: justify;
-                }
-
-                .kuster-event {
-                    margin-bottom: 12px;
-                }
-
-                .event-top {
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    font-size: 12px;
-                }
-
-                .event-name { font-weight: 400; }
-                .inst-name { color: #6e6e6e; }
-                .event-date { color: #0096ff; font-weight: 600; }
-
-                .event-hr {
-                    height: 1px;
-                    background: #e1e1e1;
-                    margin: 2px 0 6px 0;
-                }
-
-                .event-bullets {
-                    padding-left: 15px;
-                    margin: 0;
-                    font-size: 11px;
-                    color: #333;
-                }
-
-                .event-bullets li::marker { content: "• "; color: #333; }
-                .event-bullets li { margin-bottom: 2px; }
-
-                .edu-desc {
-                    font-size: 11px;
-                    margin: 0;
-                    padding-left: 10px;
-                    font-style: italic;
-                }
-
-                .footer-bullets {
-                    display: grid;
-                    grid-template-columns: 1fr 1fr;
-                    gap: 5px;
-                    font-size: 11px;
-                    padding-left: 15px;
-                }
-
-                .kuster-footer-box {
-                    margin-top: 40px;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    gap: 15px;
-                    font-size: 11px;
-                    color: #0096ff;
-                }
-
-                .dot { font-weight: 900; }
-
-                @media print {
-                    .resume-kuster-view { padding: 0; background: white; }
-                    .resume-kuster-actions { display: none; }
-                    .resume-kuster-container { box-shadow: none; border: none; padding: 0; width: 100%; min-height: auto; }
-                }
+                @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap');
+                @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+                .rv-page { background: #f1f5f9; min-height: 100vh; padding: 32px 16px 60px; display: flex; flex-direction: column; align-items: center; font-family: 'Source Sans Pro', 'Inter', sans-serif; }
+                .rv-toolbar { width: min(794px, 100%); display: flex; justify-content: flex-end; gap: 10px; margin-bottom: 16px; }
+                .rv-btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer; border: none; text-decoration: none; transition: all 0.2s; }
+                .rv-solid { background: #3d5a80; color: white; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+                .rv-solid:hover { background: #2b3f5a; transform: translateY(-1px); }
+                .rv-spin { animation: rvSpin 1s linear infinite; }
+                @keyframes rvSpin { to { transform: rotate(360deg); } }
+                .rv-sheet { width: min(794px, 100%); background: white; color: #1a1a1a; font-size: 13.5px; line-height: 1.4; padding: 0.5in; box-shadow: 0 4px 24px rgba(0,0,0,0.1); }
+                .rv-hd { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 10px; padding-bottom: 20px; border-bottom: 1.5px solid #3d5a80; margin-bottom: 15px; }
+                .rv-hd-left { display: flex; flex-direction: column; gap: 1px; text-align: left; font-size: 11.5px; }
+                .rv-hd-mid { display: flex; flex-direction: column; align-items: center; text-align: center; }
+                .rv-hd-right { display: flex; flex-direction: column; gap: 1px; text-align: right; font-size: 11.5px; }
+                .rv-name { font-size: 28px; font-weight: 700; color: #1a1a1a; margin: 0; line-height: 1.1; }
+                .rv-role { font-size: 14px; color: #3d5a80; font-weight: 600; margin: 4px 0 0; }
+                .rv-contact-row { line-height: 1.3; }
+                .rv-contact-row a { color: #3d5a80; text-decoration: none; }
+                .rv-contact-row a:hover { text-decoration: underline; }
+                .rv-body { padding: 0; }
+                .rv-summary { font-size: 12.5px; color: #1a1a1a; line-height: 1.4; margin: 0 0 15px; text-align: justify; }
+                .rv-sec { margin-bottom: 15px; min-height: auto; padding-top: 0; display: block; }
+                .rv-sec-hd { font-size: 13px; font-weight: 700; text-transform: uppercase; color: #3d5a80; margin-bottom: 5px; display: flex; align-items: center; gap: 8px; }
+                .rv-sec-hd::after { content: ""; flex: 1; height: 1px; background: #3d5a80; margin-left: 8px; opacity: 0.3; }
+                .rv-skill-row { font-size: 11.5px; margin: 0 0 3px; color: #374151; }
+                .rv-skill-row b { color: #1a1a1a; }
+                .rv-item { margin-bottom: 10px; }
+                .rv-item-top { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; margin-bottom: 1px; }
+                .rv-item-sub { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; margin-bottom: 2px; }
+                .rv-bold { font-weight: 700; font-size: 13px; color: #1a1a1a; }
+                .rv-muted { color: #1a1a1a; font-weight: 600; font-size: 12.5px; }
+                .rv-sm { font-size: 12px; }
+                .rv-meta { font-size: 12px; color: #1a1a1a; font-weight: 600; white-space: nowrap; }
+                .rv-meta-date { font-weight: 700; font-size: 12.5px; color: #1a1a1a; }
+                .rv-ul { margin: 1px 0 0; padding-left: 14px; list-style: disc; }
+                .rv-ul li { font-size: 12px; color: #1a1a1a; margin-bottom: 1px; line-height: 1.3; }
+                .rv-proj-hd { display: flex; align-items: baseline; gap: 6px; }
+                .rv-proj-title { font-weight: 700; font-size: 13px; color: #1a1a1a; }
+                .rv-proj-link { font-size: 11px; color: #3d5a80; font-style: italic; }
+                .ats-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(8px); z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 20px; animation: fadeIn 0.3s ease; }
+                .ats-panel { width: 100%; max-width: 420px; background: #1e293b; border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; padding: 30px; color: white; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+                .ats-hd { display: flex; justify-content: space-between; align-items: start; margin-bottom: 25px; }
+                .ats-hd h3 { margin: 0; font-size: 1.4rem; color: #10b981; }
+                .ats-hd p { margin: 4px 0 0; font-size: 0.9rem; color: #94a3b8; }
+                .ats-close { background: none; border: none; color: #94a3b8; cursor: pointer; padding: 0; transition: color 0.2s; }
+                .ats-close:hover { color: white; }
+                .ats-score-box { display: flex; flex-direction: column; align-items: center; margin-bottom: 30px; }
+                .ats-circle { width: 120px; height: 120px; border: 8px solid #334155; border-top-color: #10b981; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 15px; position: relative; }
+                .ats-num { font-size: 3rem; font-weight: 800; color: white; }
+                .ats-pct { font-size: 1rem; color: #10b981; margin-top: 10px; margin-left: 2px; }
+                .ats-label { font-size: 1.1rem; font-weight: 600; color: #10b981; text-transform: uppercase; letter-spacing: 1px; }
+                .ats-tips { display: flex; flex-direction: column; gap: 12px; margin-bottom: 25px; }
+                .ats-tip { display: flex; align-items: center; gap: 10px; font-size: 0.92rem; padding: 10px 14px; border-radius: 12px; background: rgba(255,255,255,0.03); }
+                .ats-plus { color: #10b981; border-left: 3px solid #10b981; }
+                .ats-tip.ats-tip { color: #38bdf8; border-left: 3px solid #38bdf8; }
+                .ats-minus { color: #f43f5e; border-left: 3px solid #f43f5e; }
+                .ats-footer { text-align: center; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px; }
+                .ats-footer p { font-size: 0.75rem; color: #64748b; margin: 0; line-height: 1.4; }
+                @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+                @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+                @media print { .rv-page { background: white; padding: 0; } .rv-toolbar, .ats-overlay { display: none; } .rv-sheet { box-shadow: none; width: 100%; padding: 0.5in; } }
+                @media (max-width: 820px) { .rv-hd { grid-template-columns: 1fr; text-align: center; gap: 10px; } .rv-hd-left, .rv-hd-right { text-align: center; align-items: center; } .rv-item-top, .rv-item-sub { flex-direction: column; align-items: center; text-align: center; } }
             `}</style>
         </div>
     );

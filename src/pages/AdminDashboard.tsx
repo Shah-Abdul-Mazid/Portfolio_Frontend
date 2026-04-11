@@ -107,25 +107,21 @@ const AdminDashboard = () => {
         }
     };
 
-    const handleDeleteMessage = async (id: string, skipConfirm = false) => {
-        if (!skipConfirm && !window.confirm('Delete this message?')) return;
+    const handleDeleteMessage = async (id: string, skipConfirm = true) => {
         try {
             const token = localStorage.getItem('admin_token');
             const headers: HeadersInit = token ? { 'Authorization': `Bearer ${token}` } : {};
             await fetch(`/api/messages/${id}`, { method: 'DELETE', headers });
+            showNotification('🗑️ Message cleared successfully');
             fetchRealTimeData();
-        } catch { alert('Failed to delete message'); }
+        } catch { 
+            showNotification('❌ Failed to delete message'); 
+        }
     };
 
     const handleReplyAndDelete = async (id: string, email: string) => {
-        // Open the email client
         window.location.href = `mailto:${email}?subject=RE: Portfolio Inquiry`;
-        // Delay a bit to ensure the mailto: is triggered before the confirm/delete
-        setTimeout(async () => {
-             if (window.confirm('The reply mail has been opened. Would you like to clear this message from the database now?')) {
-                 handleDeleteMessage(id, true);
-             }
-        }, 500);
+        handleDeleteMessage(id, true);
     };
 
     const fetchVisitors = async () => {
@@ -141,7 +137,6 @@ const AdminDashboard = () => {
     };
 
     const handleClearVisitors = async () => {
-        if (!window.confirm('Are you sure you want to delete all visitor records and reset the view count to 0?')) return;
         try {
             const token = localStorage.getItem('admin_token');
             const headers: HeadersInit = token ? { 'Authorization': `Bearer ${token}` } : {};
@@ -150,10 +145,10 @@ const AdminDashboard = () => {
             if (result.success) {
                 setVisitors([]);
                 setStats(prev => ({ ...prev, views: 0 }));
-                alert(result.message);
+                showNotification('🧹 All visitor logs cleared');
             }
         } catch (err) {
-            alert('Failed to clear visitors');
+            showNotification('❌ Failed to clear visitor data');
         }
     };
 
@@ -172,7 +167,7 @@ const AdminDashboard = () => {
     const handleCreateAdmin = async (e: React.FormEvent) => {
         e.preventDefault();
         const token = localStorage.getItem('admin_token');
-        if (!token) return alert('Session expired.');
+        if (!token) return showNotification('⚠️ Session expired. Please login again.');
 
         try {
             const res = await fetch('/api/admin/register', {
@@ -185,15 +180,15 @@ const AdminDashboard = () => {
             });
             const data = await res.json();
             if (data.success) {
-                alert('Admin user created successfully!');
+                showNotification('👤 Admin account created!');
                 setNewAdminEmail('');
                 setNewAdminPassword('');
                 fetchRealTimeData();
             } else {
-                alert(data.message || 'Error creating admin');
+                showNotification(`❌ ${data.message || 'Error creating admin'}`);
             }
         } catch (e) {
-            alert('Server error creating admin');
+            showNotification('❌ API Connection Error');
         }
     };
 
@@ -211,7 +206,6 @@ const AdminDashboard = () => {
         }));
     };
 
-    // Centralized notification helper for local edits
     const showNotification = (msg: string) => {
         setSaveStatus(msg);
         setTimeout(() => setSaveStatus(''), 2500);
@@ -226,7 +220,6 @@ const AdminDashboard = () => {
     };
 
     const removeListItem = (collection: string, index: number) => {
-        // window.confirm removed to prevent browser popup blockers from breaking the function
         setEditData(prev => {
             const list = [...(prev as any)[collection]];
             list.splice(index, 1);
@@ -258,7 +251,6 @@ const AdminDashboard = () => {
         }
     };
 
-    // ── Work detail helpers ───────────────────────────────────────────────────
     const updateWorkDetail = (workIndex: number, detailIndex: number, value: string) => {
         setEditData(prev => {
             const work = [...prev.work];
@@ -286,7 +278,6 @@ const AdminDashboard = () => {
         showNotification('🗑️ Removed work detail');
     };
 
-    // ── Skill helpers ─────────────────────────────────────────────────────────
     const updateSkillItem = (catIndex: number, itemIndex: number, value: string) => {
         setEditData(prev => {
             const skills = prev.skills.map((cat, ci) => {
@@ -316,7 +307,6 @@ const AdminDashboard = () => {
         showNotification('🗑️ Removed skill');
     };
 
-    // ── Project tag helpers ───────────────────────────────────────────────────
     const updateProjectTag = (projIndex: number, tagIndex: number, value: string) => {
         setEditData(prev => {
             const projects = prev.projects.map((p, pi) => {
@@ -328,8 +318,25 @@ const AdminDashboard = () => {
         });
     };
 
+    const removeProjectTag = (projIndex: number, tagIndex: number) => {
+        setEditData(prev => {
+            const projects = prev.projects.map((p, pi) =>
+                pi === projIndex ? { ...p, tags: p.tags.filter((_, idx) => idx !== tagIndex) } : p
+            );
+            return { ...prev, projects };
+        });
+        showNotification('🗑️ Removed project tag');
+    };
 
-
+    const addProjectTag = (projIndex: number) => {
+        setEditData(prev => {
+            const projects = prev.projects.map((p, pi) =>
+                pi === projIndex ? { ...p, tags: [...p.tags, ''] } : p
+            );
+            return { ...prev, projects };
+        });
+        showNotification('🏷️ Added project tag');
+    };
 
     const FileUploadInput = ({ label, value, onUpload, id, placeholder = "Enter URL or upload file" }: { 
         label: string, 
@@ -358,10 +365,10 @@ const AdminDashboard = () => {
                 if (result.success) {
                     onUpload(result.url);
                 } else {
-                    alert(result.message || 'Upload failed');
+                    showNotification(result.message || 'Upload failed');
                 }
             } catch (err) {
-                alert('Connection error during upload');
+                showNotification('❌ Connection failed during file upload');
             } finally {
                 setUploading(false);
             }
@@ -532,7 +539,6 @@ const AdminDashboard = () => {
 
     return (
         <div className="admin-layout">
-            {/* Mobile Header */}
             <div className="admin-mobile-header">
                 <h2>Admin <span className="gradient-text">Panel</span></h2>
                 <button className="sidebar-toggle" onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
@@ -540,7 +546,6 @@ const AdminDashboard = () => {
                 </button>
             </div>
 
-            {/* Sidebar */}
             <aside className={`admin-sidebar ${isSidebarOpen ? 'open' : ''}`}>
                 <div className="sidebar-header desktop-only">
                     <h2>Admin <span className="gradient-text">Panel</span></h2>
@@ -579,22 +584,10 @@ const AdminDashboard = () => {
                     </div>
                 </div>
             </aside>
-            <style>{`
-                .sidebar-footer .action-btn { background: transparent; color: var(--primary); justify-content: flex-start; padding: 10px 15px; }
-                .sidebar-footer .action-btn:hover { background: rgba(139, 92, 246, 0.1); }
-                .sidebar-footer .danger-btn { background: transparent; color: #ef4444; justify-content: flex-start; padding: 10px 15px; margin-top: 5px; border: 1px solid rgba(239, 68, 68, 0.2); border-radius: 8px;}
-                .sidebar-footer .danger-btn:hover { background: rgba(239, 68, 68, 0.1); }
-                .toggle-switch { position: relative; width: 44px; height: 24px; background: rgba(255,255,255,0.1); border-radius: 20px; cursor: pointer; transition: 0.3s; }
-                .toggle-switch.active { background: rgba(139, 92, 246, 0.3); }
-                .toggle-thumb { position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; background: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; transition: 0.3s; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
-            `}</style>
-
             {isSidebarOpen && <div className="sidebar-overlay" onClick={() => setIsSidebarOpen(false)} />}
-
             <main className="admin-main">
                 <div className="main-content-wrapper fade-in" key={activeTab}>
 
-                    {/* ── OVERVIEW ─────────────────────────────────────────── */}
                     {activeTab === 'overview' && (
                         <div className="tab-pane">
                             <h2 className="pane-title">System Overview</h2>
@@ -624,7 +617,6 @@ const AdminDashboard = () => {
                         </div>
                     )}
 
-                    {/* ── MESSAGES ─────────────────────────────────────────── */}
                     {activeTab === 'messages' && (
                         <div className="tab-pane">
                             <div className="pane-header">
@@ -661,13 +653,11 @@ const AdminDashboard = () => {
                         </div>
                     )}
 
-                    {/* ── INTRO & PROFILE ──────────────────────────────────── */}
                     {activeTab === 'profile' && (
                         <div className="tab-pane cms-pane">
                             <SaveBar />
                             {saveStatus && <div className="status-badge success">✓ {saveStatus}</div>}
                             
-                            {/* NEW: Individual Identity Form */}
                             <div className="form-section enhanced-profile">
                                 <h3 className="text-xl font-semibold mb-6 flex items-center gap-2" style={{ color: '#60a5fa' }}>
                                     <Users className="w-5 h-5" />
@@ -739,7 +729,6 @@ const AdminDashboard = () => {
                         </div>
                     )}
 
-                    {/* ── EDUCATION ────────────────────────────────────────── */}
                     {activeTab === 'education' && (
                         <div className="tab-pane cms-pane">
                             <SaveBar />
@@ -805,7 +794,6 @@ const AdminDashboard = () => {
                         </div>
                     )}
 
-                    {/* ── WORK HISTORY ─────────────────────────────────────── */}
                     {activeTab === 'work' && (
                         <div className="tab-pane cms-pane">
                             <SaveBar />
@@ -886,7 +874,6 @@ const AdminDashboard = () => {
                         </div>
                     )}
 
-                    {/* ── ACHIEVEMENTS (Experience) ─────────────────────────── */}
                     {activeTab === 'experience' && (
                         <div className="tab-pane cms-pane">
                             <SaveBar />
@@ -952,7 +939,6 @@ const AdminDashboard = () => {
                         </div>
                     )}
 
-                    {/* ── VISITOR LOGS ─────────────────────────────────────── */}
                     {activeTab === 'visitors' && (
                         <div className="tab-pane">
                             <div className="pane-header">
@@ -1005,7 +991,6 @@ const AdminDashboard = () => {
                         </div>
                     )}
 
-                    {/* ── TECH STACK (Skills) ───────────────────────────────── */}
                     {activeTab === 'skills' && (
                         <div className="tab-pane cms-pane">
                             <SaveBar />
@@ -1044,7 +1029,6 @@ const AdminDashboard = () => {
                         </div>
                     )}
 
-                    {/* ── PROJECTS (Portfolio) ──────────────────────────────── */}
                     {activeTab === 'projects' && (
                         <div className="tab-pane cms-pane">
                             <SaveBar />
@@ -1075,24 +1059,10 @@ const AdminDashboard = () => {
                                         {project.tags.map((tag, ti) => (
                                             <div key={ti} className="detail-row">
                                                 <input type="text" value={tag} onChange={e => updateProjectTag(i, ti, e.target.value)} placeholder={`Tag ${ti + 1}`} />
-                                                <button className="icon-btn danger" onClick={() => {
-                                                    setEditData(prev => {
-                                                        const projects = prev.projects.map((p, pi) =>
-                                                            pi === i ? { ...p, tags: p.tags.filter((_, idx) => idx !== ti) } : p
-                                                        );
-                                                        return { ...prev, projects };
-                                                    });
-                                                }}><Minus size={14} /></button>
+                                                <button className="icon-btn danger" onClick={() => removeProjectTag(i, ti)}><Minus size={14} /></button>
                                             </div>
                                         ))}
-                                        <button className="add-inline-btn" onClick={() => {
-                                            setEditData(prev => {
-                                                const projects = prev.projects.map((p, pi) =>
-                                                    pi === i ? { ...p, tags: [...p.tags, ''] } : p
-                                                );
-                                                return { ...prev, projects };
-                                            });
-                                        }}><Plus size={14} /> Add Tag</button>
+                                        <button className="add-inline-btn" onClick={() => addProjectTag(i)}><Plus size={14} /> Add Tag</button>
                                     </div>
                                     <div className="flex-group" style={{ flexWrap: 'wrap' }}>
                                         <div className="form-group" style={{ width: '25%' }}>

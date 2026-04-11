@@ -158,25 +158,27 @@ const defaultData: PortfolioData = {
     },
     hero: {
         name: "Shah Abdul Mazid",
-        title: "Machine Learning Researcher & Software Engineer",
+        title: "Data Scientist | AI Developer",
         roles: [
-            "Machine Learning Researcher",
-            "Software Engineer",
-            "AI Engineer",
-            "Data Science Enthusiast"
+            "Data Scientist",
+            "AI Developer",
+            "ML Engineer",
+            "Software Engineer"
         ],
-        description: "A CSE student focused on Intelligent Systems & Data Science."
+        description: "Passionate Data Scientist and AI Developer dedicated to building scalable, intelligent solutions."
     },
     about: {
-        bio: "I am a Computer Science and Engineering student majoring in Intelligent Systems and Data Science at East West University.\n\nPassionate about AI innovation, research, and hackathon projects. Skilled in deep learning, computer vision, NLP, and ML deployment with strong analytical and research abilities.\n\nMy journey in AI and Data Science revolves around developing intelligent systems that solve real-world problems. With a strong foundation in Computer Science, I aim to contribute to research, innovation, and impactful projects.",
+        bio: "Computer Science and Engineering student specializing in Intelligent Systems and Data Science at East West University, currently working as an AI Developer at Softvence Agency.\n\nExperienced in building real-world AI solutions, including automation systems, AI chatbots, and Retrieval-Augmented Generation pipelines. Skilled in deep learning, computer vision, NLP, and deploying scalable APIs using FastAPI.\n\nStrong background in developing end-to-end intelligent systems through research, industry work, and hackathons. Passionate about leveraging AI to solve complex real-world problems and contribute to innovative, high-impact projects.",
         age: "24",
-        projects: "10+"
+        projects: "15+"
     },
     skills: [
-        { name: 'Programming Languages', items: ['Python', 'Java', 'C/C++', 'SQL', 'JavaScript'] },
-        { name: 'AI/ML & Data Science', items: ['Deep Learning', 'Computer Vision', 'NLP', 'TensorFlow', 'PyTorch'] },
-        { name: 'Development', items: ['FastAPI', 'Flask', 'Java Swing', 'Streamlit', 'Docker', 'Vercel'] },
-        { name: 'Tools', items: ['Git', 'Research', 'Academic Writing', 'Latex'] }
+        { name: 'Languages', items: ['Python', 'JavaScript', 'SQL'] },
+        { name: 'Frameworks', items: ['FastAPI', 'Streamlit', 'React'] },
+        { name: 'AI/ML', items: ['RAG', 'LLMs', 'LangChain', 'SentenceTransformers'] },
+        { name: 'Tools', items: ['n8n', 'Docker', 'Git', 'Postman'] },
+        { name: 'Databases', items: ['PostgreSQL', 'MongoDB', 'Pinecone'] },
+        { name: 'Cloud', items: ['Vercel', 'Supabase', 'Cloudflare R2'] }
     ],
     education: [
         { degree: 'B.Sc. in Computer Science & Engineering', school: 'East West University', year: '2021 – 2026', major: 'Major: Intelligent Systems & Data Science' },
@@ -190,28 +192,61 @@ const defaultData: PortfolioData = {
     ],
     work: [
         { 
-            role: 'Campus Ambassador', 
-            company: 'eshikhon', 
-            startDate: '2022-01-03', 
-            endDate: '2025-12-30', 
-            details: ['Represented the organization on campus.', 'Organized tech workshops and events.', 'Promoted digital learning among students.'],
-            appointmentLetterUrl: '/data/eshikhon-appointment-letter.pdf'
-        },
-        { 
-            role: 'Software Engineer', 
-            company: 'softvence Omega', 
+            role: 'AI Engineer', 
+            company: 'Softvence Agency', 
             startDate: '2026-02-01', 
             endDate: '', 
-            details: ['Developing innovative AI solutions.', 'Implementing premium web architectures.', 'Contributing to research projects.']
+            details: [
+                'Developing and deploying AI-driven solutions, including automation systems, AI chatbots, and RAG-based applications.',
+                'Designing and implementing scalable backend architectures using FastAPI and modern AI frameworks.',
+                'Working with LLMs, NLP pipelines, and vector databases to build intelligent, production-ready systems.',
+                'Contributing to research-oriented projects and integrating cutting-edge AI technologies into real-world applications.'
+            ]
+        },
+        { 
+            role: 'Campus Ambassador', 
+            company: 'eShikhon', 
+            startDate: '2022-01-01', 
+            endDate: '2025-12-30', 
+            details: [
+                'Represented organization as campus lead.',
+                'Organized technical workshops and knowledge sessions.',
+                'Collaborated with cross-functional teams for student outreach.'
+            ],
+            appointmentLetterUrl: '/data/eshikhon-appointment-letter.pdf'
         }
     ],
     projects: [
-        { title: 'AI-Powered E-Commerce Customer Support Chatbot', desc: 'This project implements an AI-powered customer support chatbot for an e-commerce store using n8n, OpenAI, Pinecone, and Shopify.', tags: ['n8n', 'OpenAI', 'Pinecone', 'Shopify'], showcase: 1 },
-        { title: 'Competitive Intelligence Workflow Automation', desc: 'Automated competitive intelligence workflow using n8n, Jungle Scout, and web scraping techniques.', tags: ['n8n', 'Jungle Scout', 'Scraping'], showcase: 2 },
-        { title: 'VAID: Aerial Image Dataset', desc: 'An Aerial Image Dataset for Vehicle Detection research project targeting high-altitude surveillance.', tags: ['Aerial Imaging', 'Detection', 'Dataset'], showcase: 3 },
-        { title: 'Library Management System', desc: 'A robust database project implemented with full CRUD operations and secure user authentication.', tags: ['SQL', 'Database'], showcase: 4 },
-        { title: 'Hate Speech Detection from Live Stream', desc: 'This project implements a real-time hate speech detection system for live audio streams using BERT, PyAudio, and TensorFlow.', tags: ['BERT', 'PyAudio', 'TensorFlow'], showcase: 5, githubUrl: '' },
-        { title: 'Mechanical Glove Mouse: Motion-Based Control', desc: 'Motion-controlled wireless glove mouse for human-computer interaction using ESP32-S3 and MPU6050 sensor.', tags: ['ESP32-S3', 'MPU6050', 'Arduino IDE'], showcase: 6, githubUrl: '' }
+        { 
+            title: 'HR Policies RAG Chatbot', 
+            desc: 'An intelligent chatbot for HR policy information using RAG, LLMs, and FastAPI.', 
+            tags: ['RAG', 'LLM', 'FastAPI', 'Streamlit', 'Pinecone', 'Llama2', 'NLP', 'SentenceTransformers'], 
+            showcase: 1 
+        },
+        { 
+            title: 'TrackMyBus', 
+            desc: 'Real-time bus tracking application for university students.', 
+            tags: ['Flutter', 'Firebase', 'Firestore', 'Geolocation', 'Google Maps API'], 
+            showcase: 2 
+        },
+        { 
+            title: 'WhatsUpIn', 
+            desc: 'Comprehensive automation and AI agent solutions for business workflows.', 
+            tags: ['n8n', 'OpenAI API', 'Automation', 'AI Agents'], 
+            showcase: 3 
+        },
+        { 
+            title: 'Hate Speech Detection from Live Stream', 
+            desc: 'Real-time hate speech detection system for live audio streams using BERT and TensorFlow.', 
+            tags: ['BERT', 'PyAudio', 'TensorFlow', 'Deep Learning'], 
+            showcase: 4 
+        },
+        { 
+            title: 'Mechanical Glove Mouse', 
+            desc: 'Wireless glove mouse for human-computer interaction using ESP32-S3 and MPU6050.', 
+            tags: ['ESP32-S3', 'MPU6050', 'Arduino', 'HCI'], 
+            showcase: 5 
+        }
     ],
     papers: [
         { 
@@ -274,12 +309,12 @@ const defaultData: PortfolioData = {
     ],
     contact: {
         email: "shahabdulmazid.ezan@yahoo.com",
-        phone: "+880 1531-329222",
-        location: "Mohammadpur, Dhaka-1207",
+        phone: "(+88015) 3132-9222",
+        location: "Dhaka, Bangladesh",
         whatsapp: "https://wa.me/8801531329222",
         messenger: "https://m.me/shahabdulmazid.ezan",
         facebook: "https://facebook.com/shahabdulmazid.ezan",
-        github: "https://github.com/shamazid",
+        github: "https://github.com/Shah-Abdul-Mazid",
         linkedin: "https://linkedin.com/in/shahabdulmazid"
     }
 };
