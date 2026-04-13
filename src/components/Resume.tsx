@@ -34,6 +34,7 @@ const Resume = () => {
         if (data.papers && data.papers.length > 0) { score += 20; tips.push({ type: 'plus', text: 'Academic publications found (High Impact).' }); }
         if (data.projects.length >= 3) { score += 5; tips.push({ type: 'plus', text: 'Project portfolio demonstrated.' }); }
         if (data.education.length >= 2) { score += 5; tips.push({ type: 'plus', text: 'Education history complete.' }); }
+        if (data.references && data.references.length > 0) { score += 5; tips.push({ type: 'plus', text: `References included (${data.references.length} contact${data.references.length > 1 ? 's' : ''}).` }); }
         score += 5; tips.push({ type: 'plus', text: 'Single-column, ATS-parsable formatting.' });
 
         return { total: Math.min(score, 100), tips };
@@ -200,6 +201,25 @@ const Resume = () => {
                         <div className="rv-sec-hd">Languages</div>
                         <p className="rv-skill-row"><b>Bengali:</b> Native &nbsp;·&nbsp; <b>English:</b> Professional Working Proficiency</p>
                     </div>
+                    {data.references && data.references.length > 0 && (
+                        <div className="rv-sec">
+                            <div className="rv-sec-hd">References</div>
+                            <div className="rv-ref-grid">
+                                {data.references.map((ref, i) => (
+                                    <div key={i} className="rv-ref-item">
+                                        <div className="rv-ref-name">{ref.name}</div>
+                                        <div className="rv-ref-pos">{ref.title}</div>
+                                        <div className="rv-ref-org">{ref.company}</div>
+                                        {ref.relation && <div className="rv-ref-rel">Relation: {ref.relation}</div>}
+                                        <div className="rv-ref-contact">
+                                            <a href={`mailto:${ref.email}`} className="rv-ref-link">✉ {ref.email}</a>
+                                            {ref.phone && <span className="rv-ref-phone"> · 📞 {ref.phone}</span>}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
 
@@ -267,6 +287,16 @@ const Resume = () => {
                 .rv-proj-hd { display: flex; align-items: baseline; gap: 6px; }
                 .rv-proj-title { font-weight: 700; font-size: 13px; color: #1a1a1a; }
                 .rv-proj-link { font-size: 11px; color: #3d5a80; font-style: italic; }
+                .rv-ref-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px 20px; margin-top: 2px; }
+                .rv-ref-item { border-left: 2px solid #3d5a80; padding-left: 8px; }
+                .rv-ref-name { font-weight: 700; font-size: 12.5px; color: #1a1a1a; }
+                .rv-ref-pos { font-size: 11.5px; color: #3d5a80; font-weight: 600; }
+                .rv-ref-org { font-size: 11px; color: #374151; margin-bottom: 1px; }
+                .rv-ref-rel { font-size: 10.5px; color: #6b7280; font-style: italic; margin-bottom: 1px; }
+                .rv-ref-contact { font-size: 10.5px; color: #374151; }
+                .rv-ref-link { color: #3d5a80; text-decoration: none; }
+                .rv-ref-link:hover { text-decoration: underline; }
+                .rv-ref-phone { color: #374151; }
                 .ats-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(8px); z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 20px; animation: fadeIn 0.3s ease; }
                 .ats-panel { width: 100%; max-width: 420px; background: #1e293b; border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; padding: 30px; color: white; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
                 .ats-hd { display: flex; justify-content: space-between; align-items: start; margin-bottom: 25px; }
