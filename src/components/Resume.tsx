@@ -53,7 +53,7 @@ const Resume = () => {
                     const sheet = clonedDoc.querySelector('.rv-sheet') as HTMLElement;
                     if (sheet) {
                         sheet.style.width = '794px';
-                        sheet.style.padding = '0.5in';
+                        sheet.style.padding = '1in';
                         sheet.style.margin = '0';
                     }
                 }
@@ -237,7 +237,7 @@ const Resume = () => {
                 .rv-solid:hover { background: #2b3f5a; transform: translateY(-1px); }
                 .rv-spin { animation: rvSpin 1s linear infinite; }
                 @keyframes rvSpin { to { transform: rotate(360deg); } }
-                .rv-sheet { width: min(794px, 100%) !important; background: white !important; color: #1a1a1a !important; font-size: 13.5px !important; line-height: 1.4 !important; padding: 0.5in !important; box-shadow: 0 4px 24px rgba(0,0,0,0.1) !important; text-align: left !important; }
+                .rv-sheet { width: min(794px, 100%) !important; background: white !important; color: #1a1a1a !important; font-size: 13.5px !important; line-height: 1.4 !important; padding: 1in !important; box-shadow: 0 4px 24px rgba(0,0,0,0.1) !important; text-align: left !important; }
                 .rv-hd { display: grid !important; grid-template-columns: 1fr auto 1fr !important; align-items: center !important; gap: 10px !important; padding-bottom: 20px !important; border-bottom: 1.5px solid #3d5a80 !important; margin-bottom: 15px !important; text-align: left !important; }
                 .rv-hd-left { display: flex !important; flex-direction: column !important; gap: 1px !important; text-align: left !important; font-size: 11.5px !important; }
                 .rv-hd-mid { display: flex; flex-direction: column; align-items: center; text-align: center; }
@@ -288,7 +288,7 @@ const Resume = () => {
                 .ats-footer p { font-size: 0.75rem; color: #64748b; margin: 0; line-height: 1.4; }
                 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
                 @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-                @media print { .rv-page { background: white; padding: 0; } .rv-toolbar, .ats-overlay { display: none; } .rv-sheet { box-shadow: none; width: 100%; padding: 0.5in; } }
+                @media print { .rv-page { background: white; padding: 0; } .rv-toolbar, .ats-overlay { display: none; } .rv-sheet { box-shadow: none; width: 100%; padding: 1in; } }
             `}</style>
         </div>
     );
