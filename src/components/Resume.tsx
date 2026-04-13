@@ -275,7 +275,14 @@ const Resume = () => {
                 .ats-footer p { font-size: 0.75rem; color: #64748b; margin: 0; line-height: 1.4; }
                 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
                 @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-                @media print { .rv-page { background: white; padding: 0; } .rv-toolbar, .ats-overlay { display: none; } .rv-sheet { box-shadow: none; width: 100%; padding: 1in; } }
+                @media print { 
+                    .rv-page { background: white; padding: 0; } 
+                    .rv-toolbar, .ats-overlay { display: none !important; } 
+                    .rv-sheet { box-shadow: none; width: 100%; padding: 1in; margin: 0; }
+                    header, footer { display: none !important; }
+                    main { padding: 0 !important; margin: 0 !important; }
+                    .container { max-width: none !important; padding: 0 !important; margin: 0 !important; }
+                }
             `}</style>
         </div>
     );
