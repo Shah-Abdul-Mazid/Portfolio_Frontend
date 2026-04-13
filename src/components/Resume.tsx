@@ -58,9 +58,9 @@ const Resume = () => {
                         sheet.style.margin = '0';
                     }
                     // Hide fixed elements like the navigation header from leaking into html2canvas
-                    const header = clonedDoc.querySelector('header');
+                    const header = clonedDoc.querySelector('header') as HTMLElement | null;
                     if (header) header.style.display = 'none';
-                    const drawer = clonedDoc.querySelector('.mobile-drawer');
+                    const drawer = clonedDoc.querySelector('.mobile-drawer') as HTMLElement | null;
                     if (drawer) drawer.style.display = 'none';
                 }
             });
