@@ -121,7 +121,7 @@ const Resume = () => {
                         <div className="rv-sec">
                             <div className="rv-sec-hd">Projects</div>
                             {data.projects.slice(0, 5).map((p, i) => (
-                                <div key={i} className="rv-item">
+                                <div key={i} className={`rv-item ${p.title.includes('Bangladesh University') ? 'force-break-before' : ''}`}>
                                     <div className="rv-proj-hd"><span className="rv-proj-title">{p.title}</span>{p.projectUrl && <span className="rv-proj-link">&nbsp;· {p.projectUrl.replace('https://', '')}</span>}</div>
                                     <p className="rv-sm" style={{ color: '#374151', margin: '1px 0 2px' }}>{p.desc}</p>
                                     {p.tags.length > 0 && <p className="rv-sm" style={{ color: '#3d5a80', margin: 0, fontStyle: 'italic', fontSize: '11px' }}>Tech: {p.tags.join(', ')}</p>}
@@ -231,6 +231,7 @@ const Resume = () => {
                 .rv-skill-row { font-size: 11.5px; margin: 0 0 3px; color: #374151; break-inside: avoid; page-break-inside: avoid; }
                 .rv-skill-row b { color: #1a1a1a; }
                 .rv-item { margin-bottom: 6px; break-inside: avoid; page-break-inside: avoid; }
+                .rv-item.force-break-before { break-before: page; page-break-before: always; }
                 .rv-item-top { display: flex !important; justify-content: space-between !important; align-items: baseline !important; gap: 10px !important; margin-bottom: 1px !important; text-align: left !important; }
                 .rv-item-sub { display: flex !important; justify-content: space-between !important; align-items: baseline !important; gap: 10px !important; margin-bottom: 2px !important; text-align: left !important; }
                 .rv-bold { font-weight: 700; font-size: 13px; color: #1a1a1a; }
