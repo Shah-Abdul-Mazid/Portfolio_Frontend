@@ -1,8 +1,6 @@
 import { useRef, useState, useMemo } from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
-import { Download, Loader, CheckCircle2, AlertCircle, Info, X, Zap } from 'lucide-react';
-import html2canvas from 'html2canvas';
-import { jsPDF } from 'jspdf';
+import { Download, CheckCircle2, AlertCircle, Info, X, Zap } from 'lucide-react';
 
 const fmtDate = (s: string) => {
     if (!s) return 'Present';
@@ -14,7 +12,6 @@ const fmtDate = (s: string) => {
 const Resume = () => {
     const { data } = usePortfolio();
     const sheetRef = useRef<HTMLDivElement>(null);
-    const [busy, setBusy] = useState(false);
     const [showAts, setShowAts] = useState(false);
 
     // --- ATS SCORING LOGIC ---
