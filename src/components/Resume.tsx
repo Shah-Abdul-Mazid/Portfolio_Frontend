@@ -280,13 +280,13 @@ const Resume = () => {
                 .rv-contact-row a { color: #3d5a80; text-decoration: none; }
                 .rv-contact-row a:hover { text-decoration: underline; }
                 .rv-body { padding: 0; }
-                .rv-summary { font-size: 12.5px; color: #1a1a1a; line-height: 1.4; margin: 0 0 15px; text-align: justify; }
-                .rv-sec { margin-bottom: 8px !important; min-height: 0 !important; padding: 0 !important; display: block; overflow: visible; }
+                .rv-summary { font-size: 12.5px; color: #1a1a1a; line-height: 1.4; margin: 0 0 10px; text-align: justify; }
+                .rv-sec { margin-bottom: 5px !important; min-height: 0 !important; padding: 0 !important; display: block; overflow: visible; }
                 .rv-sec-hd { font-size: 13px; font-weight: 700; text-transform: uppercase; color: #3d5a80; margin-bottom: 3px; display: flex; align-items: center; gap: 8px; break-after: avoid; page-break-after: avoid; }
                 .rv-sec-hd::after { content: ""; flex: 1; height: 1px; background: #3d5a80; margin-left: 8px; opacity: 0.3; }
                 .rv-skill-row { font-size: 11.5px; margin: 0 0 3px; color: #374151; break-inside: avoid; page-break-inside: avoid; }
                 .rv-skill-row b { color: #1a1a1a; }
-                .rv-item { margin-bottom: 6px; }
+                .rv-item { margin-bottom: 4px; }
                 .rv-item-top { display: flex !important; justify-content: space-between !important; align-items: baseline !important; gap: 10px !important; margin-bottom: 1px !important; text-align: left !important; }
                 .rv-item-sub { display: flex !important; justify-content: space-between !important; align-items: baseline !important; gap: 10px !important; margin-bottom: 2px !important; text-align: left !important; }
                 .rv-bold { font-weight: 700; font-size: 13px; color: #1a1a1a; }
