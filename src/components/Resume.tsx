@@ -40,50 +40,10 @@ const Resume = () => {
         return { total: Math.min(score, 100), tips };
     }, [data]);
 
-    const downloadDynamic = async () => {
-        if (!sheetRef.current) return;
-        setBusy(true);
-        try {
-            const canvas = await html2canvas(sheetRef.current, {
-                scale: 4, 
-                useCORS: true, 
-                logging: false,
-                backgroundColor: '#ffffff', 
-                windowWidth: 1200,
-                onclone: (clonedDoc) => {
-                    const sheet = clonedDoc.querySelector('.rv-sheet') as HTMLElement;
-                    if (sheet) {
-                        sheet.style.width = '794px';
-                        sheet.style.padding = '1in';
-                        sheet.style.margin = '0';
-                    }
-                }
-            });
-
-            const imgData = canvas.toDataURL('image/png', 1.0);
-            const pdf = new jsPDF('p', 'mm', 'a4');
-            const pdfWidth = pdf.internal.pageSize.getWidth();
-            const pdfHeight = pdf.internal.pageSize.getHeight();
-            const imgHeight = (canvas.height * pdfWidth) / canvas.width;
-            
-            let heightLeft = imgHeight;
-            let position = 0;
-
-            // Add first page
-            pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, imgHeight);
-            heightLeft -= pdfHeight;
-
-            // Add extra pages if needed
-            while (heightLeft > 0) {
-                position = heightLeft - imgHeight;
-                pdf.addPage();
-                pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, imgHeight);
-                heightLeft -= pdfHeight;
-            }
-
-            pdf.save(`${data.hero.name.replace(/\s+/g, '_')}_Resume.pdf`);
-        } catch (e) { console.error(e); }
-        finally { setBusy(false); }
+    const downloadDynamic = () => {
+        // We use the browser's native print-to-PDF which correctly handles text wrapping
+        // and avoids cutting text in half (unlike html2canvas).
+        window.print();
     };
 
     const em  = data.contact.email   || '';
@@ -103,9 +63,8 @@ const Resume = () => {
                 <button onClick={() => setShowAts(true)} className="rv-btn rv-solid" style={{ background: '#10b981', border: 'none' }}>
                     <Zap size={14} fill="white" /> Check ATS Score
                 </button>
-                <button onClick={downloadDynamic} disabled={busy} className="rv-btn rv-solid">
-                    {busy ? <Loader size={14} className="rv-spin" /> : <Download size={14} />}
-                    {busy ? 'Generating…' : 'Download CV (Professional)'}
+                <button onClick={downloadDynamic} className="rv-btn rv-solid">
+                    <Download size={14} /> Download / Print CV
                 </button>
             </div>
 
@@ -270,11 +229,11 @@ const Resume = () => {
                 .rv-body { padding: 0; }
                 .rv-summary { font-size: 12.5px; color: #1a1a1a; line-height: 1.4; margin: 0 0 15px; text-align: justify; }
                 .rv-sec { margin-bottom: 8px !important; min-height: 0 !important; padding: 0 !important; display: block; overflow: visible; }
-                .rv-sec-hd { font-size: 13px; font-weight: 700; text-transform: uppercase; color: #3d5a80; margin-bottom: 3px; display: flex; align-items: center; gap: 8px; }
+                .rv-sec-hd { font-size: 13px; font-weight: 700; text-transform: uppercase; color: #3d5a80; margin-bottom: 3px; display: flex; align-items: center; gap: 8px; break-after: avoid; page-break-after: avoid; }
                 .rv-sec-hd::after { content: ""; flex: 1; height: 1px; background: #3d5a80; margin-left: 8px; opacity: 0.3; }
-                .rv-skill-row { font-size: 11.5px; margin: 0 0 3px; color: #374151; }
+                .rv-skill-row { font-size: 11.5px; margin: 0 0 3px; color: #374151; break-inside: avoid; page-break-inside: avoid; }
                 .rv-skill-row b { color: #1a1a1a; }
-                .rv-item { margin-bottom: 6px; }
+                .rv-item { margin-bottom: 6px; break-inside: avoid; page-break-inside: avoid; }
                 .rv-item-top { display: flex !important; justify-content: space-between !important; align-items: baseline !important; gap: 10px !important; margin-bottom: 1px !important; text-align: left !important; }
                 .rv-item-sub { display: flex !important; justify-content: space-between !important; align-items: baseline !important; gap: 10px !important; margin-bottom: 2px !important; text-align: left !important; }
                 .rv-bold { font-weight: 700; font-size: 13px; color: #1a1a1a; }
