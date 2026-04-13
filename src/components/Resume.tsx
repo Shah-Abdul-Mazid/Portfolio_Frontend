@@ -1,6 +1,8 @@
 import { useRef, useState, useMemo } from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
-import { Download, CheckCircle2, AlertCircle, Info, X, Zap } from 'lucide-react';
+import { Download, Loader, Printer, CheckCircle2, AlertCircle, Info, X, Zap } from 'lucide-react';
+import html2canvas from 'html2canvas';
+import { jsPDF } from 'jspdf';
 
 const fmtDate = (s: string) => {
     if (!s) return 'Present';
@@ -12,6 +14,7 @@ const fmtDate = (s: string) => {
 const Resume = () => {
     const { data } = usePortfolio();
     const sheetRef = useRef<HTMLDivElement>(null);
+    const [busy, setBusy] = useState(false);
     const [showAts, setShowAts] = useState(false);
 
     // --- ATS SCORING LOGIC ---
@@ -37,6 +40,55 @@ const Resume = () => {
         return { total: Math.min(score, 100), tips };
     }, [data]);
 
+    const downloadPDF = async () => {
+        if (!sheetRef.current) return;
+        setBusy(true);
+        try {
+            const canvas = await html2canvas(sheetRef.current, {
+                scale: 4, 
+                useCORS: true, 
+                logging: false,
+                backgroundColor: '#ffffff', 
+                windowWidth: 1200,
+                onclone: (clonedDoc) => {
+                    const sheet = clonedDoc.querySelector('.rv-sheet') as HTMLElement;
+                    if (sheet) {
+                        sheet.style.width = '794px';
+                        sheet.style.padding = '1in';
+                        sheet.style.margin = '0';
+                    }
+                    // Hide fixed elements like the navigation header from leaking into html2canvas
+                    const header = clonedDoc.querySelector('header');
+                    if (header) header.style.display = 'none';
+                    const drawer = clonedDoc.querySelector('.mobile-drawer');
+                    if (drawer) drawer.style.display = 'none';
+                }
+            });
+
+            const imgData = canvas.toDataURL('image/png', 1.0);
+            const pdf = new jsPDF('p', 'mm', 'a4');
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = pdf.internal.pageSize.getHeight();
+            const imgHeight = (canvas.height * pdfWidth) / canvas.width;
+            
+            let heightLeft = imgHeight;
+            let position = 0;
+
+            pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, imgHeight);
+            heightLeft -= pdfHeight;
+
+            while (heightLeft > 0) {
+                position = heightLeft - imgHeight;
+                pdf.addPage();
+                pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, imgHeight);
+                heightLeft -= pdfHeight;
+            }
+
+            pdf.save(`${data.hero.name.replace(/\s+/g, '_')}_Resume.pdf`);
+        } catch (e) { console.error(e); }
+        finally { setBusy(false); }
+    };
+
     const downloadDynamic = () => {
         // We use the browser's native print-to-PDF which correctly handles text wrapping
         // and avoids cutting text in half (unlike html2canvas).
@@ -60,8 +112,12 @@ const Resume = () => {
                 <button onClick={() => setShowAts(true)} className="rv-btn rv-solid" style={{ background: '#10b981', border: 'none' }}>
                     <Zap size={14} fill="white" /> Check ATS Score
                 </button>
+                <button onClick={downloadPDF} disabled={busy} className="rv-btn rv-solid" style={{ background: '#f59e0b', color: 'white', border: 'none' }}>
+                    {busy ? <Loader size={14} className="rv-spin" /> : <Download size={14} />}
+                    {busy ? 'Generating…' : 'Download PDF'}
+                </button>
                 <button onClick={downloadDynamic} className="rv-btn rv-solid">
-                    <Download size={14} /> Download / Print CV
+                    <Printer size={14} /> Print CV
                 </button>
             </div>
 
