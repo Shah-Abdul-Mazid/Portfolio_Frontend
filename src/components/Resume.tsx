@@ -57,6 +57,12 @@ const Resume = () => {
                         sheet.style.padding = '1in';
                         sheet.style.margin = '0';
                     }
+                    
+                    const buItem = clonedDoc.querySelector('.bu-project') as HTMLElement | null;
+                    if (buItem) {
+                        buItem.style.marginTop = '160px'; // Shoves it cleanly into the Page 2 image slice
+                    }
+
                     // Hide fixed elements like the navigation header from leaking into html2canvas
                     const header = clonedDoc.querySelector('header') as HTMLElement | null;
                     if (header) header.style.display = 'none';
@@ -177,7 +183,7 @@ const Resume = () => {
                         <div className="rv-sec">
                             <div className="rv-sec-hd">Projects</div>
                             {data.projects.slice(0, 5).map((p, i) => (
-                                <div key={i} className="rv-item">
+                                <div key={i} className={`rv-item ${p.title.includes('Bangladesh University') ? 'bu-project' : ''}`}>
                                     <div className="rv-proj-hd"><span className="rv-proj-title">{p.title}</span>{p.projectUrl && <span className="rv-proj-link">&nbsp;· {p.projectUrl.replace('https://', '')}</span>}</div>
                                     <p className="rv-sm" style={{ color: '#374151', margin: '1px 0 2px' }}>{p.desc}</p>
                                     {p.tags.length > 0 && <p className="rv-sm" style={{ color: '#3d5a80', margin: 0, fontStyle: 'italic', fontSize: '11px' }}>Tech: {p.tags.join(', ')}</p>}
@@ -337,6 +343,7 @@ const Resume = () => {
                     header, footer { display: none !important; }
                     main { padding: 0 !important; margin: 0 !important; }
                     .container { max-width: none !important; padding: 0 !important; margin: 0 !important; }
+                    .bu-project { break-before: page; page-break-before: always; }
                 }
             `}</style>
         </div>
