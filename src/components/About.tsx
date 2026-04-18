@@ -4,6 +4,20 @@ import avtarImg from '../assets/avtar.png';
 const About = ({ addToRefs }: { addToRefs: (el: HTMLElement | null) => void }) => {
     const { data } = usePortfolio();
 
+    const calculateAge = (birthDateStr: string) => {
+        const today = new Date();
+        const birthDate = new Date(birthDateStr);
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const m = today.getMonth() - birthDate.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+            age--;
+        }
+        return age;
+    };
+
+    // Birth date: June 1st, 2001 (based on your request that June 1st 2026 = 25)
+    const currentAge = calculateAge('2001-06-01');
+
     return (
         <section id="about" className="about-modern section">
             <div className="container">
@@ -30,7 +44,7 @@ const About = ({ addToRefs }: { addToRefs: (el: HTMLElement | null) => void }) =
 
                         <div className="about-stats">
                             <div className="stat">
-                                <span className="number">{data.about.age}</span>
+                                <span className="number">{currentAge}</span>
                                 <span className="label">Age</span>
                             </div>
                             <div className="stat">
