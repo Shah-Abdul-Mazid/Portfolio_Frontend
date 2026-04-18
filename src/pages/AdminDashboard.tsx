@@ -685,10 +685,27 @@ const AdminDashboard = () => {
                                             className="enhanced-input" style={{ width: '100%', padding: '10px' }} />
                                     </div>
                                     <div className="form-group">
-                                        <label>Current Age / Status</label>
-                                        <input type="text" value={editData.about.age}
-                                            onChange={e => handleAboutChange('age', e.target.value)}
-                                            className="enhanced-input" />
+                                        <label>Birth Date</label>
+                                        <input type="text" value="June 01, 2001" disabled className="enhanced-input" style={{ opacity: 0.8, cursor: 'not-allowed' }} />
+                                    </div>
+                                    <div className="form-group">
+                                        <label>Today's Date</label>
+                                        <input type="text" value={new Date().toLocaleDateString('en-US', { month: 'long', day: '2-digit', year: 'numeric' })} disabled className="enhanced-input" style={{ opacity: 0.8, cursor: 'not-allowed' }} />
+                                    </div>
+                                    <div className="form-group">
+                                        <label>Current Age (Auto-calculated)</label>
+                                        <input type="text" 
+                                            value={(() => {
+                                                const today = new Date();
+                                                const birthDate = new Date('2001-06-01');
+                                                let age = today.getFullYear() - birthDate.getFullYear();
+                                                const m = today.getMonth() - birthDate.getMonth();
+                                                if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) age--;
+                                                return age;
+                                            })()}
+                                            disabled 
+                                            className="enhanced-input" 
+                                            style={{ background: 'rgba(255,255,255,0.05)', cursor: 'not-allowed', color: 'var(--primary)', fontWeight: 'bold' }} />
                                     </div>
                                     <div className="form-group">
                                         <label>Projects Completed (Stat)</label>
