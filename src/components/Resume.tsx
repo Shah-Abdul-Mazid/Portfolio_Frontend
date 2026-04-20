@@ -60,7 +60,7 @@ const Resume = () => {
                     
                     const buItem = clonedDoc.querySelector('.bu-project') as HTMLElement | null;
                     if (buItem) {
-                        buItem.style.marginTop = '280px'; // Aggressively pushes it into Page 2
+                        buItem.style.marginTop = '10px'; // Replaced aggressive 280px with subtle spacing
                     }
 
                     // Hide fixed elements like the navigation header from leaking into html2canvas
