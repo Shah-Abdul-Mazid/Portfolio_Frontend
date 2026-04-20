@@ -54,7 +54,7 @@ const Resume = () => {
                     const sheet = clonedDoc.querySelector('.rv-sheet') as HTMLElement;
                     if (sheet) {
                         sheet.style.width = '794px';
-                        sheet.style.padding = '1in';
+                        sheet.style.padding = '0.5in';
                         sheet.style.margin = '0';
                     }
                     
@@ -339,7 +339,7 @@ const Resume = () => {
                 @media print { 
                     .rv-page { background: white; padding: 0; } 
                     .rv-toolbar, .ats-overlay { display: none !important; } 
-                    .rv-sheet { box-shadow: none; width: 100%; padding: 1in; margin: 0; }
+                    .rv-sheet { box-shadow: none; width: 100%; padding: 0.5in; margin: 0; }
                     header, footer { display: none !important; }
                     main { padding: 0 !important; margin: 0 !important; }
                     .container { max-width: none !important; padding: 0 !important; margin: 0 !important; }
