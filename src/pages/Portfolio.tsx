@@ -12,6 +12,7 @@ import References from '../components/References';
 import Blogs from '../components/Blogs';
 import Contact from '../components/Contact';
 import Footer from '../components/Footer';
+import Certifications from '../components/Certifications';
 import FloatingContactForm from '../components/FloatingContactForm';
 import IntelligenceMatrix from '../components/IntelligenceMatrix';
 import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
@@ -27,6 +28,7 @@ const SECTION_ROUTES: Record<string, string> = {
     'achievements': '/achievements',
 
     'activities':   '/activities',
+    'certifications': '/certifications',
     'skills':       '/skills',
     'projects':     '/projects',
     'papers':       '/papers',
@@ -125,6 +127,7 @@ const Portfolio = () => {
                 <Hero addToRefs={addToRefs} />
                 <About addToRefs={addToRefs} />
                 <Education addToRefs={addToRefs} />
+                <Certifications addToRefs={addToRefs} />
                 <WorkExperience addToRefs={addToRefs} />
                 <Experience addToRefs={addToRefs} />
                 <Activities addToRefs={addToRefs} />

@@ -6,6 +6,7 @@ const Header = () => {
     const professionalLinks = [
         { to: '/about', label: 'Profile' },
         { to: '/education', label: 'Education' },
+        { to: '/certifications', label: 'Certificates' },
         { to: '/experience', label: 'Experience' },
         { to: '/achievements', label: 'Achievements' },
         { to: '/activities', label: 'Activities' },

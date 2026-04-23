@@ -29,6 +29,7 @@ function App() {
                         <Route path="/experience" element={<Portfolio />} />
                         <Route path="/achievements" element={<Portfolio />} />
                         <Route path="/activities" element={<Portfolio />} />
+                        <Route path="/certifications" element={<Portfolio />} />
                         <Route path="/skills" element={<Portfolio />} />
                         <Route path="/projects" element={<Portfolio />} />
                         <Route path="/papers" element={<Portfolio />} />
