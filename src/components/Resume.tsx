@@ -34,6 +34,7 @@ const Resume = () => {
         if (data.papers && data.papers.length > 0) { score += 20; tips.push({ type: 'plus', text: 'Academic publications found (High Impact).' }); }
         if (data.projects.length >= 3) { score += 5; tips.push({ type: 'plus', text: 'Project portfolio demonstrated.' }); }
         if (data.education.length >= 2) { score += 5; tips.push({ type: 'plus', text: 'Education history complete.' }); }
+        if (data.certifications && data.certifications.length > 0) { score += 10; tips.push({ type: 'plus', text: 'Industry certifications verified.' }); }
         if (data.references && data.references.length > 0) { score += 5; tips.push({ type: 'plus', text: `References included (${data.references.length} contact${data.references.length > 1 ? 's' : ''}).` }); }
         score += 5; tips.push({ type: 'plus', text: 'Single-column, ATS-parsable formatting.' });
 
@@ -199,6 +200,31 @@ const Resume = () => {
                                     <div className="rv-item-top"><span className="rv-bold">{p.title}</span><span className="rv-meta">{p.year}</span></div>
                                     <p className="rv-sm" style={{ color: '#1a1a1a', margin: '2px 0 1px' }}>{p.venue}</p>
                                     {p.link && <p className="rv-sm" style={{ color: '#3d5a80', margin: 0, fontSize: '11px' }}><a href={p.link} target="_blank" rel="noopener noreferrer">{p.link.replace('https://', '')}</a></p>}
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                    {data.certifications && data.certifications.length > 0 && (
+                        <div className="rv-sec">
+                            <div className="rv-sec-hd">Licenses & Certifications</div>
+                            {data.certifications.map((c, i) => (
+                                <div key={i} className="rv-item">
+                                    <div className="rv-item-top">
+                                        <span className="rv-bold">{c.name}</span>
+                                        <span className="rv-meta">{c.date}</span>
+                                    </div>
+                                    <div className="rv-item-sub">
+                                        <span className="rv-muted">{c.issuer}{c.instructor ? ` | ${c.instructor}` : ''}</span>
+                                        {c.credentialUrl ? (
+                                            <span className="rv-meta">
+                                                <a href={c.credentialUrl} target="_blank" rel="noopener noreferrer" style={{ color: '#3d5a80', textDecoration: 'none' }}>
+                                                    {c.credentialId ? `ID: ${c.credentialId}` : 'Show Credential'} ↗
+                                                </a>
+                                            </span>
+                                        ) : c.credentialId ? (
+                                            <span className="rv-meta">ID: {c.credentialId}</span>
+                                        ) : null}
+                                    </div>
                                 </div>
                             ))}
                         </div>

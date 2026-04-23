@@ -473,6 +473,7 @@ const AdminDashboard = () => {
         { id: 'papers', icon: '📚', label: editData.sections?.papers?.adminLabel || 'Publications' },
         { id: 'references', icon: '🤝', label: editData.sections?.references?.adminLabel || 'References' },
         { id: 'blogs', icon: '✍️', label: editData.sections?.blogs?.adminLabel || 'Blog Posts' },
+        { id: 'certifications', icon: '📜', label: editData.sections?.certifications?.adminLabel || 'Certifications' },
         { id: 'messages', icon: '📩', label: 'Messages' },
         { id: 'visitors', icon: <Users size={18} />, label: 'Visitor Logs' },
         { id: 'contact', icon: '📞', label: editData.sections?.contact?.adminLabel || 'Contact' },
@@ -1340,6 +1341,56 @@ const AdminDashboard = () => {
                             ))}
                             <button type="button" className="add-btn" onClick={() => addListItem('blogs', { title: '', date: '', url: '', excerpt: '' })}>
                                 <Plus size={16} /> Add Blog Post
+                            </button>
+                        </div>
+                    )}
+
+                    {/* ── LICENSES & CERTIFICATIONS ────────────────────────── */}
+                    {activeTab === 'certifications' && (
+                        <div className="tab-pane cms-pane">
+                            <SaveBar />
+                            {saveStatus && <div className="status-badge success">✓ {saveStatus}</div>}
+                            <SectionConfigPanel sectionKey="certifications" />
+                            {editData.certifications?.map((cert: any, i: number) => (
+                                <div key={i} className="form-section item-card">
+                                    <div className="item-card-header">
+                                        <h4 className="section-label">Certification #{i + 1}</h4>
+                                        <button type="button" className="remove-btn" onClick={() => removeListItem('certifications', i)}><Minus size={14} /> Remove</button>
+                                    </div>
+                                    <div className="flex-group">
+                                        <div className="form-group w-50">
+                                            <label>Name / Title</label>
+                                            <input type="text" value={cert.name} onChange={e => updateListItem('certifications', i, 'name', e.target.value)} />
+                                        </div>
+                                    </div>
+                                    <div className="flex-group">
+                                        <div className="form-group w-50">
+                                            <label>Issuer / Provider</label>
+                                            <input type="text" value={cert.issuer} onChange={e => updateListItem('certifications', i, 'issuer', e.target.value)} />
+                                        </div>
+                                        <div className="form-group w-50">
+                                            <label>Instructor / Trainer (Optional)</label>
+                                            <input type="text" value={cert.instructor || ''} onChange={e => updateListItem('certifications', i, 'instructor', e.target.value)} />
+                                        </div>
+                                    </div>
+                                    <div className="flex-group">
+                                        <div className="form-group w-50">
+                                            <label>Date / Year</label>
+                                            <input type="text" value={cert.date} placeholder="e.g. 2024" onChange={e => updateListItem('certifications', i, 'date', e.target.value)} />
+                                        </div>
+                                        <div className="form-group w-50">
+                                            <label>Credential ID (Optional)</label>
+                                            <input type="text" value={cert.credentialId || ''} onChange={e => updateListItem('certifications', i, 'credentialId', e.target.value)} />
+                                        </div>
+                                    </div>
+                                    <div className="form-group">
+                                        <label>Credential URL / Link (Optional)</label>
+                                        <input type="text" value={cert.credentialUrl || ''} placeholder="https://..." onChange={e => updateListItem('certifications', i, 'credentialUrl', e.target.value)} />
+                                    </div>
+                                </div>
+                            ))}
+                            <button type="button" className="add-btn" onClick={() => addListItem('certifications', { name: '', issuer: '', date: '', credentialId: '', credentialUrl: '' })}>
+                                <Plus size={16} /> Add Certification
                             </button>
                         </div>
                     )}

@@ -89,6 +89,15 @@ export interface BlogItem {
     url: string;
 }
 
+export interface CertificationItem {
+    name: string;
+    issuer: string;
+    instructor?: string;
+    date: string;
+    credentialId?: string;
+    credentialUrl?: string;
+}
+
 export interface SectionConfig {
     navLabel: string;
     adminLabel: string;
@@ -108,6 +117,7 @@ export interface PortfolioData {
         activities: SectionConfig; // New section
         references: SectionConfig; // New section
         blogs: SectionConfig; // New section
+        certifications: SectionConfig; // New section
         contact: SectionConfig;
     };
     hero: {
@@ -131,6 +141,7 @@ export interface PortfolioData {
     activities: ActivityItem[]; // New
     references: ReferenceItem[]; // New
     blogs: BlogItem[]; // New
+    certifications: CertificationItem[]; // New
     contact: {
         email: string;
         phone: string;
@@ -155,6 +166,7 @@ const defaultData: PortfolioData = {
         activities: { navLabel: 'Activities', adminLabel: 'Extracurriculars', subtitle: 'Involvement', title: 'Extracurricular Activities' },
         references: { navLabel: 'References', adminLabel: 'References', subtitle: 'Recommendations', title: 'Professional References' },
         blogs: { navLabel: 'Blog', adminLabel: 'Blog Posts', subtitle: 'Writing', title: 'Recent Blog Posts' },
+        certifications: { navLabel: 'Certificates', adminLabel: 'Certifications', subtitle: 'Licenses', title: 'Licenses & Certifications' },
         contact: { navLabel: 'Contact', adminLabel: 'Contact Details', subtitle: 'Contact', title: 'Let\'s Start a Conversation' }
     },
     hero: {
@@ -307,6 +319,9 @@ const defaultData: PortfolioData = {
     ],
     blogs: [
         { title: 'The Future of AI in Web Development', date: 'October 2024', excerpt: 'Exploring how large language models are fundamentally changing how we approach UI engineering.', url: '#' }
+    ],
+    certifications: [
+        { name: 'Machine Learning Specialization', issuer: 'Coursera (Stanford)', date: '2023', credentialId: 'ABC-123', credentialUrl: 'https://coursera.org/verify/123' }
     ],
     contact: {
         email: "shahabdulmazid.ezan@yahoo.com",
