@@ -45,6 +45,16 @@ const Certifications = ({ addToRefs }: { addToRefs: (el: HTMLElement | null) => 
                                     )}
                                 </p>
 
+                                {cert.skills && cert.skills.length > 0 && (
+                                    <div className="cert-skills-wrap" style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', margin: '8px 0' }}>
+                                        {cert.skills.map((skill, sIdx) => (
+                                            <span key={sIdx} className="cert-skill-tag">
+                                                {skill}
+                                            </span>
+                                        ))}
+                                    </div>
+                                )}
+
                                 <div className="cert-footer" style={{ flexWrap: 'wrap', gap: '10px' }}>
                                     {cert.credentialId && (
                                         <span className="cert-id" style={{ marginRight: 'auto' }}>ID: {cert.credentialId}</span>
@@ -180,6 +190,25 @@ const Certifications = ({ addToRefs }: { addToRefs: (el: HTMLElement | null) => 
                     align-items: center;
                     gap: 6px;
                     margin-top: 2px;
+                }
+
+                .cert-skill-tag {
+                    font-size: 0.7rem;
+                    background: rgba(255, 255, 255, 0.05);
+                    color: var(--text-color);
+                    padding: 3px 10px;
+                    border-radius: 100px;
+                    border: 1px solid rgba(255, 255, 255, 0.1);
+                    transition: all 0.2s;
+                    font-weight: 500;
+                    opacity: 0.8;
+                }
+
+                .cert-skill-tag:hover {
+                    background: rgba(139, 92, 246, 0.1);
+                    border-color: var(--primary);
+                    color: var(--primary);
+                    opacity: 1;
                 }
 
                 .cert-footer {

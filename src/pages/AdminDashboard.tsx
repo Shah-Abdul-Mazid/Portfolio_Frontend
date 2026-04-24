@@ -1422,6 +1422,16 @@ const AdminDashboard = () => {
                                         <input type="text" value={cert.credentialUrl || ''} placeholder="https://..." onChange={e => updateListItem('certifications', i, 'credentialUrl', e.target.value)} />
                                     </div>
 
+                                    <div className="form-group">
+                                        <label>Skills Earned (Comma separated)</label>
+                                        <input 
+                                            type="text" 
+                                            value={cert.skills?.join(', ') || ''} 
+                                            placeholder="e.g. Generative AI, Python, Machine Learning" 
+                                            onChange={e => updateListItem('certifications', i, 'skills', e.target.value.split(',').map(s => s.trim()).filter(s => s !== ''))} 
+                                        />
+                                    </div>
+
                                     <div className="form-section-nested" style={{ background: 'rgba(255,255,255,0.02)', padding: '16px', borderRadius: '12px', marginTop: '12px', border: '1px solid rgba(255,255,255,0.05)' }}>
                                         <h5 className="section-label" style={{ fontSize: '0.7rem', marginBottom: '12px' }}>Additional Credential Links</h5>
                                         {cert.links?.map((link: any, lIndex: number) => (
@@ -1441,7 +1451,7 @@ const AdminDashboard = () => {
                                     </div>
                                 </div>
                             ))}
-                            <button type="button" className="add-btn" onClick={() => addListItem('certifications', { name: '', issuer: '', date: '', credentialId: '', credentialUrl: '', links: [] })}>
+                            <button type="button" className="add-btn" onClick={() => addListItem('certifications', { name: '', issuer: '', date: '', credentialId: '', credentialUrl: '', links: [], skills: [] })}>
                                 <Plus size={16} /> Add Certification
                             </button>
                         </div>
