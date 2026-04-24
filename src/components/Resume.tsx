@@ -215,15 +215,25 @@ const Resume = () => {
                                     </div>
                                     <div className="rv-item-sub">
                                         <span className="rv-muted">{c.issuer}{c.instructor ? ` | ${c.instructor}` : ''}</span>
-                                        {c.credentialUrl ? (
-                                            <span className="rv-meta">
-                                                <a href={c.credentialUrl} target="_blank" rel="noopener noreferrer" style={{ color: '#3d5a80', textDecoration: 'none' }}>
-                                                    {c.credentialId ? `ID: ${c.credentialId}` : 'Show Credential'} ↗
-                                                </a>
-                                            </span>
-                                        ) : c.credentialId ? (
-                                            <span className="rv-meta">ID: {c.credentialId}</span>
-                                        ) : null}
+                                        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                                            {c.credentialUrl && (
+                                                <span className="rv-meta">
+                                                    <a href={c.credentialUrl} target="_blank" rel="noopener noreferrer" style={{ color: '#3d5a80', textDecoration: 'none' }}>
+                                                        {c.credentialId ? `ID: ${c.credentialId}` : 'Show Credential'} ↗
+                                                    </a>
+                                                </span>
+                                            )}
+                                            {c.links?.map((link, lIdx) => (
+                                                <span key={lIdx} className="rv-meta">
+                                                    <a href={link.url} target="_blank" rel="noopener noreferrer" style={{ color: '#3d5a80', textDecoration: 'none', fontStyle: 'italic' }}>
+                                                        {link.label || 'Link'} ↗
+                                                    </a>
+                                                </span>
+                                            ))}
+                                            {!c.credentialUrl && c.credentialId && (
+                                                <span className="rv-meta">ID: {c.credentialId}</span>
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
                             ))}

@@ -96,6 +96,7 @@ export interface CertificationItem {
     date: string;
     credentialId?: string;
     credentialUrl?: string;
+    links?: { label: string; url: string }[];
 }
 
 export interface SectionConfig {

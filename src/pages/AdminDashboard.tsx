@@ -260,6 +260,40 @@ const AdminDashboard = () => {
             return { ...prev, work };
         });
     };
+
+    const addCertLink = (certIndex: number) => {
+        setEditData(prev => {
+            const list = [...prev.certifications];
+            const cert = { ...list[certIndex] };
+            cert.links = [...(cert.links || []), { label: '', url: '' }];
+            list[certIndex] = cert;
+            return { ...prev, certifications: list };
+        });
+    };
+
+    const updateCertLink = (certIndex: number, linkIndex: number, field: string, value: string) => {
+        setEditData(prev => {
+            const list = [...prev.certifications];
+            const cert = { ...list[certIndex] };
+            const links = [...(cert.links || [])];
+            links[linkIndex] = { ...links[linkIndex], [field]: value };
+            cert.links = links;
+            list[certIndex] = cert;
+            return { ...prev, certifications: list };
+        });
+    };
+
+    const removeCertLink = (certIndex: number, linkIndex: number) => {
+        setEditData(prev => {
+            const list = [...prev.certifications];
+            const cert = { ...list[certIndex] };
+            const links = [...(cert.links || [])];
+            links.splice(linkIndex, 1);
+            cert.links = links;
+            list[certIndex] = cert;
+            return { ...prev, certifications: list };
+        });
+    };
     const addWorkDetail = (workIndex: number) => {
         setEditData(prev => {
             const work = [...prev.work];
@@ -1384,12 +1418,30 @@ const AdminDashboard = () => {
                                         </div>
                                     </div>
                                     <div className="form-group">
-                                        <label>Credential URL / Link (Optional)</label>
+                                        <label>Primary Credential URL (Legacy)</label>
                                         <input type="text" value={cert.credentialUrl || ''} placeholder="https://..." onChange={e => updateListItem('certifications', i, 'credentialUrl', e.target.value)} />
+                                    </div>
+
+                                    <div className="form-section-nested" style={{ background: 'rgba(255,255,255,0.02)', padding: '16px', borderRadius: '12px', marginTop: '12px', border: '1px solid rgba(255,255,255,0.05)' }}>
+                                        <h5 className="section-label" style={{ fontSize: '0.7rem', marginBottom: '12px' }}>Additional Credential Links</h5>
+                                        {cert.links?.map((link: any, lIndex: number) => (
+                                            <div key={lIndex} className="flex-group" style={{ marginBottom: '10px' }}>
+                                                <div className="form-group w-50" style={{ marginBottom: 0 }}>
+                                                    <input type="text" value={link.label} placeholder="Link Label (e.g. Instructor Bio)" onChange={e => updateCertLink(i, lIndex, 'label', e.target.value)} />
+                                                </div>
+                                                <div className="form-group w-50" style={{ marginBottom: 0, display: 'flex', gap: '8px' }}>
+                                                    <input type="text" value={link.url} placeholder="https://..." onChange={e => updateCertLink(i, lIndex, 'url', e.target.value)} />
+                                                    <button type="button" className="icon-btn danger" onClick={() => removeCertLink(i, lIndex)}><Minus size={14} /></button>
+                                                </div>
+                                            </div>
+                                        ))}
+                                        <button type="button" className="add-inline-btn" onClick={() => addCertLink(i)}>
+                                            <Plus size={14} /> Add Another Link
+                                        </button>
                                     </div>
                                 </div>
                             ))}
-                            <button type="button" className="add-btn" onClick={() => addListItem('certifications', { name: '', issuer: '', date: '', credentialId: '', credentialUrl: '' })}>
+                            <button type="button" className="add-btn" onClick={() => addListItem('certifications', { name: '', issuer: '', date: '', credentialId: '', credentialUrl: '', links: [] })}>
                                 <Plus size={16} /> Add Certification
                             </button>
                         </div>

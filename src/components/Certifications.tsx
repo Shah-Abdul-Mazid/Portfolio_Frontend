@@ -45,20 +45,34 @@ const Certifications = ({ addToRefs }: { addToRefs: (el: HTMLElement | null) => 
                                     )}
                                 </p>
 
-                                <div className="cert-footer">
+                                <div className="cert-footer" style={{ flexWrap: 'wrap', gap: '10px' }}>
                                     {cert.credentialId && (
-                                        <span className="cert-id">ID: {cert.credentialId}</span>
+                                        <span className="cert-id" style={{ marginRight: 'auto' }}>ID: {cert.credentialId}</span>
                                     )}
-                                    {cert.credentialUrl && (
-                                        <a 
-                                            href={cert.credentialUrl} 
-                                            target="_blank" 
-                                            rel="noopener noreferrer" 
-                                            className="cert-link-btn"
-                                        >
-                                            Verify <ExternalLink size={14} />
-                                        </a>
-                                    )}
+                                    <div className="cert-link-group" style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                                        {cert.credentialUrl && (
+                                            <a 
+                                                href={cert.credentialUrl} 
+                                                target="_blank" 
+                                                rel="noopener noreferrer" 
+                                                className="cert-link-btn"
+                                            >
+                                                Verify <ExternalLink size={14} />
+                                            </a>
+                                        )}
+                                        {cert.links?.map((link, lIdx) => (
+                                            <a 
+                                                key={lIdx}
+                                                href={link.url} 
+                                                target="_blank" 
+                                                rel="noopener noreferrer" 
+                                                className="cert-link-btn"
+                                                style={{ background: 'rgba(255,255,255,0.08)', color: '#fff', border: '1px solid rgba(255,255,255,0.1)' }}
+                                            >
+                                                {link.label || 'Link'} <ExternalLink size={14} />
+                                            </a>
+                                        ))}
+                                    </div>
                                 </div>
                             </div>
                         </div>
