@@ -4,16 +4,13 @@ import avtarImg from '../assets/avtar.png';
 
 const Header = () => {
     const professionalLinks = [
-        { to: '/about', label: 'About Me' },
+        { to: '/about', label: 'Profile' },
         { to: '/education', label: 'Education' },
-        { to: '/experience', label: 'Work History' },
         { to: '/certifications', label: 'Certificates' },
-        { to: '/resume', label: 'Resume / CV' },
-    ];
-
-    const achievementLinks = [
+        { to: '/experience', label: 'Experience' },
         { to: '/achievements', label: 'Achievements' },
         { to: '/activities', label: 'Activities' },
+        { to: '/resume', label: 'Resume' },
     ];
 
     const portfolioLinks = [
@@ -86,7 +83,7 @@ const Header = () => {
                 backdropFilter: scrolled ? 'blur(12px)' : 'none',
                 borderBottom: scrolled ? '1px solid var(--border-color)' : 'none'
             }}>
-                <nav className="container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '30px' }}>
+                <nav style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '20px', width: '100%', padding: '0 3%' }}>
                     {/* Logo */}
                     <Link to="/" className="logo-link" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none' }}>
                         <div style={{ position: 'relative' }}>
@@ -103,39 +100,18 @@ const Header = () => {
                         <span style={{ fontSize: '1.0625rem', fontWeight: 700, color: 'var(--text-color)', whiteSpace: 'nowrap' }}>Shah Abdul Mazid</span>
                     </Link>
 
-                    {/* Desktop Grouped Nav */}
+                    {/* Desktop Nav - Flat side by side (Full Width) */}
                     <div className="nav-links-desktop">
-                        <div className="nav-dropdown">
-                            <button className="nav-drop-btn">Career <span className="chevron" /></button>
-                            <div className="dropdown-content">
-                                {professionalLinks.map(link => (
-                                    <Link key={link.to} to={link.to} className={location.pathname === link.to ? 'drop-link active' : 'drop-link'}>{link.label}</Link>
-                                ))}
-                            </div>
-                        </div>
-
-                        <div className="nav-dropdown">
-                            <button className="nav-drop-btn">Showcase <span className="chevron" /></button>
-                            <div className="dropdown-content">
-                                {portfolioLinks.map(link => (
-                                    <Link key={link.to} to={link.to} className={location.pathname === link.to ? 'drop-link active' : 'drop-link'}>{link.label}</Link>
-                                ))}
-                            </div>
-                        </div>
-
-                        <div className="nav-dropdown">
-                            <button className="nav-drop-btn">Insights <span className="chevron" /></button>
-                            <div className="dropdown-content">
-                                {achievementLinks.map(link => (
-                                    <Link key={link.to} to={link.to} className={location.pathname === link.to ? 'drop-link active' : 'drop-link'}>{link.label}</Link>
-                                ))}
-                                {contactLinks.filter(l => l.label === 'References').map(link => (
-                                    <Link key={link.to} to={link.to} className={location.pathname === link.to ? 'drop-link active' : 'drop-link'}>{link.label}</Link>
-                                ))}
-                            </div>
-                        </div>
-
-                        <Link to="/contact" className={location.pathname === '/contact' ? 'nav-flat-link active' : 'nav-flat-link'}>Contact</Link>
+                        {allLinks.map(link => (
+                            <Link
+                                key={link.to}
+                                to={link.to}
+                                className={location.pathname === link.to ? 'nav-flat-link active' : 'nav-flat-link'}
+                                style={{ fontSize: '0.8rem', padding: '8px 8px' }}
+                            >
+                                {link.label}
+                            </Link>
+                        ))}
                     </div>
 
                     {/* Right Controls */}
@@ -251,41 +227,6 @@ const Header = () => {
                 .nav-flat-link:hover::after { transform: scaleX(1); }
                 .nav-flat-link.active { opacity: 1; color: var(--primary); font-weight: 700; }
                 .nav-flat-link.active::after { transform: scaleX(1); }
-
-                /* Dropdown Logic */
-                .nav-dropdown { position: relative; display: inline-block; }
-                .nav-drop-btn { 
-                    background: transparent; border: none; color: var(--text-color); 
-                    font-size: 0.85rem; font-weight: 600; padding: 10px 16px; 
-                    cursor: pointer; opacity: 0.7; transition: var(--transition);
-                    display: flex; align-items: center; gap: 4px; border-radius: 10px;
-                }
-                .nav-drop-btn:hover { opacity: 1; color: var(--primary); background: rgba(255,255,255,0.03); }
-                .chevron { 
-                    width: 0; height: 0; border-left: 4px solid transparent; 
-                    border-right: 4px solid transparent; border-top: 4px solid currentColor; 
-                    margin-top: 2px; transition: transform 0.3s; 
-                }
-                .nav-dropdown:hover .chevron { transform: rotate(180deg); }
-                
-                .dropdown-content {
-                    position: absolute; top: 100%; left: 50%; transform: translateX(-50%) translateY(10px);
-                    background: var(--nav-bg); backdrop-filter: blur(20px);
-                    border: 1px solid var(--border-color); border-radius: 14px;
-                    min-width: 180px; box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-                    opacity: 0; visibility: hidden; transition: all 0.3s ease;
-                    padding: 8px; z-index: 1000;
-                }
-                .nav-dropdown:hover .dropdown-content { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
-                
-                .drop-link {
-                    display: block; color: var(--text-color); padding: 10px 14px;
-                    text-decoration: none; font-size: 0.85rem; font-weight: 500;
-                    border-radius: 8px; transition: 0.2s; white-space: nowrap;
-                    opacity: 0.8;
-                }
-                .drop-link:hover { opacity: 1; background: rgba(139,92,246,0.1); color: var(--primary); padding-left: 18px; }
-                .drop-link.active { background: rgba(139,92,246,0.15); color: var(--primary); font-weight: 700; opacity: 1; }
 
                 /* Hamburger */
                 .mobile-toggle {
