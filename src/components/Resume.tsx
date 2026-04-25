@@ -1,7 +1,8 @@
 import { useRef, useState, useMemo } from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
 import { Download, Loader, Printer, CheckCircle2, AlertCircle, Info, X, Zap } from 'lucide-react';
-import { jsPDF } from 'jspdf';
+// @ts-ignore
+import html2pdf from 'html2pdf.js';
 
 const fmtDate = (s: string) => {
     if (!s) return 'Present';
@@ -44,31 +45,25 @@ const Resume = () => {
         if (!sheetRef.current) return;
         setBusy(true);
         try {
-            const doc = new jsPDF({
-                orientation: 'p',
-                unit: 'mm',
-                format: 'a4',
-            });
-
-            // Use the modern html() method which has better support for links
-            await doc.html(sheetRef.current, {
-                callback: function (doc) {
-                    doc.save(`${data.hero.name.replace(/\s+/g, '_')}_Resume.pdf`);
+            const element = sheetRef.current;
+            const opt = {
+                margin: 0,
+                filename: `${data.hero.name.replace(/\s+/g, '_')}_Resume.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { 
+                    scale: 2, 
+                    useCORS: true, 
+                    letterRendering: true,
+                    scrollY: 0
                 },
-                x: 0,
-                y: 0,
-                width: 210, // A4 width in mm
-                windowWidth: 794, // Standard A4 pixel width at 96 DPI
-                autoPaging: 'text', // Better for not cutting text mid-line
-                html2canvas: {
-                    scale: 0.2645, // Convert pixels to mm roughly (210/794)
-                    useCORS: true,
-                    logging: false,
-                }
-            });
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            // Capture the element and trigger the download
+            await (html2pdf() as any).set(opt).from(element).save();
         } catch (e) { 
             console.error(e); 
-            alert("Error generating PDF. Please try the 'Print CV' option as a fallback.");
+            alert("Error generating PDF. Please try the 'Print CV' button instead.");
         } finally { 
             setBusy(false); 
         }
