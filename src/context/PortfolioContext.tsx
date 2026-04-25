@@ -183,7 +183,7 @@ const defaultData: PortfolioData = {
         description: "Passionate Data Scientist and AI Developer dedicated to building scalable, intelligent solutions."
     },
     about: {
-        bio: "Computer Science and Engineering student specializing in Intelligent Systems and Data Science at East West University, currently working as an AI Developer at Softvence Agency.\n\nExperienced in building real-world AI solutions, including automation systems, AI chatbots, and Retrieval-Augmented Generation pipelines. Skilled in deep learning, computer vision, NLP, and deploying scalable APIs using FastAPI.\n\nStrong background in developing end-to-end intelligent systems through research, industry work, and hackathons. Passionate about leveraging AI to solve complex real-world problems and contribute to innovative, high-impact projects.",
+        bio: "I am a Computer Science and Engineering student majoring in Intelligent Systems and Data Science at East West University.\n\nPassionate about AI innovation, research, and hackathon projects. Skilled in deep learning, computer vision, NLP, and ML deployment with strong analytical and research abilities.\n\nMy journey in AI and Data Science revolves around developing intelligent systems that solve real-world problems. With a strong foundation in Computer Science, I aim to contribute to research, innovation, and impactful projects. | (FastAPI Verified 2026)",
         age: "24",
         projects: "15+"
     },
