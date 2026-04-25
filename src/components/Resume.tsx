@@ -2,7 +2,6 @@ import { useRef, useState, useMemo } from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
 import { Download, Loader, Printer, CheckCircle2, AlertCircle, Info, X, Zap } from 'lucide-react';
 import { jsPDF } from 'jspdf';
-import html2canvas from 'html2canvas';
 
 const fmtDate = (s: string) => {
     if (!s) return 'Present';
