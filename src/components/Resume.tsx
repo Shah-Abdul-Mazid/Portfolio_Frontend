@@ -324,13 +324,13 @@ const Resume = () => {
                 .rv-solid:hover { background: #2b3f5a; transform: translateY(-1px); }
                 .rv-spin { animation: rvSpin 1s linear infinite; }
                 @keyframes rvSpin { to { transform: rotate(360deg); } }
-                .rv-sheet { width: min(794px, 100%) !important; background: white !important; color: #1a1a1a !important; font-size: 13.5px !important; line-height: 1.4 !important; padding: 1in !important; box-shadow: 0 4px 24px rgba(0,0,0,0.1) !important; text-align: left !important; }
-                .rv-hd { display: grid !important; grid-template-columns: 1fr auto 1fr !important; align-items: center !important; gap: 10px !important; padding-bottom: 20px !important; border-bottom: 1.5px solid #3d5a80 !important; margin-bottom: 15px !important; text-align: left !important; }
-                .rv-hd-left { display: flex !important; flex-direction: column !important; gap: 1px !important; text-align: left !important; font-size: 11.5px !important; }
-                .rv-hd-mid { display: flex; flex-direction: column; align-items: center; text-align: center; }
-                .rv-hd-right { display: flex !important; flex-direction: column !important; gap: 1px !important; text-align: right !important; font-size: 11.5px !important; }
-                .rv-name { font-size: 28px; font-weight: 700; color: #1a1a1a; margin: 0; line-height: 1.1; }
-                .rv-role { font-size: 14px; color: #3d5a80; font-weight: 600; margin: 4px 0 0; }
+                .rv-sheet { width: min(794px, 100%) !important; background: white !important; color: #1a1a1a !important; font-size: 13.5px !important; line-height: 1.4 !important; padding: 0.5in !important; box-shadow: 0 4px 24px rgba(0,0,0,0.1) !important; text-align: left !important; }
+                .rv-hd { display: grid !important; grid-template-columns: 1.2fr 2fr 1.2fr !important; align-items: center !important; gap: 15px !important; padding-bottom: 15px !important; border-bottom: 1.5px solid #3d5a80 !important; margin-bottom: 12px !important; }
+                .rv-hd-left { display: flex !important; flex-direction: column !important; gap: 2px !important; text-align: left !important; font-size: 11px !important; }
+                .rv-hd-mid { display: flex; flex-direction: column; align-items: center; text-align: center; min-width: 0; }
+                .rv-hd-right { display: flex !important; flex-direction: column !important; gap: 2px !important; text-align: right !important; font-size: 11px !important; }
+                .rv-name { font-size: 26px; font-weight: 700; color: #1a1a1a; margin: 0; line-height: 1.1; white-space: nowrap; }
+                .rv-role { font-size: 12px; color: #3d5a80; font-weight: 600; margin: 4px 0 0; line-height: 1.3; max-width: 100%; }
                 .rv-contact-row { line-height: 1.3; }
                 .rv-contact-row a { color: #3d5a80; text-decoration: none; }
                 .rv-contact-row a:hover { text-decoration: underline; }
@@ -390,8 +390,8 @@ const Resume = () => {
                 @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
                 @media print { 
                     .rv-page { background: white; padding: 0; } 
-                    .rv-toolbar, .ats-overlay { display: none !important; } 
-                    .rv-sheet { box-shadow: none; width: 100%; padding: 0.5in; margin: 0; }
+                    .rv-toolbar, .ats-overlay, .rv-print-tip { display: none !important; } 
+                    .rv-sheet { box-shadow: none; width: 100%; padding: 0.5in !important; margin: 0; }
                     header, footer { display: none !important; }
                     main { padding: 0 !important; margin: 0 !important; }
                     .container { max-width: none !important; padding: 0 !important; margin: 0 !important; }
