@@ -277,9 +277,9 @@ const Resume = () => {
                                 {data.references.map((r, i) => (
                                     <div key={i} className="rv-ref-item">
                                         <div className="rv-ref-name">{r.name}</div>
-                                        <div className="rv-ref-pos">{r.position}</div>
-                                        <div className="rv-ref-org">{r.organization}</div>
-                                        <div className="rv-ref-rel">{r.relationship}</div>
+                                        <div className="rv-ref-pos">{r.title}</div>
+                                        <div className="rv-ref-org">{r.company}</div>
+                                        <div className="rv-ref-rel">{r.relation}</div>
                                         <div className="rv-ref-contact">
                                             {r.email && <div className="rv-ref-email"><a href={`mailto:${r.email}`} className="rv-ref-link">{r.email}</a></div>}
                                             {r.phone && <div className="rv-ref-phone">{r.phone}</div>}
@@ -291,6 +291,7 @@ const Resume = () => {
                     )}
                 </div>
             </div>
+        </div>
 
             {showAts && (
                 <div className="ats-overlay" onClick={() => setShowAts(false)}>
