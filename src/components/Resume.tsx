@@ -55,7 +55,7 @@ const Resume = () => {
                     const sheet = clonedDoc.querySelector('.rv-sheet') as HTMLElement;
                     if (sheet) {
                         sheet.style.width = '794px';
-                        sheet.style.padding = '0.5in';
+                        sheet.style.padding = '1in 0.5in';
                         sheet.style.margin = '0';
                         sheet.style.boxSizing = 'border-box';
                     }
@@ -325,7 +325,7 @@ const Resume = () => {
                 .rv-solid:hover { background: #2b3f5a; transform: translateY(-1px); }
                 .rv-spin { animation: rvSpin 1s linear infinite; }
                 @keyframes rvSpin { to { transform: rotate(360deg); } }
-                .rv-sheet { width: min(794px, 100%) !important; background: white !important; color: #1a1a1a !important; font-size: 13.5px !important; line-height: 1.4 !important; padding: 0.5in !important; box-shadow: 0 4px 24px rgba(0,0,0,0.1) !important; text-align: left !important; box-sizing: border-box !important; }
+                .rv-sheet { width: min(794px, 100%) !important; background: white !important; color: #1a1a1a !important; font-size: 13.5px !important; line-height: 1.4 !important; padding: 1in 0.5in !important; box-shadow: 0 4px 24px rgba(0,0,0,0.1) !important; text-align: left !important; box-sizing: border-box !important; }
                 .rv-hd { display: grid !important; grid-template-columns: 1.2fr 2fr 1.2fr !important; align-items: center !important; gap: 15px !important; padding-bottom: 15px !important; border-bottom: 1.5px solid #3d5a80 !important; margin-bottom: 12px !important; }
                 .rv-hd-left { display: flex !important; flex-direction: column !important; gap: 2px !important; text-align: left !important; font-size: 11px !important; }
                 .rv-hd-mid { display: flex; flex-direction: column; align-items: center; text-align: center; min-width: 0; }
@@ -392,7 +392,7 @@ const Resume = () => {
                 @media print { 
                     .rv-page { background: white; padding: 0; } 
                     .rv-toolbar, .ats-overlay, .rv-print-tip { display: none !important; } 
-                    .rv-sheet { box-shadow: none; width: 100%; padding: 0.5in !important; margin: 0; box-sizing: border-box !important; }
+                    .rv-sheet { box-shadow: none; width: 100%; padding: 1in 0.5in !important; margin: 0; box-sizing: border-box !important; }
                     header, footer { display: none !important; }
                     main { padding: 0 !important; margin: 0 !important; }
                     .container { max-width: none !important; padding: 0 !important; margin: 0 !important; }
