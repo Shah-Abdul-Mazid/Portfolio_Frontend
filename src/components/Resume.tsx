@@ -1,8 +1,8 @@
 import { useRef, useState, useMemo } from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
 import { Download, Loader, Printer, CheckCircle2, AlertCircle, Info, X, Zap } from 'lucide-react';
-// @ts-ignore
-import html2pdf from 'html2pdf.js';
+import { jsPDF } from 'jspdf';
+import html2canvas from 'html2canvas';
 
 const fmtDate = (s: string) => {
     if (!s) return 'Present';
@@ -45,23 +45,28 @@ const Resume = () => {
         if (!sheetRef.current) return;
         setBusy(true);
         try {
-            const element = sheetRef.current;
-            const opt = {
-                margin: 0,
-                filename: `${data.hero.name.replace(/\s+/g, '_')}_Resume.pdf`,
-                image: { type: 'jpeg' as const, quality: 0.98 },
-                html2canvas: { 
-                    scale: 3, 
-                    useCORS: true, 
-                    letterRendering: true,
-                    scrollX: 0,
-                    scrollY: 0
-                },
-                jsPDF: { unit: 'mm' as const, format: 'a4' as const, orientation: 'portrait' as const }
-            };
+            const doc = new jsPDF({
+                orientation: 'p',
+                unit: 'mm',
+                format: 'a4',
+            });
 
-            // This library handles the capture and preserves links automatically
-            await html2pdf().set(opt).from(element).save();
+            // Use the modern html() method which has better support for links
+            await doc.html(sheetRef.current, {
+                callback: function (doc) {
+                    doc.save(`${data.hero.name.replace(/\s+/g, '_')}_Resume.pdf`);
+                },
+                x: 0,
+                y: 0,
+                width: 210, // A4 width in mm
+                windowWidth: 794, // Standard A4 pixel width at 96 DPI
+                autoPaging: 'text', // Better for not cutting text mid-line
+                html2canvas: {
+                    scale: 0.2645, // Convert pixels to mm roughly (210/794)
+                    useCORS: true,
+                    logging: false,
+                }
+            });
         } catch (e) { 
             console.error(e); 
             alert("Error generating PDF. Please try the 'Print CV' option as a fallback.");
