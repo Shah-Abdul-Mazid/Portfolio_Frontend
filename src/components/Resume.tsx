@@ -369,13 +369,13 @@ const Resume = () => {
                 .rv-proj-hd { display: flex; align-items: baseline; gap: 6px; }
                 .rv-proj-title { font-weight: 700; font-size: 13px; color: #1a1a1a; }
                 .rv-proj-link { font-size: 11px; color: #3d5a80; font-style: italic; }
-                .rv-ref-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px 20px; margin-top: 2px; }
+                .rv-ref-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px 15px; margin-top: 2px; }
                 .rv-ref-item { border-left: 2px solid #3d5a80; padding-left: 8px; }
-                .rv-ref-name { font-weight: 700; font-size: 12.5px; color: #1a1a1a; }
-                .rv-ref-pos { font-size: 11.5px; color: #3d5a80; font-weight: 600; }
-                .rv-ref-org { font-size: 11px; color: #374151; margin-bottom: 1px; }
-                .rv-ref-rel { font-size: 10.5px; color: #6b7280; font-style: italic; margin-bottom: 1px; }
-                .rv-ref-contact { font-size: 10.5px; color: #374151; }
+                .rv-ref-name { font-weight: 700; font-size: 11.5px; color: #1a1a1a; line-height: 1.2; }
+                .rv-ref-pos { font-size: 10.5px; color: #3d5a80; font-weight: 600; line-height: 1.2; }
+                .rv-ref-org { font-size: 10px; color: #374151; margin-bottom: 1px; }
+                .rv-ref-rel { font-size: 9.5px; color: #6b7280; font-style: italic; margin-bottom: 1px; }
+                .rv-ref-contact { font-size: 9.5px; color: #374151; }
                 .rv-ref-link { color: #3d5a80; text-decoration: none; }
                 .rv-ref-link:hover { text-decoration: underline; }
                 .rv-ref-phone { color: #374151; }
