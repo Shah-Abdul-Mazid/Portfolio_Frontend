@@ -192,8 +192,8 @@ const Resume = () => {
                         {data.projects.length > 0 && (
                             <div className="rv-sec">
                                 <div className="rv-sec-hd">Projects</div>
-                                {data.projects.slice(0, 5).map((p, i) => (
-                                    <div key={i} className={`rv-item ${p.title.includes('Bangladesh University') ? 'bu-project' : ''}`}>
+                                {data.projects.slice(0, 8).map((p, i) => (
+                                    <div key={i} className="rv-item">
                                         <div className="rv-proj-hd">
                                             {p.projectUrl ? (
                                                 <a href={p.projectUrl} target="_blank" rel="noopener noreferrer" className="rv-proj-link-anchor" style={{ textDecoration: 'none', display: 'flex', alignItems: 'baseline', gap: '6px' }}>
@@ -411,8 +411,9 @@ const Resume = () => {
                     header, footer, .mobile-drawer { display: none !important; }
                     main { padding: 0 !important; margin: 0 !important; }
                     .container { max-width: none !important; padding: 0 !important; margin: 0 !important; }
-                    .bu-project { break-before: page; page-break-before: always; }
-                    .rv-sec { break-inside: avoid; page-break-inside: avoid; margin-bottom: 12px !important; }
+                    .bu-project { break-before: auto !important; page-break-before: auto !important; }
+                    .rv-sec { break-inside: auto !important; page-break-inside: auto !important; margin-bottom: 12px !important; }
+                    .rv-item, .rv-ref-item, .rv-skill-row { break-inside: avoid !important; page-break-inside: avoid !important; }
                 }
             `}</style>
         </div>
