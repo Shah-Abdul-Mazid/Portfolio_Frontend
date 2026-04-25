@@ -317,6 +317,7 @@ const Resume = () => {
             <style>{`
                 @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap');
                 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+                * { box-sizing: border-box !important; }
                 @page {
                     size: A4;
                     margin: 0.5in;
@@ -328,8 +329,8 @@ const Resume = () => {
                 .rv-solid:hover { background: #2b3f5a; transform: translateY(-1px); }
                 .rv-spin { animation: rvSpin 1s linear infinite; }
                 @keyframes rvSpin { to { transform: rotate(360deg); } }
-                .rv-sheet { width: 794px !important; background: white !important; color: #1a1a1a !important; font-size: 13.5px !important; line-height: 1.4 !important; padding: 0 !important; box-shadow: 0 4px 24px rgba(0,0,0,0.1) !important; text-align: left !important; box-sizing: border-box !important; }
-                .rv-content { padding: 0.5in !important; }
+                .rv-sheet { width: 100% !important; max-width: 210mm !important; margin: 0 auto !important; background: white !important; color: #1a1a1a !important; font-size: 13.5px !important; line-height: 1.4 !important; padding: 0 !important; box-shadow: 0 4px 24px rgba(0,0,0,0.1) !important; text-align: left !important; }
+                .rv-content { padding: 0.5in !important; overflow-wrap: break-word !important; }
                 .rv-hd { display: grid !important; grid-template-columns: 1.2fr 2fr 1.2fr !important; align-items: center !important; gap: 15px !important; padding-bottom: 15px !important; border-bottom: 1.5px solid #3d5a80 !important; margin-bottom: 12px !important; }
                 .rv-hd-left { display: flex !important; flex-direction: column !important; gap: 2px !important; text-align: left !important; font-size: 11px !important; }
                 .rv-hd-mid { display: flex; flex-direction: column; align-items: center; text-align: center; min-width: 0; }
@@ -396,8 +397,8 @@ const Resume = () => {
                 @media print { 
                     .rv-page { background: white !important; padding: 0 !important; margin: 0 !important; width: 100% !important; } 
                     .rv-toolbar, .ats-overlay, .rv-print-tip { display: none !important; } 
-                    .rv-sheet { box-shadow: none !important; width: 100% !important; max-width: 100% !important; padding: 0 !important; margin: 0 !important; box-sizing: border-box !important; }
-                    .rv-content { padding: 0 !important; width: 100% !important; }
+                    .rv-sheet { box-shadow: none !important; width: 210mm !important; max-width: 100% !important; padding: 0 !important; margin: 0 !important; overflow: hidden !important; }
+                    .rv-content { padding: 0.5in !important; width: 100% !important; }
                     .rv-hd { grid-template-columns: 1.4fr 2fr 1.4fr !important; gap: 10px !important; }
                     .rv-hd-left, .rv-hd-right { font-size: 10px !important; }
                     .rv-name { font-size: 24px !important; }
