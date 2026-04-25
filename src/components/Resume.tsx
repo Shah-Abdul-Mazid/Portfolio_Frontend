@@ -335,7 +335,7 @@ const Resume = () => {
                 .rv-solid:hover { background: #2b3f5a; transform: translateY(-1px); }
                 .rv-spin { animation: rvSpin 1s linear infinite; }
                 @keyframes rvSpin { to { transform: rotate(360deg); } }
-                .rv-sheet { width: 100% !important; max-width: 210mm !important; margin: 0 auto !important; background: white !important; color: #1a1a1a !important; font-size: 13.5px !important; line-height: 1.4 !important; padding: 0 !important; box-shadow: 0 4px 24px rgba(0,0,0,0.1) !important; text-align: left !important; }
+                .rv-sheet { width: 100% !important; max-width: 210mm !important; margin: 0 auto !important; background: white !important; color: #1a1a1a !important; font-size: 13.5px !important; line-height: 1.4 !important; padding: 0 !important; box-shadow: 0 4px 24px rgba(0,0,0,0.1) !important; text-align: left !important; overflow: hidden !important; }
                 .rv-content { padding: 0.5in !important; overflow-wrap: break-word !important; }
                 .rv-hd { display: grid !important; grid-template-columns: 1.2fr 2fr 1.2fr !important; align-items: center !important; gap: 15px !important; padding-bottom: 15px !important; border-bottom: 1.5px solid #3d5a80 !important; margin-bottom: 12px !important; }
                 .rv-hd-left { display: flex !important; flex-direction: column !important; gap: 2px !important; text-align: left !important; font-size: 11px !important; }
@@ -351,12 +351,12 @@ const Resume = () => {
                 .rv-proj-link-anchor:hover .rv-proj-title { color: #3d5a80; text-decoration: underline; }
                 .rv-body { padding: 0; }
                 .rv-summary { font-size: 12.5px; color: #1a1a1a; line-height: 1.4; margin: 0 0 10px; text-align: justify; }
-                .rv-sec { margin-bottom: 5px !important; min-height: 0 !important; padding: 0 !important; display: block; overflow: visible; }
-                .rv-sec-hd { font-size: 13px; font-weight: 700; text-transform: uppercase; color: #3d5a80; margin-bottom: 3px; display: flex; align-items: center; gap: 8px; break-after: avoid; page-break-after: avoid; }
+                .rv-sec { margin-bottom: 5px !important; min-height: 0 !important; padding: 0 !important; display: block; overflow: visible; break-inside: avoid !important; page-break-inside: avoid !important; }
+                .rv-sec-hd { font-size: 13px; font-weight: 700; text-transform: uppercase; color: #3d5a80; margin-bottom: 3px; display: flex; align-items: center; gap: 8px; break-after: avoid !important; page-break-after: avoid !important; }
                 .rv-sec-hd::after { content: ""; flex: 1; height: 1px; background: #3d5a80; margin-left: 8px; opacity: 0.3; }
                 .rv-skill-row { font-size: 11.5px; margin: 0 0 3px; color: #374151; break-inside: avoid; page-break-inside: avoid; }
                 .rv-skill-row b { color: #1a1a1a; }
-                .rv-item { margin-bottom: 4px; }
+                .rv-item { margin-bottom: 4px; break-inside: avoid !important; page-break-inside: avoid !important; }
                 .rv-item-top { display: flex !important; justify-content: space-between !important; align-items: baseline !important; gap: 10px !important; margin-bottom: 1px !important; text-align: left !important; }
                 .rv-item-sub { display: flex !important; justify-content: space-between !important; align-items: baseline !important; gap: 10px !important; margin-bottom: 2px !important; text-align: left !important; }
                 .rv-bold { font-weight: 700; font-size: 13px; color: #1a1a1a; }
@@ -366,7 +366,7 @@ const Resume = () => {
                 .rv-meta-date { font-weight: 700; font-size: 12.5px; color: #1a1a1a; }
                 .rv-ul { margin: 1px 0 0; padding-left: 14px; list-style: disc; }
                 .rv-ul li { font-size: 12px; color: #1a1a1a; margin-bottom: 1px; line-height: 1.3; }
-                .rv-proj-hd { display: flex; align-items: baseline; gap: 6px; }
+                .rv-proj-hd { display: flex; align-items: baseline; gap: 6px; break-inside: avoid !important; page-break-inside: avoid !important; }
                 .rv-proj-title { font-weight: 700; font-size: 13px; color: #1a1a1a; }
                 .rv-proj-link { font-size: 11px; color: #3d5a80; font-style: italic; }
                 .rv-ref-grid { display: grid !important; grid-template-columns: 1fr 1fr 1fr !important; gap: 10px 15px !important; margin-top: 2px !important; }
@@ -412,8 +412,8 @@ const Resume = () => {
                     main { padding: 0 !important; margin: 0 !important; }
                     .container { max-width: none !important; padding: 0 !important; margin: 0 !important; }
                     .bu-project { break-before: auto !important; page-break-before: auto !important; }
-                    .rv-sec { break-inside: auto !important; page-break-inside: auto !important; margin-bottom: 12px !important; }
-                    .rv-item, .rv-ref-item, .rv-skill-row { break-inside: auto !important; page-break-inside: auto !important; }
+                    .rv-item, .rv-sec, .rv-proj-hd, .rv-ref-item, .rv-skill-row { break-inside: avoid !important; page-break-inside: avoid !important; }
+                    .rv-sec-hd { break-after: avoid !important; page-break-after: avoid !important; }
                 }
             `}</style>
         </div>
