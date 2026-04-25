@@ -394,15 +394,18 @@ const Resume = () => {
                 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
                 @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
                 @media print { 
-                    .rv-page { background: white; padding: 0; } 
+                    .rv-page { background: white !important; padding: 0 !important; margin: 0 !important; width: 100% !important; } 
                     .rv-toolbar, .ats-overlay, .rv-print-tip { display: none !important; } 
-                    .rv-sheet { box-shadow: none; width: 100%; padding: 0 !important; margin: 0; box-sizing: border-box !important; }
-                    .rv-content { padding: 0 !important; }
-                    header, footer { display: none !important; }
+                    .rv-sheet { box-shadow: none !important; width: 100% !important; max-width: 100% !important; padding: 0 !important; margin: 0 !important; box-sizing: border-box !important; }
+                    .rv-content { padding: 0 !important; width: 100% !important; }
+                    .rv-hd { grid-template-columns: 1.4fr 2fr 1.4fr !important; gap: 10px !important; }
+                    .rv-hd-left, .rv-hd-right { font-size: 10px !important; }
+                    .rv-name { font-size: 24px !important; }
+                    header, footer, .mobile-drawer { display: none !important; }
                     main { padding: 0 !important; margin: 0 !important; }
                     .container { max-width: none !important; padding: 0 !important; margin: 0 !important; }
                     .bu-project { break-before: page; page-break-before: always; }
-                    .rv-sec { break-inside: avoid; page-break-inside: avoid; margin-bottom: 15px !important; }
+                    .rv-sec { break-inside: avoid; page-break-inside: avoid; margin-bottom: 12px !important; }
                 }
             `}</style>
         </div>
