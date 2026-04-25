@@ -123,8 +123,8 @@ const Resume = () => {
                     {busy ? <Loader size={14} className="rv-spin" /> : <Download size={14} />}
                     {busy ? 'Generating…' : 'Download PDF'}
                 </button>
-                <button onClick={downloadDynamic} className="rv-btn rv-solid">
-                    <Printer size={14} /> Print CV
+                <button onClick={downloadDynamic} className="rv-btn rv-solid" style={{ background: '#3b82f6', color: 'white', border: 'none' }}>
+                    <Printer size={14} /> Print CV (Recommended for active links)
                 </button>
             </div>
 
@@ -140,10 +140,14 @@ const Resume = () => {
                         <p className="rv-role">{data.hero.title}</p>
                     </div>
                     <div className="rv-hd-right">
-                        <div className="rv-contact-row"><a href="https://shahabdulmazid.vercel.app" target="_blank" rel="noopener noreferrer">Portfolio: shahabdulmazid.vercel.app</a></div>
-                        <div className="rv-contact-row"><a href={data.contact.github} target="_blank" rel="noopener noreferrer">GitHub: github.com/Shah-Abdul-Mazid</a></div>
-                        <div className="rv-contact-row"><a href={data.contact.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn: linkedin.com/in/shahabdulmazid</a></div>
+                        <div className="rv-contact-row"><a href="https://shahabdulmazid.vercel.app" target="_blank" rel="noopener noreferrer" className="rv-link">Portfolio: shahabdulmazid.vercel.app</a></div>
+                        <div className="rv-contact-row"><a href={data.contact.github} target="_blank" rel="noopener noreferrer" className="rv-link">GitHub: github.com/Shah-Abdul-Mazid</a></div>
+                        <div className="rv-contact-row"><a href={data.contact.linkedin} target="_blank" rel="noopener noreferrer" className="rv-link">LinkedIn: linkedin.com/in/shahabdulmazid</a></div>
                     </div>
+                </div>
+
+                <div className="rv-print-tip" style={{ fontSize: '10px', color: '#6b7280', textAlign: 'center', marginBottom: '8px', fontStyle: 'italic' }}>
+                    Note: For active clickable hyperlinks in the PDF, please use the "Print CV" button and select "Save as PDF".
                 </div>
 
                 <div className="rv-body">
@@ -185,7 +189,16 @@ const Resume = () => {
                             <div className="rv-sec-hd">Projects</div>
                             {data.projects.slice(0, 5).map((p, i) => (
                                 <div key={i} className={`rv-item ${p.title.includes('Bangladesh University') ? 'bu-project' : ''}`}>
-                                    <div className="rv-proj-hd"><span className="rv-proj-title">{p.title}</span>{p.projectUrl && <span className="rv-proj-link">&nbsp;· {p.projectUrl.replace('https://', '')}</span>}</div>
+                                    <div className="rv-proj-hd">
+                                        {p.projectUrl ? (
+                                            <a href={p.projectUrl} target="_blank" rel="noopener noreferrer" className="rv-proj-link-anchor" style={{ textDecoration: 'none', display: 'flex', alignItems: 'baseline', gap: '6px' }}>
+                                                <span className="rv-proj-title">{p.title}</span>
+                                                <span className="rv-proj-link">· {p.projectUrl.replace('https://', '')}</span>
+                                            </a>
+                                        ) : (
+                                            <span className="rv-proj-title">{p.title}</span>
+                                        )}
+                                    </div>
                                     <p className="rv-sm" style={{ color: '#374151', margin: '1px 0 2px' }}>{p.desc}</p>
                                     {p.tags.length > 0 && <p className="rv-sm" style={{ color: '#3d5a80', margin: 0, fontStyle: 'italic', fontSize: '11px' }}>Tech: {p.tags.join(', ')}</p>}
                                 </div>
@@ -321,6 +334,9 @@ const Resume = () => {
                 .rv-contact-row { line-height: 1.3; }
                 .rv-contact-row a { color: #3d5a80; text-decoration: none; }
                 .rv-contact-row a:hover { text-decoration: underline; }
+                .rv-link { color: #3d5a80 !important; text-decoration: none !important; font-weight: 600 !important; }
+                .rv-link:hover { text-decoration: underline !important; }
+                .rv-proj-link-anchor:hover .rv-proj-title { color: #3d5a80; text-decoration: underline; }
                 .rv-body { padding: 0; }
                 .rv-summary { font-size: 12.5px; color: #1a1a1a; line-height: 1.4; margin: 0 0 10px; text-align: justify; }
                 .rv-sec { margin-bottom: 5px !important; min-height: 0 !important; padding: 0 !important; display: block; overflow: visible; }
