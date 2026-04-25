@@ -405,24 +405,18 @@
 
 // export default Resume;
 
-import { useRef, useState, useMemo } from 'react';
+import { useRef, useState } from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
-import { Download, Loader, Printer, CheckCircle2, AlertCircle, Info, X, Zap } from 'lucide-react';
+import { Download, Loader, Printer } from 'lucide-react';
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
-
-const fmtDate = (s: string) => {
-    if (!s) return 'Present';
-    const d = new Date(s);
-    if (isNaN(d.getTime())) return s;
-    return d.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
-};
 
 const Resume = () => {
     const { data } = usePortfolio();
     const sheetRef = useRef<HTMLDivElement>(null);
     const [busy, setBusy] = useState(false);
 
+    // ✅ PDF DOWNLOAD (FIXED)
     const downloadPDF = async () => {
         if (!sheetRef.current) return;
         setBusy(true);
@@ -432,6 +426,7 @@ const Resume = () => {
                 scale: 4,
                 useCORS: true,
                 backgroundColor: '#ffffff',
+                logging: false,
                 onclone: (doc) => {
                     const sheet = doc.querySelector('.rv-sheet') as HTMLElement;
                     if (sheet) {
@@ -441,47 +436,89 @@ const Resume = () => {
                 }
             });
 
-            const imgData = canvas.toDataURL('image/png');
+            const imgData = canvas.toDataURL('image/png', 1.0);
             const pdf = new jsPDF('p', 'mm', 'a4');
 
-            const width = pdf.internal.pageSize.getWidth();
-            const height = (canvas.height * width) / canvas.width;
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = pdf.internal.pageSize.getHeight();
+            const imgHeight = (canvas.height * pdfWidth) / canvas.width;
 
-            pdf.addImage(imgData, 'PNG', 0, 0, width, height);
+            let heightLeft = imgHeight;
+            let position = 0;
+
+            pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, imgHeight);
+            heightLeft -= pdfHeight;
+
+            while (heightLeft > 0) {
+                position = heightLeft - imgHeight;
+                pdf.addPage();
+                pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, imgHeight);
+                heightLeft -= pdfHeight;
+            }
+
             pdf.save('Resume.pdf');
+        } catch (e) {
+            console.error(e);
         } finally {
             setBusy(false);
         }
     };
 
+    // ✅ PRINT (BEST FOR LINKS)
     const printPDF = () => window.print();
 
     return (
         <div className="rv-page">
+            {/* Toolbar */}
             <div className="rv-toolbar">
-                <button onClick={downloadPDF} className="rv-btn">
+                <button onClick={downloadPDF} disabled={busy} className="rv-btn">
                     {busy ? <Loader size={14} /> : <Download size={14} />}
-                    Download
+                    {busy ? 'Generating...' : 'Download PDF'}
                 </button>
 
                 <button onClick={printPDF} className="rv-btn">
-                    <Printer size={14} /> Print
+                    <Printer size={14} /> Print CV
                 </button>
             </div>
 
-            {/* ✅ FIXED STRUCTURE */}
+            {/* Resume Sheet */}
             <div className="rv-sheet" ref={sheetRef}>
                 <div className="rv-content">
 
+                    {/* Header */}
                     <h1 className="rv-name">{data.hero.name}</h1>
                     <p className="rv-role">{data.hero.title}</p>
 
-                    <p>{data.about.bio}</p>
+                    {/* About */}
+                    {data.about.bio && <p className="rv-text">{data.about.bio}</p>}
+
+                    {/* Skills */}
+                    {data.skills.length > 0 && (
+                        <>
+                            <h3 className="rv-sec">Skills</h3>
+                            {data.skills.map((s, i) => (
+                                <p key={i}><b>{s.name}:</b> {s.items.join(', ')}</p>
+                            ))}
+                        </>
+                    )}
+
+                    {/* Projects */}
+                    {data.projects.length > 0 && (
+                        <>
+                            <h3 className="rv-sec">Projects</h3>
+                            {data.projects.map((p, i) => (
+                                <div key={i}>
+                                    <b>{p.title}</b>
+                                    <p>{p.desc}</p>
+                                </div>
+                            ))}
+                        </>
+                    )}
 
                 </div>
             </div>
 
-            {/* ✅ FINAL CSS FIX */}
+            {/* ✅ FIXED CSS */}
             <style>{`
                 @page {
                     size: A4;
@@ -490,14 +527,16 @@ const Resume = () => {
 
                 .rv-page {
                     background: #f1f5f9;
+                    min-height: 100vh;
                     display: flex;
                     flex-direction: column;
                     align-items: center;
                     padding: 20px;
+                    font-family: Arial, sans-serif;
                 }
 
                 .rv-toolbar {
-                    margin-bottom: 10px;
+                    margin-bottom: 15px;
                 }
 
                 .rv-btn {
@@ -513,12 +552,12 @@ const Resume = () => {
                 .rv-sheet {
                     width: 794px;
                     background: white;
-                    padding: 0 !important; /* 🔥 IMPORTANT FIX */
+                    padding: 0 !important; /* 🔥 IMPORTANT */
                     box-sizing: border-box;
                 }
 
                 .rv-content {
-                    padding: 0.5in; /* ✅ PERFECT MARGIN */
+                    padding: 0.5in; /* ✅ Equal margins */
                 }
 
                 .rv-name {
@@ -528,6 +567,16 @@ const Resume = () => {
 
                 .rv-role {
                     color: #3b82f6;
+                    margin-bottom: 10px;
+                }
+
+                .rv-sec {
+                    margin-top: 15px;
+                    font-size: 16px;
+                    font-weight: bold;
+                }
+
+                .rv-text {
                     margin-bottom: 10px;
                 }
 
