@@ -62,10 +62,9 @@ const Resume = () => {
 
                     const buItem = clonedDoc.querySelector('.bu-project') as HTMLElement | null;
                     if (buItem) {
-                        buItem.style.marginTop = '10px'; // Replaced aggressive 280px with subtle spacing
+                        buItem.style.marginTop = '10px';
                     }
 
-                    // Hide fixed elements like the navigation header from leaking into html2canvas
                     const header = clonedDoc.querySelector('header') as HTMLElement | null;
                     if (header) header.style.display = 'none';
                     const drawer = clonedDoc.querySelector('.mobile-drawer') as HTMLElement | null;
@@ -98,8 +97,6 @@ const Resume = () => {
     };
 
     const downloadDynamic = () => {
-        // We use the browser's native print-to-PDF which correctly handles text wrapping
-        // and avoids cutting text in half (unlike html2canvas).
         window.print();
     };
 
@@ -132,166 +129,166 @@ const Resume = () => {
             <div className="rv-sheet" ref={sheetRef}>
                 <div className="rv-content">
                     <div className="rv-hd">
-                    <div className="rv-hd-left">
-                        <div className="rv-contact-row"><span>{ph}</span></div>
-                        <div className="rv-contact-row"><span>{city}</span></div>
-                        <div className="rv-contact-row"><a href={`mailto:${em}`}>{em}</a></div>
+                        <div className="rv-hd-left">
+                            <div className="rv-contact-row"><span>{ph}</span></div>
+                            <div className="rv-contact-row"><span>{city}</span></div>
+                            <div className="rv-contact-row"><a href={`mailto:${em}`}>{em}</a></div>
+                        </div>
+                        <div className="rv-hd-mid">
+                            <h1 className="rv-name">{data.hero.name}</h1>
+                            <p className="rv-role">{data.hero.title}</p>
+                        </div>
+                        <div className="rv-hd-right">
+                            <div className="rv-contact-row"><a href="https://shahabdulmazid.vercel.app" target="_blank" rel="noopener noreferrer" className="rv-link">Portfolio: shahabdulmazid.vercel.app</a></div>
+                            <div className="rv-contact-row"><a href={data.contact.github} target="_blank" rel="noopener noreferrer" className="rv-link">GitHub: github.com/Shah-Abdul-Mazid</a></div>
+                            <div className="rv-contact-row"><a href={data.contact.linkedin} target="_blank" rel="noopener noreferrer" className="rv-link">LinkedIn: linkedin.com/in/shahabdulmazid</a></div>
+                        </div>
                     </div>
-                    <div className="rv-hd-mid">
-                        <h1 className="rv-name">{data.hero.name}</h1>
-                        <p className="rv-role">{data.hero.title}</p>
-                    </div>
-                    <div className="rv-hd-right">
-                        <div className="rv-contact-row"><a href="https://shahabdulmazid.vercel.app" target="_blank" rel="noopener noreferrer" className="rv-link">Portfolio: shahabdulmazid.vercel.app</a></div>
-                        <div className="rv-contact-row"><a href={data.contact.github} target="_blank" rel="noopener noreferrer" className="rv-link">GitHub: github.com/Shah-Abdul-Mazid</a></div>
-                        <div className="rv-contact-row"><a href={data.contact.linkedin} target="_blank" rel="noopener noreferrer" className="rv-link">LinkedIn: linkedin.com/in/shahabdulmazid</a></div>
-                    </div>
-                </div>
 
-                <div className="rv-print-tip" style={{ fontSize: '10px', color: '#6b7280', textAlign: 'center', marginBottom: '8px', fontStyle: 'italic' }}>
-                    Note: For active clickable hyperlinks in the PDF, please use the "Print CV" button and select "Save as PDF".
-                </div>
+                    <div className="rv-print-tip" style={{ fontSize: '10px', color: '#6b7280', textAlign: 'center', marginBottom: '8px', fontStyle: 'italic' }}>
+                        Note: For active clickable hyperlinks in the PDF, please use the "Print CV" button and select "Save as PDF".
+                    </div>
 
-                <div className="rv-body">
-                    {data.about.bio && <p className="rv-summary">{data.about.bio.split('\n\n')[0]}</p>}
-                    {data.skills.length > 0 && (
-                        <div className="rv-sec">
-                            <div className="rv-sec-hd">Skills</div>
-                            {data.skills.map((c, i) => (
-                                <p key={i} className="rv-skill-row"><b>{c.name}:</b> {c.items.join(', ')}</p>
-                            ))}
-                        </div>
-                    )}
-                    {sortedWork.length > 0 && (
-                        <div className="rv-sec">
-                            <div className="rv-sec-hd">Technical Experience</div>
-                            {sortedWork.map((w, i) => (
-                                <div key={i} className="rv-item">
-                                    <div className="rv-item-top"><span className="rv-bold">{w.role}</span><span className="rv-meta-date">{fmtDate(w.startDate)} — {w.endDate ? fmtDate(w.endDate) : 'Present'}</span></div>
-                                    <div className="rv-item-sub"><span className="rv-muted">{w.company}</span><span className="rv-meta">{city}</span></div>
-                                    <ul className="rv-ul">{w.details.map((d, j) => <li key={j}>{d}</li>)}</ul>
-                                </div>
-                            ))}
-                        </div>
-                    )}
-                    {data.education.length > 0 && (
-                        <div className="rv-sec">
-                            <div className="rv-sec-hd">Education</div>
-                            {data.education.map((e, i) => (
-                                <div key={i} className="rv-item">
-                                    <div className="rv-item-top"><span className="rv-bold">{e.degree}</span><span className="rv-meta">{e.year}</span></div>
-                                    <div className="rv-item-sub"><span className="rv-muted">{e.school}</span><span className="rv-meta">Dhaka, Bangladesh</span></div>
-                                    {e.major && <p className="rv-sm" style={{ color: '#4b5563', fontStyle: 'italic', fontSize: '11.5px', marginTop: '2px' }}>• {e.major}</p>}
-                                </div>
-                            ))}
-                        </div>
-                    )}
-                    {data.projects.length > 0 && (
-                        <div className="rv-sec">
-                            <div className="rv-sec-hd">Projects</div>
-                            {data.projects.slice(0, 5).map((p, i) => (
-                                <div key={i} className={`rv-item ${p.title.includes('Bangladesh University') ? 'bu-project' : ''}`}>
-                                    <div className="rv-proj-hd">
-                                        {p.projectUrl ? (
-                                            <a href={p.projectUrl} target="_blank" rel="noopener noreferrer" className="rv-proj-link-anchor" style={{ textDecoration: 'none', display: 'flex', alignItems: 'baseline', gap: '6px' }}>
+                    <div className="rv-body">
+                        {data.about.bio && <p className="rv-summary">{data.about.bio.split('\n\n')[0]}</p>}
+                        {data.skills.length > 0 && (
+                            <div className="rv-sec">
+                                <div className="rv-sec-hd">Skills</div>
+                                {data.skills.map((c, i) => (
+                                    <p key={i} className="rv-skill-row"><b>{c.name}:</b> {c.items.join(', ')}</p>
+                                ))}
+                            </div>
+                        )}
+                        {sortedWork.length > 0 && (
+                            <div className="rv-sec">
+                                <div className="rv-sec-hd">Technical Experience</div>
+                                {sortedWork.map((w, i) => (
+                                    <div key={i} className="rv-item">
+                                        <div className="rv-item-top"><span className="rv-bold">{w.role}</span><span className="rv-meta-date">{fmtDate(w.startDate)} — {w.endDate ? fmtDate(w.endDate) : 'Present'}</span></div>
+                                        <div className="rv-item-sub"><span className="rv-muted">{w.company}</span><span className="rv-meta">{city}</span></div>
+                                        <ul className="rv-ul">{w.details.map((d, j) => <li key={j}>{d}</li>)}</ul>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                        {data.education.length > 0 && (
+                            <div className="rv-sec">
+                                <div className="rv-sec-hd">Education</div>
+                                {data.education.map((e, i) => (
+                                    <div key={i} className="rv-item">
+                                        <div className="rv-item-top"><span className="rv-bold">{e.degree}</span><span className="rv-meta">{e.year}</span></div>
+                                        <div className="rv-item-sub"><span className="rv-muted">{e.school}</span><span className="rv-meta">Dhaka, Bangladesh</span></div>
+                                        {e.major && <p className="rv-sm" style={{ color: '#4b5563', fontStyle: 'italic', fontSize: '11.5px', marginTop: '2px' }}>• {e.major}</p>}
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                        {data.projects.length > 0 && (
+                            <div className="rv-sec">
+                                <div className="rv-sec-hd">Projects</div>
+                                {data.projects.slice(0, 5).map((p, i) => (
+                                    <div key={i} className={`rv-item ${p.title.includes('Bangladesh University') ? 'bu-project' : ''}`}>
+                                        <div className="rv-proj-hd">
+                                            {p.projectUrl ? (
+                                                <a href={p.projectUrl} target="_blank" rel="noopener noreferrer" className="rv-proj-link-anchor" style={{ textDecoration: 'none', display: 'flex', alignItems: 'baseline', gap: '6px' }}>
+                                                    <span className="rv-proj-title">{p.title}</span>
+                                                    <span className="rv-proj-link">· {p.projectUrl.replace('https://', '')}</span>
+                                                </a>
+                                            ) : (
                                                 <span className="rv-proj-title">{p.title}</span>
-                                                <span className="rv-proj-link">· {p.projectUrl.replace('https://', '')}</span>
-                                            </a>
-                                        ) : (
-                                            <span className="rv-proj-title">{p.title}</span>
-                                        )}
-                                    </div>
-                                    <p className="rv-sm" style={{ color: '#374151', margin: '1px 0 2px' }}>{p.desc}</p>
-                                    {p.tags.length > 0 && <p className="rv-sm" style={{ color: '#3d5a80', margin: 0, fontStyle: 'italic', fontSize: '11px' }}>Tech: {p.tags.join(', ')}</p>}
-                                </div>
-                            ))}
-                        </div>
-                    )}
-                    {data.papers && data.papers.length > 0 && (
-                        <div className="rv-sec">
-                            <div className="rv-sec-hd">Publications</div>
-                            {data.papers.slice(0, 3).map((p, i) => (
-                                <div key={i} className="rv-item">
-                                    <div className="rv-item-top"><span className="rv-bold">{p.title}</span><span className="rv-meta">{p.year}</span></div>
-                                    <p className="rv-sm" style={{ color: '#1a1a1a', margin: '2px 0 1px' }}>{p.venue}</p>
-                                    {p.link && <p className="rv-sm" style={{ color: '#3d5a80', margin: 0, fontSize: '11px' }}><a href={p.link} target="_blank" rel="noopener noreferrer">{p.link.replace('https://', '')}</a></p>}
-                                </div>
-                            ))}
-                        </div>
-                    )}
-                    {data.certifications && data.certifications.length > 0 && (
-                        <div className="rv-sec">
-                            <div className="rv-sec-hd">Licenses & Certifications</div>
-                            {data.certifications.map((c, i) => (
-                                <div key={i} className="rv-item">
-                                    <div className="rv-item-top">
-                                        <span className="rv-bold">{c.name}</span>
-                                        <span className="rv-meta">{c.date}</span>
-                                    </div>
-                                    <div className="rv-item-sub">
-                                        <span className="rv-muted">{c.issuer}{c.instructor ? ` | ${c.instructor}` : ''}</span>
-                                        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                                            {c.credentialUrl && (
-                                                <span className="rv-meta">
-                                                    <a href={c.credentialUrl} target="_blank" rel="noopener noreferrer" style={{ color: '#3d5a80', textDecoration: 'none' }}>
-                                                        {c.credentialId ? `ID: ${c.credentialId}` : 'Show Credential'} ↗
-                                                    </a>
-                                                </span>
-                                            )}
-                                            {c.links?.map((link, lIdx) => (
-                                                <span key={lIdx} className="rv-meta">
-                                                    <a href={link.url} target="_blank" rel="noopener noreferrer" style={{ color: '#3d5a80', textDecoration: 'none', fontStyle: 'italic' }}>
-                                                        {link.label || 'Link'} ↗
-                                                    </a>
-                                                </span>
-                                            ))}
-                                            {!c.credentialUrl && c.credentialId && (
-                                                <span className="rv-meta">ID: {c.credentialId}</span>
                                             )}
                                         </div>
+                                        <p className="rv-sm" style={{ color: '#374151', margin: '1px 0 2px' }}>{p.desc}</p>
+                                        {p.tags.length > 0 && <p className="rv-sm" style={{ color: '#3d5a80', margin: 0, fontStyle: 'italic', fontSize: '11px' }}>Tech: {p.tags.join(', ')}</p>}
                                     </div>
-                                </div>
-                            ))}
-                        </div>
-                    )}
-                    {data.experience && data.experience.length > 0 && (
-                        <div className="rv-sec">
-                            <div className="rv-sec-hd">Competitions & Awards</div>
-                            {data.experience.map((e, i) => (
-                                <div key={i} className="rv-item">
-                                    <div className="rv-item-top"><span className="rv-bold">{e.role}</span><span className="rv-meta">{e.period}</span></div>
-                                    <div className="rv-item-sub"><span className="rv-muted">{e.company}</span></div>
-                                    <p className="rv-sm" style={{ color: '#1a1a1a', margin: '1px 0 0' }}>{e.desc}</p>
-                                </div>
-                            ))}
-                        </div>
-                    )}
-                    <div className="rv-sec">
-                        <div className="rv-sec-hd">Languages</div>
-                        <p className="rv-skill-row"><b>Bengali:</b> Native &nbsp;·&nbsp; <b>English:</b> Professional Working Proficiency</p>
-                    </div>
-                    {data.references && data.references.length > 0 && (
-                        <div className="rv-sec">
-                            <div className="rv-sec-hd">References</div>
-                            <div className="rv-ref-grid">
-                                {data.references.map((r, i) => (
-                                    <div key={i} className="rv-ref-item">
-                                        <div className="rv-ref-name">{r.name}</div>
-                                        <div className="rv-ref-pos">{r.title}</div>
-                                        <div className="rv-ref-org">{r.company}</div>
-                                        <div className="rv-ref-rel">{r.relation}</div>
-                                        <div className="rv-ref-contact">
-                                            {r.email && <div className="rv-ref-email"><a href={`mailto:${r.email}`} className="rv-ref-link">{r.email}</a></div>}
-                                            {r.phone && <div className="rv-ref-phone">{r.phone}</div>}
+                                ))}
+                            </div>
+                        )}
+                        {data.papers && data.papers.length > 0 && (
+                            <div className="rv-sec">
+                                <div className="rv-sec-hd">Publications</div>
+                                {data.papers.slice(0, 3).map((p, i) => (
+                                    <div key={i} className="rv-item">
+                                        <div className="rv-item-top"><span className="rv-bold">{p.title}</span><span className="rv-meta">{p.year}</span></div>
+                                        <p className="rv-sm" style={{ color: '#1a1a1a', margin: '2px 0 1px' }}>{p.venue}</p>
+                                        {p.link && <p className="rv-sm" style={{ color: '#3d5a80', margin: 0, fontSize: '11px' }}><a href={p.link} target="_blank" rel="noopener noreferrer">{p.link.replace('https://', '')}</a></p>}
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                        {data.certifications && data.certifications.length > 0 && (
+                            <div className="rv-sec">
+                                <div className="rv-sec-hd">Licenses & Certifications</div>
+                                {data.certifications.map((c, i) => (
+                                    <div key={i} className="rv-item">
+                                        <div className="rv-item-top">
+                                            <span className="rv-bold">{c.name}</span>
+                                            <span className="rv-meta">{c.date}</span>
+                                        </div>
+                                        <div className="rv-item-sub">
+                                            <span className="rv-muted">{c.issuer}{c.instructor ? ` | ${c.instructor}` : ''}</span>
+                                            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                                                {c.credentialUrl && (
+                                                    <span className="rv-meta">
+                                                        <a href={c.credentialUrl} target="_blank" rel="noopener noreferrer" style={{ color: '#3d5a80', textDecoration: 'none' }}>
+                                                            {c.credentialId ? `ID: ${c.credentialId}` : 'Show Credential'} ↗
+                                                        </a>
+                                                    </span>
+                                                )}
+                                                {c.links?.map((link, lIdx) => (
+                                                    <span key={lIdx} className="rv-meta">
+                                                        <a href={link.url} target="_blank" rel="noopener noreferrer" style={{ color: '#3d5a80', textDecoration: 'none', fontStyle: 'italic' }}>
+                                                            {link.label || 'Link'} ↗
+                                                        </a>
+                                                    </span>
+                                                ))}
+                                                {!c.credentialUrl && c.credentialId && (
+                                                    <span className="rv-meta">ID: {c.credentialId}</span>
+                                                )}
+                                            </div>
                                         </div>
                                     </div>
                                 ))}
                             </div>
+                        )}
+                        {data.experience && data.experience.length > 0 && (
+                            <div className="rv-sec">
+                                <div className="rv-sec-hd">Competitions & Awards</div>
+                                {data.experience.map((e, i) => (
+                                    <div key={i} className="rv-item">
+                                        <div className="rv-item-top"><span className="rv-bold">{e.role}</span><span className="rv-meta">{e.period}</span></div>
+                                        <div className="rv-item-sub"><span className="rv-muted">{e.company}</span></div>
+                                        <p className="rv-sm" style={{ color: '#1a1a1a', margin: '1px 0 0' }}>{e.desc}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                        <div className="rv-sec">
+                            <div className="rv-sec-hd">Languages</div>
+                            <p className="rv-skill-row"><b>Bengali:</b> Native &nbsp;·&nbsp; <b>English:</b> Professional Working Proficiency</p>
                         </div>
-                    )}
+                        {data.references && data.references.length > 0 && (
+                            <div className="rv-sec">
+                                <div className="rv-sec-hd">References</div>
+                                <div className="rv-ref-grid">
+                                    {data.references.map((r, i) => (
+                                        <div key={i} className="rv-ref-item">
+                                            <div className="rv-ref-name">{r.name}</div>
+                                            <div className="rv-ref-pos">{r.title}</div>
+                                            <div className="rv-ref-org">{r.company}</div>
+                                            <div className="rv-ref-rel">{r.relation}</div>
+                                            <div className="rv-ref-contact">
+                                                {r.email && <div className="rv-ref-email"><a href={`mailto:${r.email}`} className="rv-ref-link">{r.email}</a></div>}
+                                                {r.phone && <div className="rv-ref-phone">{r.phone}</div>}
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
-        </div>
 
             {showAts && (
                 <div className="ats-overlay" onClick={() => setShowAts(false)}>
@@ -332,7 +329,7 @@ const Resume = () => {
                 .rv-spin { animation: rvSpin 1s linear infinite; }
                 @keyframes rvSpin { to { transform: rotate(360deg); } }
                 .rv-sheet { width: 794px !important; background: white !important; color: #1a1a1a !important; font-size: 13.5px !important; line-height: 1.4 !important; padding: 0 !important; box-shadow: 0 4px 24px rgba(0,0,0,0.1) !important; text-align: left !important; box-sizing: border-box !important; }
-                .rv-content { padding: 0.5in 0.5in 0.8in 0.5in !important; }
+                .rv-content { padding: 0.5in !important; }
                 .rv-hd { display: grid !important; grid-template-columns: 1.2fr 2fr 1.2fr !important; align-items: center !important; gap: 15px !important; padding-bottom: 15px !important; border-bottom: 1.5px solid #3d5a80 !important; margin-bottom: 12px !important; }
                 .rv-hd-left { display: flex !important; flex-direction: column !important; gap: 2px !important; text-align: left !important; font-size: 11px !important; }
                 .rv-hd-mid { display: flex; flex-direction: column; align-items: center; text-align: center; min-width: 0; }
@@ -399,7 +396,7 @@ const Resume = () => {
                 @media print { 
                     .rv-page { background: white; padding: 0; } 
                     .rv-toolbar, .ats-overlay, .rv-print-tip { display: none !important; } 
-                    .rv-sheet { box-shadow: none; width: 100%; padding: 1in 0.5in !important; margin: 0; box-sizing: border-box !important; }
+                    .rv-sheet { box-shadow: none; width: 100%; padding: 0.5in !important; margin: 0; box-sizing: border-box !important; }
                     header, footer { display: none !important; }
                     main { padding: 0 !important; margin: 0 !important; }
                     .container { max-width: none !important; padding: 0 !important; margin: 0 !important; }
