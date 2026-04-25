@@ -413,7 +413,7 @@ const Resume = () => {
                     .container { max-width: none !important; padding: 0 !important; margin: 0 !important; }
                     .bu-project { break-before: auto !important; page-break-before: auto !important; }
                     .rv-sec { break-inside: auto !important; page-break-inside: auto !important; margin-bottom: 12px !important; }
-                    .rv-item, .rv-ref-item, .rv-skill-row { break-inside: avoid !important; page-break-inside: avoid !important; }
+                    .rv-item, .rv-ref-item, .rv-skill-row { break-inside: auto !important; page-break-inside: auto !important; }
                 }
             `}</style>
         </div>
