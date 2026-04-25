@@ -1,8 +1,8 @@
 import { useRef, useState, useMemo } from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
 import { Download, Loader, Printer, CheckCircle2, AlertCircle, Info, X, Zap } from 'lucide-react';
-import html2canvas from 'html2canvas';
-import { jsPDF } from 'jspdf';
+// @ts-ignore
+import html2pdf from 'html2pdf.js';
 
 const fmtDate = (s: string) => {
     if (!s) return 'Present';
@@ -45,55 +45,29 @@ const Resume = () => {
         if (!sheetRef.current) return;
         setBusy(true);
         try {
-            const canvas = await html2canvas(sheetRef.current, {
-                scale: 4,
-                useCORS: true,
-                logging: false,
-                backgroundColor: '#ffffff',
-                windowWidth: 1200,
-                onclone: (clonedDoc) => {
-                    const sheet = clonedDoc.querySelector('.rv-sheet') as HTMLElement;
-                    if (sheet) {
-                        sheet.style.width = '794px';
-                        sheet.style.padding = '0';
-                        sheet.style.margin = '0';
-                        sheet.style.boxSizing = 'border-box';
-                    }
+            const element = sheetRef.current;
+            const opt = {
+                margin: 0,
+                filename: `${data.hero.name.replace(/\s+/g, '_')}_Resume.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { 
+                    scale: 3, 
+                    useCORS: true, 
+                    letterRendering: true,
+                    scrollX: 0,
+                    scrollY: 0
+                },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
 
-                    const buItem = clonedDoc.querySelector('.bu-project') as HTMLElement | null;
-                    if (buItem) {
-                        buItem.style.marginTop = '10px';
-                    }
-
-                    const header = clonedDoc.querySelector('header') as HTMLElement | null;
-                    if (header) header.style.display = 'none';
-                    const drawer = clonedDoc.querySelector('.mobile-drawer') as HTMLElement | null;
-                    if (drawer) drawer.style.display = 'none';
-                }
-            });
-
-            const imgData = canvas.toDataURL('image/png', 1.0);
-            const pdf = new jsPDF('p', 'mm', 'a4');
-            const pdfWidth = pdf.internal.pageSize.getWidth();
-            const pdfHeight = pdf.internal.pageSize.getHeight();
-            const imgHeight = (canvas.height * pdfWidth) / canvas.width;
-
-            let heightLeft = imgHeight;
-            let position = 0;
-
-            pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, imgHeight);
-            heightLeft -= pdfHeight;
-
-            while (heightLeft > 0) {
-                position = heightLeft - imgHeight;
-                pdf.addPage();
-                pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, imgHeight);
-                heightLeft -= pdfHeight;
-            }
-
-            pdf.save(`${data.hero.name.replace(/\s+/g, '_')}_Resume.pdf`);
-        } catch (e) { console.error(e); }
-        finally { setBusy(false); }
+            // This library handles the capture and preserves links automatically
+            await html2pdf().set(opt).from(element).save();
+        } catch (e) { 
+            console.error(e); 
+            alert("Error generating PDF. Please try the 'Print CV' option as a fallback.");
+        } finally { 
+            setBusy(false); 
+        }
     };
 
     const downloadDynamic = () => {
