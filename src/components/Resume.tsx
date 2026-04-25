@@ -377,10 +377,11 @@ const Resume = () => {
                 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
                 @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
                 @media print { 
+                    @page { size: A4; margin: 0.5in; }
                     .rv-page { background: white !important; padding: 0 !important; margin: 0 !important; width: 100% !important; } 
                     .rv-toolbar, .ats-overlay, .rv-print-tip { display: none !important; } 
-                    .rv-sheet { box-shadow: none !important; width: 210mm !important; max-width: 100% !important; padding: 0 !important; margin: 0 !important; overflow: hidden !important; }
-                    .rv-content { padding: 0.5in !important; width: 100% !important; }
+                    .rv-sheet { box-shadow: none !important; width: 100% !important; max-width: 100% !important; padding: 0 !important; margin: 0 !important; overflow: visible !important; }
+                    .rv-content { padding: 0 !important; width: 100% !important; }
                     .rv-hd { grid-template-columns: 1.4fr 2fr 1.4fr !important; gap: 10px !important; }
                     .rv-hd-left, .rv-hd-right { font-size: 10px !important; }
                     .rv-name { font-size: 24px !important; }
@@ -388,9 +389,9 @@ const Resume = () => {
                     main { padding: 0 !important; margin: 0 !important; }
                     .container { max-width: none !important; padding: 0 !important; margin: 0 !important; }
                     .bu-project { break-before: auto !important; page-break-before: auto !important; }
-                    .rv-item, .rv-proj-hd, .rv-ref-item, .rv-skill-row { break-inside: avoid !important; page-break-inside: avoid !important; }
-                    .rv-sec { break-inside: auto !important; page-break-inside: auto !important; margin-bottom: 12px !important; }
-                    .rv-sec-hd { break-after: avoid !important; page-break-after: avoid !important; margin-top: 15px !important; }
+                    .rv-item, .rv-proj-hd, .rv-ref-item, .rv-skill-row { break-inside: auto !important; page-break-inside: auto !important; }
+                    .rv-sec { break-inside: auto !important; page-break-inside: auto !important; margin-bottom: 10px !important; }
+                    .rv-sec-hd { break-after: auto !important; page-break-after: auto !important; margin-top: 10px !important; }
                     .rv-sec-hd:first-child { margin-top: 0 !important; }
                 }
             `}</style>
