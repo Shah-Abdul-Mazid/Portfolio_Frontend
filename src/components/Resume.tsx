@@ -150,7 +150,13 @@ const Resume = () => {
                     </div>
 
                     <div className="rv-body">
-                        {data.about.bio && <p className="rv-summary">{data.about.bio.split('\n\n')[0]}</p>}
+                        {data.about.bio && (
+                            <div className="rv-summary">
+                                {data.about.bio.split('\n\n').map((para, i) => (
+                                    <p key={i} style={{ marginBottom: i === data.about.bio.split('\n\n').length - 1 ? 0 : '8px' }}>{para}</p>
+                                ))}
+                            </div>
+                        )}
                         {data.skills.length > 0 && (
                             <div className="rv-sec">
                                 <div className="rv-sec-hd">Skills</div>
