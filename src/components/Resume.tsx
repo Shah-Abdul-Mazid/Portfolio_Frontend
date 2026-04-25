@@ -44,26 +44,29 @@ const Resume = () => {
     const downloadPDF = async () => {
         if (!sheetRef.current) return;
         setBusy(true);
+        
         try {
-            const element = sheetRef.current;
+            // Options for html2pdf
             const opt = {
-                margin: 0,
+                margin: [0, 0],
                 filename: `${data.hero.name.replace(/\s+/g, '_')}_Resume.pdf`,
                 image: { type: 'jpeg', quality: 0.98 },
                 html2canvas: { 
                     scale: 2, 
                     useCORS: true, 
                     letterRendering: true,
-                    scrollY: 0
+                    windowWidth: 794
                 },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+                pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
             };
 
-            // Capture the element and trigger the download
-            await (html2pdf() as any).set(opt).from(element).save();
+            // Modern way to call html2pdf with full link preservation
+            const worker = (html2pdf() as any).set(opt).from(sheetRef.current);
+            await worker.save();
         } catch (e) { 
-            console.error(e); 
-            alert("Error generating PDF. Please try the 'Print CV' button instead.");
+            console.error("PDF Download Error:", e); 
+            alert("Download failed. Using 'Print CV' is recommended for best quality.");
         } finally { 
             setBusy(false); 
         }
@@ -385,8 +388,10 @@ const Resume = () => {
                     main { padding: 0 !important; margin: 0 !important; }
                     .container { max-width: none !important; padding: 0 !important; margin: 0 !important; }
                     .bu-project { break-before: auto !important; page-break-before: auto !important; }
-                    .rv-item, .rv-sec, .rv-proj-hd, .rv-ref-item, .rv-skill-row { break-inside: avoid !important; page-break-inside: avoid !important; }
-                    .rv-sec-hd { break-after: avoid !important; page-break-after: avoid !important; }
+                    .rv-item, .rv-proj-hd, .rv-ref-item, .rv-skill-row { break-inside: avoid !important; page-break-inside: avoid !important; }
+                    .rv-sec { break-inside: auto !important; page-break-inside: auto !important; margin-bottom: 12px !important; }
+                    .rv-sec-hd { break-after: avoid !important; page-break-after: avoid !important; margin-top: 15px !important; }
+                    .rv-sec-hd:first-child { margin-top: 0 !important; }
                 }
             `}</style>
         </div>
