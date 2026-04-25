@@ -369,8 +369,8 @@ const Resume = () => {
                 .rv-proj-hd { display: flex; align-items: baseline; gap: 6px; }
                 .rv-proj-title { font-weight: 700; font-size: 13px; color: #1a1a1a; }
                 .rv-proj-link { font-size: 11px; color: #3d5a80; font-style: italic; }
-                .rv-ref-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px 15px; margin-top: 2px; }
-                .rv-ref-item { border-left: 2px solid #3d5a80; padding-left: 8px; }
+                .rv-ref-grid { display: grid !important; grid-template-columns: 1fr 1fr 1fr !important; gap: 10px 15px !important; margin-top: 2px !important; }
+                .rv-ref-item { border-left: 2px solid #3d5a80 !important; padding-left: 8px !important; break-inside: avoid !important; page-break-inside: avoid !important; }
                 .rv-ref-name { font-weight: 700; font-size: 11.5px; color: #1a1a1a; line-height: 1.2; }
                 .rv-ref-pos { font-size: 10.5px; color: #3d5a80; font-weight: 600; line-height: 1.2; }
                 .rv-ref-org { font-size: 10px; color: #374151; margin-bottom: 1px; }
