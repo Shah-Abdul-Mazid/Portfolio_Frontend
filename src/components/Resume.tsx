@@ -46,9 +46,10 @@ const Resume = () => {
         setBusy(true);
         
         try {
+            sheetRef.current.classList.add('pdf-export');
             // Options for html2pdf
             const opt = {
-                margin: [12.7, 0, 12.7, 0], // 0.5 inch top/bottom margin for PDF pages
+                margin: 15, // 15mm margin on all pages (top, right, bottom, left)
                 filename: `${data.hero.name.replace(/\s+/g, '_')}_Resume.pdf`,
                 image: { type: 'jpeg', quality: 0.98 },
                 html2canvas: { 
@@ -70,6 +71,7 @@ const Resume = () => {
             console.error("PDF Download Error:", e); 
             alert("Download failed. Using 'Print CV' is recommended for best quality.");
         } finally { 
+            if (sheetRef.current) sheetRef.current.classList.remove('pdf-export');
             setBusy(false); 
         }
     };
@@ -397,6 +399,7 @@ const Resume = () => {
                     .rv-sec-hd:first-child { margin-top: 0 !important; }
                     .rv-sheet a { pointer-events: auto !important; text-decoration: none !important; }
                 }
+                .pdf-export .rv-content { padding: 0 !important; }
             `}</style>
         </div>
     );
