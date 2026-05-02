@@ -48,7 +48,7 @@ const Resume = () => {
         try {
             // Options for html2pdf
             const opt = {
-                margin: [0, 0],
+                margin: [12.7, 0, 12.7, 0], // 0.5 inch top/bottom margin for PDF pages
                 filename: `${data.hero.name.replace(/\s+/g, '_')}_Resume.pdf`,
                 image: { type: 'jpeg', quality: 0.98 },
                 html2canvas: { 
@@ -58,12 +58,14 @@ const Resume = () => {
                     windowWidth: 794
                 },
                 jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-                pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+                pagebreak: { mode: ['css', 'legacy'] }
             };
 
             // Modern way to call html2pdf with full link preservation
             const worker = (html2pdf() as any).set(opt).from(sheetRef.current);
-            await worker.save();
+            await worker.toPdf().get('pdf').then(() => {
+                // PDF generated successfully
+            }).save();
         } catch (e) { 
             console.error("PDF Download Error:", e); 
             alert("Download failed. Using 'Print CV' is recommended for best quality.");
@@ -377,7 +379,7 @@ const Resume = () => {
                 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
                 @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
                 @media print { 
-                    @page { size: A4; margin: 0.5in; }
+                    @page { size: A4; margin: 0.75in 0.5in; }
                     .rv-page { background: white !important; padding: 0 !important; margin: 0 !important; width: 100% !important; } 
                     .rv-toolbar, .ats-overlay, .rv-print-tip { display: none !important; } 
                     .rv-sheet { box-shadow: none !important; width: 100% !important; max-width: 100% !important; padding: 0 !important; margin: 0 !important; overflow: visible !important; }
@@ -390,9 +392,10 @@ const Resume = () => {
                     .container { max-width: none !important; padding: 0 !important; margin: 0 !important; }
                     .bu-project { break-before: auto !important; page-break-before: auto !important; }
                     .rv-item, .rv-proj-hd, .rv-ref-item, .rv-skill-row { break-inside: auto !important; page-break-inside: auto !important; }
-                    .rv-sec { break-inside: auto !important; page-break-inside: auto !important; margin-bottom: 10px !important; }
-                    .rv-sec-hd { break-after: auto !important; page-break-after: auto !important; margin-top: 10px !important; }
+                    .rv-sec { break-inside: auto !important; page-break-inside: auto !important; margin-bottom: 12px !important; }
+                    .rv-sec-hd { break-after: avoid !important; page-break-after: avoid !important; margin-top: 15px !important; }
                     .rv-sec-hd:first-child { margin-top: 0 !important; }
+                    .rv-sheet a { pointer-events: auto !important; text-decoration: none !important; }
                 }
             `}</style>
         </div>
