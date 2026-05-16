@@ -153,6 +153,9 @@ export interface PortfolioData {
         facebook: string;
         github?: string;
         linkedin?: string;
+        nationality?: string;
+        dob?: string;
+        pob?: string;
     };
 }
 
@@ -333,7 +336,10 @@ const defaultData: PortfolioData = {
         messenger: "https://m.me/shahabdulmazid.ezan",
         facebook: "https://facebook.com/shahabdulmazid.ezan",
         github: "https://github.com/Shah-Abdul-Mazid",
-        linkedin: "https://linkedin.com/in/shahabdulmazid"
+        linkedin: "https://linkedin.com/in/shahabdulmazid",
+        nationality: "Bangladeshi",
+        dob: "01/06/2001",
+        pob: "Dhaka, Bangladesh"
     }
 };
 

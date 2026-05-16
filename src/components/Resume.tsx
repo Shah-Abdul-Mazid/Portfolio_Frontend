@@ -16,6 +16,7 @@ const Resume = () => {
     const sheetRef = useRef<HTMLDivElement>(null);
     const [busy, setBusy] = useState(false);
     const [showAts, setShowAts] = useState(false);
+    const [cvType, setCvType] = useState<'modern' | 'europass'>('modern');
 
     // --- ATS SCORING LOGIC ---
     const atsScore = useMemo(() => {
@@ -94,6 +95,21 @@ const Resume = () => {
     return (
         <div className="rv-page">
             <div className="rv-toolbar">
+                <div className="rv-layout-toggle">
+                    <button 
+                        onClick={() => setCvType('modern')} 
+                        className={`rv-btn ${cvType === 'modern' ? 'rv-active' : ''}`}
+                    >
+                        Modern Layout
+                    </button>
+                    <button 
+                        onClick={() => setCvType('europass')} 
+                        className={`rv-btn ${cvType === 'europass' ? 'rv-active' : ''}`}
+                    >
+                        Europass (German)
+                    </button>
+                </div>
+                <div style={{ flex: 1 }} />
                 <button onClick={() => setShowAts(true)} className="rv-btn rv-solid" style={{ background: '#10b981', border: 'none' }}>
                     <Zap size={14} fill="white" /> Check ATS Score
                 </button>
@@ -102,178 +118,281 @@ const Resume = () => {
                     {busy ? 'Generating…' : 'Download PDF'}
                 </button>
                 <button onClick={downloadDynamic} className="rv-btn rv-solid" style={{ background: '#3b82f6', color: 'white', border: 'none' }}>
-                    <Printer size={14} /> Print CV (Recommended for active links)
+                    <Printer size={14} /> Print CV
                 </button>
             </div>
 
             <div className="rv-sheet" ref={sheetRef}>
-                <div className="rv-content">
-                    <div className="rv-hd">
-                        <div className="rv-hd-left">
-                            <div className="rv-contact-row"><span>{ph}</span></div>
-                            <div className="rv-contact-row"><span>{city}</span></div>
-                            <div className="rv-contact-row"><a href={`mailto:${em}`}>{em}</a></div>
+                {cvType === 'modern' ? (
+                    <div className="rv-content">
+                        <div className="rv-hd">
+                            <div className="rv-hd-left">
+                                <div className="rv-contact-row"><span>{ph}</span></div>
+                                <div className="rv-contact-row"><span>{city}</span></div>
+                                <div className="rv-contact-row"><a href={`mailto:${em}`}>{em}</a></div>
+                            </div>
+                            <div className="rv-hd-mid">
+                                <h1 className="rv-name">{data.hero.name}</h1>
+                                <p className="rv-role">{data.hero.title}</p>
+                            </div>
+                            <div className="rv-hd-right">
+                                <div className="rv-contact-row"><a href="https://shahabdulmazid.vercel.app" target="_blank" rel="noopener noreferrer" className="rv-link">Portfolio: shahabdulmazid.vercel.app</a></div>
+                                <div className="rv-contact-row"><a href={data.contact.github} target="_blank" rel="noopener noreferrer" className="rv-link">GitHub: github.com/Shah-Abdul-Mazid</a></div>
+                                <div className="rv-contact-row"><a href={data.contact.linkedin} target="_blank" rel="noopener noreferrer" className="rv-link">LinkedIn: linkedin.com/in/shahabdulmazid</a></div>
+                            </div>
                         </div>
-                        <div className="rv-hd-mid">
-                            <h1 className="rv-name">{data.hero.name}</h1>
-                            <p className="rv-role">{data.hero.title}</p>
-                        </div>
-                        <div className="rv-hd-right">
-                            <div className="rv-contact-row"><a href="https://shahabdulmazid.vercel.app" target="_blank" rel="noopener noreferrer" className="rv-link">Portfolio: shahabdulmazid.vercel.app</a></div>
-                            <div className="rv-contact-row"><a href={data.contact.github} target="_blank" rel="noopener noreferrer" className="rv-link">GitHub: github.com/Shah-Abdul-Mazid</a></div>
-                            <div className="rv-contact-row"><a href={data.contact.linkedin} target="_blank" rel="noopener noreferrer" className="rv-link">LinkedIn: linkedin.com/in/shahabdulmazid</a></div>
-                        </div>
-                    </div>
 
-                    <div className="rv-print-tip" style={{ fontSize: '10px', color: '#6b7280', textAlign: 'center', marginBottom: '8px', fontStyle: 'italic' }}>
-                        Note: For active clickable hyperlinks in the PDF, please use the "Print CV" button and select "Save as PDF".
-                    </div>
+                        <div className="rv-print-tip" style={{ fontSize: '10px', color: '#6b7280', textAlign: 'center', marginBottom: '8px', fontStyle: 'italic' }}>
+                            Note: For active clickable hyperlinks in the PDF, please use the "Print CV" button and select "Save as PDF".
+                        </div>
 
-                    <div className="rv-body">
-                        {data.about.bio && (
-                            <div className="rv-summary">
-                                {data.about.bio.split('\n\n').map((para, i) => (
-                                    <p key={i} style={{ marginBottom: i === data.about.bio.split('\n\n').length - 1 ? 0 : '8px' }}>{para}</p>
-                                ))}
-                            </div>
-                        )}
-                        {data.skills.length > 0 && (
-                            <div className="rv-sec">
-                                <div className="rv-sec-hd">Skills</div>
-                                {data.skills.map((c, i) => (
-                                    <p key={i} className="rv-skill-row"><b>{c.name}:</b> {c.items.join(', ')}</p>
-                                ))}
-                            </div>
-                        )}
-                        {sortedWork.length > 0 && (
-                            <div className="rv-sec">
-                                <div className="rv-sec-hd">Technical Experience</div>
-                                {sortedWork.map((w, i) => (
-                                    <div key={i} className="rv-item">
-                                        <div className="rv-item-top"><span className="rv-bold">{w.role}</span><span className="rv-meta-date">{fmtDate(w.startDate)} — {w.endDate ? fmtDate(w.endDate) : 'Present'}</span></div>
-                                        <div className="rv-item-sub"><span className="rv-muted">{w.company}</span><span className="rv-meta">{city}</span></div>
-                                        <ul className="rv-ul">{w.details.map((d, j) => <li key={j}>{d}</li>)}</ul>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
-                        {data.education.length > 0 && (
-                            <div className="rv-sec">
-                                <div className="rv-sec-hd">Education</div>
-                                {data.education.map((e, i) => (
-                                    <div key={i} className="rv-item">
-                                        <div className="rv-item-top"><span className="rv-bold">{e.degree}</span><span className="rv-meta">{e.year}</span></div>
-                                        <div className="rv-item-sub"><span className="rv-muted">{e.school}</span><span className="rv-meta">Dhaka, Bangladesh</span></div>
-                                        {e.major && <p className="rv-sm" style={{ color: '#4b5563', fontStyle: 'italic', fontSize: '11.5px', marginTop: '2px' }}>• {e.major}</p>}
-                                    </div>
-                                ))}
-                            </div>
-                        )}
-                        {data.projects.length > 0 && (
-                            <div className="rv-sec">
-                                <div className="rv-sec-hd">Projects</div>
-                                {data.projects.slice(0, 8).map((p, i) => (
-                                    <div key={i} className="rv-item">
-                                        <div className="rv-proj-hd">
-                                            {p.projectUrl ? (
-                                                <a href={p.projectUrl} target="_blank" rel="noopener noreferrer" className="rv-proj-link-anchor" style={{ textDecoration: 'none', display: 'flex', alignItems: 'baseline', gap: '6px' }}>
+                        <div className="rv-body">
+                            {data.about.bio && (
+                                <div className="rv-summary">
+                                    {data.about.bio.split('\n\n').map((para, i) => (
+                                        <p key={i} style={{ marginBottom: i === data.about.bio.split('\n\n').length - 1 ? 0 : '8px' }}>{para}</p>
+                                    ))}
+                                </div>
+                            )}
+                            {data.skills.length > 0 && (
+                                <div className="rv-sec">
+                                    <div className="rv-sec-hd">Skills</div>
+                                    {data.skills.map((c, i) => (
+                                        <p key={i} className="rv-skill-row"><b>{c.name}:</b> {c.items.join(', ')}</p>
+                                    ))}
+                                </div>
+                            )}
+                            {sortedWork.length > 0 && (
+                                <div className="rv-sec">
+                                    <div className="rv-sec-hd">Technical Experience</div>
+                                    {sortedWork.map((w, i) => (
+                                        <div key={i} className="rv-item">
+                                            <div className="rv-item-top"><span className="rv-bold">{w.role}</span><span className="rv-meta-date">{fmtDate(w.startDate)} — {w.endDate ? fmtDate(w.endDate) : 'Present'}</span></div>
+                                            <div className="rv-item-sub"><span className="rv-muted">{w.company}</span><span className="rv-meta">{city}</span></div>
+                                            <ul className="rv-ul">{w.details.map((d, j) => <li key={j}>{d}</li>)}</ul>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                            {data.education.length > 0 && (
+                                <div className="rv-sec">
+                                    <div className="rv-sec-hd">Education</div>
+                                    {data.education.map((e, i) => (
+                                        <div key={i} className="rv-item">
+                                            <div className="rv-item-top"><span className="rv-bold">{e.degree}</span><span className="rv-meta">{e.year}</span></div>
+                                            <div className="rv-item-sub"><span className="rv-muted">{e.school}</span><span className="rv-meta">Dhaka, Bangladesh</span></div>
+                                            {e.major && <p className="rv-sm" style={{ color: '#4b5563', fontStyle: 'italic', fontSize: '11.5px', marginTop: '2px' }}>• {e.major}</p>}
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                            {data.projects.length > 0 && (
+                                <div className="rv-sec">
+                                    <div className="rv-sec-hd">Projects</div>
+                                    {data.projects.slice(0, 8).map((p, i) => (
+                                        <div key={i} className="rv-item">
+                                            <div className="rv-proj-hd">
+                                                {p.projectUrl ? (
+                                                    <a href={p.projectUrl} target="_blank" rel="noopener noreferrer" className="rv-proj-link-anchor" style={{ textDecoration: 'none', display: 'flex', alignItems: 'baseline', gap: '6px' }}>
+                                                        <span className="rv-proj-title">{p.title}</span>
+                                                        <span className="rv-proj-link">· {p.projectUrl.replace('https://', '')}</span>
+                                                    </a>
+                                                ) : (
                                                     <span className="rv-proj-title">{p.title}</span>
-                                                    <span className="rv-proj-link">· {p.projectUrl.replace('https://', '')}</span>
-                                                </a>
-                                            ) : (
-                                                <span className="rv-proj-title">{p.title}</span>
-                                            )}
-                                        </div>
-                                        <p className="rv-sm" style={{ color: '#374151', margin: '1px 0 2px' }}>{p.desc}</p>
-                                        {p.tags.length > 0 && <p className="rv-sm" style={{ color: '#3d5a80', margin: 0, fontStyle: 'italic', fontSize: '11px' }}>Tech: {p.tags.join(', ')}</p>}
-                                    </div>
-                                ))}
-                            </div>
-                        )}
-                        {data.papers && data.papers.length > 0 && (
-                            <div className="rv-sec">
-                                <div className="rv-sec-hd">Publications</div>
-                                {data.papers.slice(0, 3).map((p, i) => (
-                                    <div key={i} className="rv-item">
-                                        <div className="rv-item-top"><span className="rv-bold">{p.title}</span><span className="rv-meta">{p.year}</span></div>
-                                        <p className="rv-sm" style={{ color: '#1a1a1a', margin: '2px 0 1px' }}>{p.venue}</p>
-                                        {p.link && <p className="rv-sm" style={{ color: '#3d5a80', margin: 0, fontSize: '11px' }}><a href={p.link} target="_blank" rel="noopener noreferrer">{p.link.replace('https://', '')}</a></p>}
-                                    </div>
-                                ))}
-                            </div>
-                        )}
-                        {data.certifications && data.certifications.length > 0 && (
-                            <div className="rv-sec">
-                                <div className="rv-sec-hd">Licenses & Certifications</div>
-                                {data.certifications.map((c, i) => (
-                                    <div key={i} className="rv-item">
-                                        <div className="rv-item-top">
-                                            <span className="rv-bold">{c.name}</span>
-                                            <span className="rv-meta">{c.date}</span>
-                                        </div>
-                                        <div className="rv-item-sub">
-                                            <span className="rv-muted">{c.issuer}{c.instructor ? ` | ${c.instructor}` : ''}</span>
-                                            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                                                {c.credentialUrl && (
-                                                    <span className="rv-meta">
-                                                        <a href={c.credentialUrl} target="_blank" rel="noopener noreferrer" style={{ color: '#3d5a80', textDecoration: 'none' }}>
-                                                            {c.credentialId ? `ID: ${c.credentialId}` : 'Show Credential'} ↗
-                                                        </a>
-                                                    </span>
-                                                )}
-                                                {c.links?.map((link, lIdx) => (
-                                                    <span key={lIdx} className="rv-meta">
-                                                        <a href={link.url} target="_blank" rel="noopener noreferrer" style={{ color: '#3d5a80', textDecoration: 'none', fontStyle: 'italic' }}>
-                                                            {link.label || 'Link'} ↗
-                                                        </a>
-                                                    </span>
-                                                ))}
-                                                {!c.credentialUrl && c.credentialId && (
-                                                    <span className="rv-meta">ID: {c.credentialId}</span>
                                                 )}
                                             </div>
+                                            <p className="rv-sm" style={{ color: '#374151', margin: '1px 0 2px' }}>{p.desc}</p>
+                                            {p.tags.length > 0 && <p className="rv-sm" style={{ color: '#3d5a80', margin: 0, fontStyle: 'italic', fontSize: '11px' }}>Tech: {p.tags.join(', ')}</p>}
                                         </div>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
-                        {data.experience && data.experience.length > 0 && (
-                            <div className="rv-sec">
-                                <div className="rv-sec-hd">Competitions & Awards</div>
-                                {data.experience.map((e, i) => (
-                                    <div key={i} className="rv-item">
-                                        <div className="rv-item-top"><span className="rv-bold">{e.role}</span><span className="rv-meta">{e.period}</span></div>
-                                        <div className="rv-item-sub"><span className="rv-muted">{e.company}</span></div>
-                                        <p className="rv-sm" style={{ color: '#1a1a1a', margin: '1px 0 0' }}>{e.desc}</p>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
-                        <div className="rv-sec">
-                            <div className="rv-sec-hd">Languages</div>
-                            <p className="rv-skill-row"><b>Bengali:</b> Native &nbsp;·&nbsp; <b>English:</b> Professional Working Proficiency</p>
-                        </div>
-                        {data.references && data.references.length > 0 && (
-                            <div className="rv-sec">
-                                <div className="rv-sec-hd">References</div>
-                                <div className="rv-ref-grid">
-                                    {data.references.map((r, i) => (
-                                        <div key={i} className="rv-ref-item">
-                                            <div className="rv-ref-name">{r.name}</div>
-                                            <div className="rv-ref-pos">{r.title}</div>
-                                            <div className="rv-ref-org">{r.company}</div>
-                                            <div className="rv-ref-rel">{r.relation}</div>
-                                            <div className="rv-ref-contact">
-                                                {r.email && <div className="rv-ref-email"><a href={`mailto:${r.email}`} className="rv-ref-link">{r.email}</a></div>}
-                                                {r.phone && <div className="rv-ref-phone">{r.phone}</div>}
+                                    ))}
+                                </div>
+                            )}
+                            {data.papers && data.papers.length > 0 && (
+                                <div className="rv-sec">
+                                    <div className="rv-sec-hd">Publications</div>
+                                    {data.papers.slice(0, 3).map((p, i) => (
+                                        <div key={i} className="rv-item">
+                                            <div className="rv-item-top"><span className="rv-bold">{p.title}</span><span className="rv-meta">{p.year}</span></div>
+                                            <p className="rv-sm" style={{ color: '#1a1a1a', margin: '2px 0 1px' }}>{p.venue}</p>
+                                            {p.link && <p className="rv-sm" style={{ color: '#3d5a80', margin: 0, fontSize: '11px' }}><a href={p.link} target="_blank" rel="noopener noreferrer">{p.link.replace('https://', '')}</a></p>}
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                            {data.certifications && data.certifications.length > 0 && (
+                                <div className="rv-sec">
+                                    <div className="rv-sec-hd">Licenses & Certifications</div>
+                                    {data.certifications.map((c, i) => (
+                                        <div key={i} className="rv-item">
+                                            <div className="rv-item-top">
+                                                <span className="rv-bold">{c.name}</span>
+                                                <span className="rv-meta">{c.date}</span>
+                                            </div>
+                                            <div className="rv-item-sub">
+                                                <span className="rv-muted">{c.issuer}{c.instructor ? ` | ${c.instructor}` : ''}</span>
+                                                <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                                                    {c.credentialUrl && (
+                                                        <span className="rv-meta">
+                                                            <a href={c.credentialUrl} target="_blank" rel="noopener noreferrer" style={{ color: '#3d5a80', textDecoration: 'none' }}>
+                                                                {c.credentialId ? `ID: ${c.credentialId}` : 'Show Credential'} ↗
+                                                            </a>
+                                                        </span>
+                                                    )}
+                                                    {c.links?.map((link, lIdx) => (
+                                                        <span key={lIdx} className="rv-meta">
+                                                            <a href={link.url} target="_blank" rel="noopener noreferrer" style={{ color: '#3d5a80', textDecoration: 'none', fontStyle: 'italic' }}>
+                                                                {link.label || 'Link'} ↗
+                                                            </a>
+                                                        </span>
+                                                    ))}
+                                                    {!c.credentialUrl && c.credentialId && (
+                                                        <span className="rv-meta">ID: {c.credentialId}</span>
+                                                    )}
+                                                </div>
                                             </div>
                                         </div>
                                     ))}
                                 </div>
+                            )}
+                            {data.experience && data.experience.length > 0 && (
+                                <div className="rv-sec">
+                                    <div className="rv-sec-hd">Competitions & Awards</div>
+                                    {data.experience.map((e, i) => (
+                                        <div key={i} className="rv-item">
+                                            <div className="rv-item-top"><span className="rv-bold">{e.role}</span><span className="rv-meta">{e.period}</span></div>
+                                            <div className="rv-item-sub"><span className="rv-muted">{e.company}</span></div>
+                                            <p className="rv-sm" style={{ color: '#1a1a1a', margin: '1px 0 0' }}>{e.desc}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                            <div className="rv-sec">
+                                <div className="rv-sec-hd">Languages</div>
+                                <p className="rv-skill-row"><b>Bengali:</b> Native &nbsp;·&nbsp; <b>English:</b> Professional Working Proficiency</p>
                             </div>
-                        )}
+                            {data.references && data.references.length > 0 && (
+                                <div className="rv-sec">
+                                    <div className="rv-sec-hd">References</div>
+                                    <div className="rv-ref-grid">
+                                        {data.references.map((r, i) => (
+                                            <div key={i} className="rv-ref-item">
+                                                <div className="rv-ref-name">{r.name}</div>
+                                                <div className="rv-ref-pos">{r.title}</div>
+                                                <div className="rv-ref-org">{r.company}</div>
+                                                <div className="rv-ref-rel">{r.relation}</div>
+                                                <div className="rv-ref-contact">
+                                                    {r.email && <div className="rv-ref-email"><a href={`mailto:${r.email}`} className="rv-ref-link">{r.email}</a></div>}
+                                                    {r.phone && <div className="rv-ref-phone">{r.phone}</div>}
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
                     </div>
-                </div>
+                ) : (
+                    <div className="ep-content">
+                        <div className="ep-header">
+                            <div className="ep-photo">
+                                {data.hero.avatarUrl ? (
+                                    <img src={data.hero.avatarUrl} alt="Profile" />
+                                ) : (
+                                    <div className="ep-photo-placeholder" />
+                                )}
+                            </div>
+                            <div className="ep-info">
+                                <h1 className="ep-name">{data.hero.name}</h1>
+                                <div className="ep-details">
+                                    <div className="ep-detail-row"><b>Nationality:</b> {data.contact.nationality || 'Bangladeshi'}</div>
+                                    <div className="ep-detail-row"><b>Date of birth:</b> {data.contact.dob || '01/06/2001'}</div>
+                                    <div className="ep-detail-row"><b>Place of birth:</b> {data.contact.pob || 'Dhaka, Bangladesh'}</div>
+                                    <div className="ep-detail-row">
+                                        <svg viewBox="0 0 24 24" fill="currentColor" width="12" height="12"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                                        <b>Home:</b> {loc}
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="ep-logo">
+                                <img src="https://europa.eu/europass/themes/custom/europass_theme/logo.svg" alt="Europass Logo" />
+                            </div>
+                        </div>
+
+                        <div className="ep-section">
+                            <h2 className="ep-sec-title">EDUCATION AND TRAINING</h2>
+                            <div className="ep-sec-line" />
+                            {data.education.map((e, i) => (
+                                <div key={i} className="ep-item">
+                                    <h3 className="ep-item-title">{e.degree}</h3>
+                                    <div className="ep-item-org">{e.school}</div>
+                                    <div className="ep-item-meta">
+                                        <span><b>Address:</b> Dhaka, Bangladesh</span>
+                                        <span><b>Website:</b> <a href="https://www.ewubd.edu/">https://www.ewubd.edu/</a></span>
+                                        <span><b>Level in EQF:</b> {i === 0 ? 'EQF level 6' : i === 1 ? 'EQF level 4' : 'EQF level 3'}</span>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+
+                        <div className="ep-section">
+                            <h2 className="ep-sec-title">WORK EXPERIENCE</h2>
+                            <div className="ep-sec-line" />
+                            {sortedWork.map((w, i) => (
+                                <div key={i} className="ep-item">
+                                    <div className="ep-company-row">
+                                        <svg viewBox="0 0 24 24" fill="#003399" width="14" height="14"><path d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10zm-2-8h-2v2h2v-2zm0 4h-2v2h2v-2z"/></svg>
+                                        <span className="ep-company">{w.company}</span> — <span className="ep-loc">{city}</span>
+                                    </div>
+                                    <h3 className="ep-role">{w.role}</h3>
+                                    <div className="ep-dates">[ {w.startDate.split('-').reverse().join('/')} – {w.endDate ? w.endDate.split('-').reverse().join('/') : 'Present'} ]</div>
+                                    <ul className="ep-bullets">
+                                        {w.details.map((d, j) => <li key={j}>{d}</li>)}
+                                    </ul>
+                                </div>
+                            ))}
+                        </div>
+
+                        <div className="ep-section">
+                            <h2 className="ep-sec-title">DIGITAL SKILLS TEST RESULTS</h2>
+                            <div className="ep-sec-line" />
+                            {[
+                                { name: 'Information and data literacy', level: 'INTERMEDIATE', val: '3 / 6', icon: 'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z' },
+                                { name: 'Communication and collaboration', level: 'INTERMEDIATE', val: '4 / 6', icon: 'M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5s-3 1.34-3 3 1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z' },
+                                { name: 'Digital content creation', level: 'ADVANCED', val: '5 / 6', icon: 'M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z' },
+                                { name: 'Safety', level: 'INTERMEDIATE', val: '3 / 6', icon: 'M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-1 6h2v2h-2V7zm0 4h2v6h-2v-6z' }
+                            ].map((s, i) => (
+                                <div key={i} className="ep-skill-row">
+                                    <div className="ep-skill-name">
+                                        <svg viewBox="0 0 24 24" fill="#666" width="16" height="16"><path d={s.icon}/></svg>
+                                        {s.name}
+                                    </div>
+                                    <div className="ep-skill-level">
+                                        <b>{s.level}</b> Level {s.val}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+
+                        <div className="ep-section">
+                            <h2 className="ep-sec-title">LANGUAGE SKILLS</h2>
+                            <div className="ep-sec-line" />
+                            <div className="ep-detail-row"><b>Mother tongue(s):</b> Bengali</div>
+                        </div>
+
+                        <div className="ep-section">
+                            <h2 className="ep-sec-title">CERTIFICATIONS</h2>
+                            <div className="ep-sec-line" />
+                            {data.certifications.slice(0, 8).map((c, i) => (
+                                <div key={i} className="ep-cert-item">
+                                    <div className="ep-cert-meta">[ {c.issuer}, {c.date} ]</div>
+                                    <div className="ep-cert-name">{c.name}</div>
+                                    <div className="ep-cert-mode"><b>Mode of learning:</b> Online</div>
+                                    {c.credentialUrl && <div className="ep-cert-link"><b>Link:</b> <a href={c.credentialUrl}>{c.credentialUrl}</a></div>}
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
             </div>
 
             {showAts && (
@@ -400,6 +519,56 @@ const Resume = () => {
                     .rv-sheet a { pointer-events: auto !important; text-decoration: none !important; }
                 }
                 .pdf-export .rv-content { padding: 0 !important; }
+                .rv-active { background: #3d5a80 !important; color: white !important; }
+                .rv-layout-toggle { display: flex; background: #e2e8f0; padding: 4px; border-radius: 8px; gap: 4px; }
+                .rv-layout-toggle .rv-btn { background: transparent; box-shadow: none; color: #64748b; }
+                .rv-layout-toggle .rv-btn:hover { background: rgba(255,255,255,0.5); }
+                
+                /* Europass Styles */
+                .ep-content { padding: 40px !important; color: #333 !important; line-height: 1.5 !important; font-family: 'Arial', sans-serif !important; }
+                .ep-header { display: flex; align-items: start; gap: 30px; margin-bottom: 30px; }
+                .ep-photo { width: 120px; height: 120px; border-radius: 50%; overflow: hidden; border: 1px solid #ddd; flex-shrink: 0; }
+                .ep-photo img { width: 100%; height: 100%; object-fit: cover; }
+                .ep-photo-placeholder { width: 100%; height: 100%; background: #f0f0f0; }
+                .ep-info { flex: 1; }
+                .ep-name { font-size: 24px; font-weight: bold; color: #003399; margin: 0 0 15px; }
+                .ep-details { font-size: 11px; display: flex; flex-direction: column; gap: 4px; color: #444; }
+                .ep-detail-row { display: flex; align-items: center; gap: 6px; }
+                .ep-logo { width: 120px; flex-shrink: 0; text-align: right; }
+                .ep-logo img { width: 100%; }
+                
+                .ep-section { margin-bottom: 25px; }
+                .ep-sec-title { font-size: 14px; font-weight: bold; color: #003399; margin: 0 0 5px; text-transform: uppercase; }
+                .ep-sec-line { height: 1px; background: #ddd; margin-bottom: 15px; }
+                
+                .ep-item { margin-bottom: 15px; }
+                .ep-item-title { font-size: 13px; font-weight: bold; color: #003399; margin: 0 0 2px; }
+                .ep-item-org { font-size: 12px; font-weight: bold; font-style: italic; color: #333; margin-bottom: 5px; }
+                .ep-item-meta { font-size: 11px; display: flex; flex-direction: column; gap: 2px; color: #555; }
+                .ep-item-meta a { color: #003399; text-decoration: none; }
+                
+                .ep-company-row { display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: bold; color: #003399; margin-bottom: 3px; }
+                .ep-role { font-size: 13px; font-weight: bold; color: #333; margin: 0 0 2px; }
+                .ep-dates { font-size: 11px; color: #666; margin-bottom: 8px; }
+                .ep-bullets { margin: 0; padding-left: 18px; list-style: disc; }
+                .ep-bullets li { font-size: 11px; color: #444; margin-bottom: 3px; }
+                
+                .ep-skill-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid #f0f0f0; }
+                .ep-skill-name { display: flex; align-items: center; gap: 8px; font-size: 11px; color: #333; }
+                .ep-skill-level { font-size: 11px; color: #333; }
+                .ep-skill-level b { color: #003399; }
+                
+                .ep-cert-item { margin-bottom: 12px; }
+                .ep-cert-meta { font-size: 10px; color: #666; margin-bottom: 2px; }
+                .ep-cert-name { font-size: 12px; font-weight: bold; color: #333; margin-bottom: 2px; }
+                .ep-cert-mode, .ep-cert-link { font-size: 11px; color: #555; }
+                .ep-cert-link a { color: #003399; text-decoration: none; word-break: break-all; }
+
+                @media print {
+                    .ep-content { padding: 0 !important; }
+                    .ep-name { color: #003399 !important; -webkit-print-color-adjust: exact; }
+                    .ep-sec-title { color: #003399 !important; -webkit-print-color-adjust: exact; }
+                }
             `}</style>
         </div>
     );
