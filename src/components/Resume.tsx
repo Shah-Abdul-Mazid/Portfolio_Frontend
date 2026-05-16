@@ -501,7 +501,6 @@ const Resume = () => {
                 .rv-spin { animation: rvSpin 1s linear infinite; }
                 @keyframes rvSpin { to { transform: rotate(360deg); } }
                 .ep-sheet { border: none !important; }
-                .ep-page-break { page-break-before: always !important; }
                 .rv-content { padding: 40px !important; overflow-wrap: break-word !important; position: relative; z-index: 2; }
                 
                 /* Europass Styles */
@@ -612,7 +611,7 @@ const Resume = () => {
                 .ep-logo img { width: 100%; height: auto; }
                 
                 .ep-summary-text { font-size: 11px; color: #333; line-height: 1.5; text-align: justify; }
-                .ep-section { margin-bottom: 20px; break-inside: avoid !important; page-break-inside: avoid !important; }
+                .ep-section { margin-bottom: 20px; }
                 .ep-sec-title { font-size: 13px; font-weight: bold; color: #003399; margin: 0 0 4px; text-transform: uppercase; }
                 .ep-sec-line { height: 1px; background: #ccd1d9; margin-bottom: 12px; }
                 
