@@ -655,7 +655,7 @@ const Resume = () => {
                     .ep-name { color: #003399 !important; -webkit-print-color-adjust: exact; }
                     .ep-sec-title { color: #003399 !important; -webkit-print-color-adjust: exact; }
                 }
-                .pdf-export .rv-content { padding: 0 !important; }
+                .pdf-export .rv-content { padding: 0 40px !important; }
             `}</style>
         </div>
     );
