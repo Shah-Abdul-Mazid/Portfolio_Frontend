@@ -68,26 +68,29 @@ const Resume = () => {
             // Modern way to call html2pdf with full link preservation
             const worker = (html2pdf() as any).set(opt).from(sheetRef.current);
             await worker.toPdf().get('pdf').then((pdf: any) => {
-                const totalPages = pdf.internal.getNumberOfPages();
-                const pageWidth = 210; // A4 Width in mm
-                const pageHeight = 297; // A4 Height in mm
-                const barHeight = 8; // mm
-                const barColor = '#a8c4e5';
-                const inset = 6; // mm
+                // ONLY DRAW BARS IF IN EUROPASS MODE
+                if (cvType === 'europass') {
+                    const totalPages = pdf.internal.getNumberOfPages();
+                    const pageWidth = 210; // A4 Width in mm
+                    const pageHeight = 297; // A4 Height in mm
+                    const barHeight = 8; // mm
+                    const barColor = '#a8c4e5';
+                    const inset = 6; // mm
 
-                for (let i = 1; i <= totalPages; i++) {
-                    pdf.setPage(i);
-                    pdf.setFillColor(barColor);
-                    
-                    // TOP BAR
-                    pdf.rect(0, 0, pageWidth, barHeight, 'F');
-                    pdf.rect(0, 0, inset, barHeight * 2, 'F');
-                    pdf.rect(pageWidth - inset, 0, inset, barHeight * 2, 'F');
+                    for (let i = 1; i <= totalPages; i++) {
+                        pdf.setPage(i);
+                        pdf.setFillColor(barColor);
+                        
+                        // TOP BAR
+                        pdf.rect(0, 0, pageWidth, barHeight, 'F');
+                        pdf.rect(0, 0, inset, barHeight * 2, 'F');
+                        pdf.rect(pageWidth - inset, 0, inset, barHeight * 2, 'F');
 
-                    // BOTTOM BAR
-                    pdf.rect(0, pageHeight - barHeight, pageWidth, barHeight, 'F');
-                    pdf.rect(0, pageHeight - barHeight * 2, inset, barHeight * 2, 'F');
-                    pdf.rect(pageWidth - inset, pageHeight - barHeight * 2, inset, barHeight * 2, 'F');
+                        // BOTTOM BAR
+                        pdf.rect(0, pageHeight - barHeight, pageWidth, barHeight, 'F');
+                        pdf.rect(0, pageHeight - barHeight * 2, inset, barHeight * 2, 'F');
+                        pdf.rect(pageWidth - inset, pageHeight - barHeight * 2, inset, barHeight * 2, 'F');
+                    }
                 }
             }).save();
         } catch (e) { 
@@ -399,7 +402,7 @@ const Resume = () => {
                             <div className="ep-lang-row"><b>Mother tongue(s):</b> Bengali</div>
                         </div>
 
-                        <div className="ep-section">
+                        <div className="ep-section ep-page-break">
                             <h2 className="ep-sec-title">PROJECTS</h2>
                             <div className="ep-sec-line" />
                             {data.projects.map((p, i) => (
@@ -422,7 +425,7 @@ const Resume = () => {
                             ))}
                         </div>
 
-                        <div className="ep-section ep-page-break">
+                        <div className="ep-section">
                             <h2 className="ep-sec-title">CERTIFICATIONS</h2>
                             <div className="ep-sec-line" />
                             {data.certifications.map((c, i) => (
