@@ -62,7 +62,7 @@ const Resume = () => {
                     windowWidth: 794
                 },
                 jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-                pagebreak: { mode: ['css', 'legacy'] }
+                pagebreak: { mode: 'css', avoid: ['.ep-section', '.ep-item', '.ep-cert-item'] }
             };
 
             // Modern way to call html2pdf with full link preservation
