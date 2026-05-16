@@ -484,9 +484,8 @@ const Resume = () => {
                 .rv-solid:hover { background: #2b3f5a; transform: translateY(-1px); }
                 .rv-spin { animation: rvSpin 1s linear infinite; }
                 @keyframes rvSpin { to { transform: rotate(360deg); } }
-                .rv-sheet { width: 100% !important; max-width: 210mm !important; margin: 0 auto !important; background: white !important; color: #1a1a1a !important; font-size: 13.5px !important; line-height: 1.4 !important; padding: 0 !important; box-shadow: 0 4px 24px rgba(0,0,0,0.1) !important; text-align: left !important; overflow: hidden !important; transition: border 0.3s; position: relative; }
                 .ep-sheet { border: none !important; }
-                .ep-page-break { page-break-before: always !important; break-before: page !important; }
+                .ep-page-break { page-break-before: always !important; break-before: page !important; padding-top: 50px !important; }
                 .rv-content { padding: 40px !important; overflow-wrap: break-word !important; position: relative; z-index: 2; }
                 
                 /* Europass Styles */
