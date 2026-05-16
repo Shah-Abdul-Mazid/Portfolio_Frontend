@@ -400,6 +400,29 @@ const Resume = () => {
                         </div>
 
                         <div className="ep-section">
+                            <h2 className="ep-sec-title">PROJECTS</h2>
+                            <div className="ep-sec-line" />
+                            {data.projects.map((p, i) => (
+                                <div key={i} className="ep-item">
+                                    <h3 className="ep-item-title">{p.title}</h3>
+                                    <div className="ep-item-meta" style={{ marginTop: '2px' }}>
+                                        <div style={{ fontSize: '10.5px', color: '#444', marginBottom: '3px' }}>{p.desc}</div>
+                                        <div style={{ display: 'flex', gap: '5px', flexWrap: 'wrap' }}>
+                                            {p.tags.slice(0, 5).map((t, j) => (
+                                                <span key={j} style={{ fontSize: '9px', background: '#f0f4f8', color: '#003399', padding: '1px 5px', borderRadius: '3px' }}>{t}</span>
+                                            ))}
+                                        </div>
+                                        {(p.projectUrl || p.githubUrl) && (
+                                            <div className="ep-meta-row" style={{ marginTop: '3px' }}>
+                                                <b>Link:</b> <a href={p.projectUrl || p.githubUrl}>{p.projectUrl || p.githubUrl}</a>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+
+                        <div className="ep-section ep-page-break">
                             <h2 className="ep-sec-title">CERTIFICATIONS</h2>
                             <div className="ep-sec-line" />
                             {data.certifications.map((c, i) => (
@@ -460,6 +483,7 @@ const Resume = () => {
                 @keyframes rvSpin { to { transform: rotate(360deg); } }
                 .rv-sheet { width: 100% !important; max-width: 210mm !important; margin: 0 auto !important; background: white !important; color: #1a1a1a !important; font-size: 13.5px !important; line-height: 1.4 !important; padding: 0 !important; box-shadow: 0 4px 24px rgba(0,0,0,0.1) !important; text-align: left !important; overflow: hidden !important; transition: border 0.3s; position: relative; }
                 .ep-sheet { border: none !important; }
+                .ep-page-break { page-break-before: always !important; break-before: page !important; }
                 .rv-content { padding: 40px !important; overflow-wrap: break-word !important; position: relative; z-index: 2; }
                 
                 /* Europass Styles */
