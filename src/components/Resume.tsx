@@ -69,30 +69,24 @@ const Resume = () => {
             const worker = (html2pdf() as any).set(opt).from(sheetRef.current);
             await worker.toPdf().get('pdf').then((pdf: any) => {
                 const totalPages = pdf.internal.getNumberOfPages();
-                const pageWidth = pdf.internal.pageSize.getWidth();
-                const pageHeight = pdf.internal.pageSize.getHeight();
+                const pageWidth = 210; // A4 Width in mm
+                const pageHeight = 297; // A4 Height in mm
                 const barHeight = 8; // mm
                 const barColor = '#a8c4e5';
-                const inset = 5; // mm (the 'legs' of the bevel)
+                const inset = 6; // mm
 
                 for (let i = 1; i <= totalPages; i++) {
                     pdf.setPage(i);
                     pdf.setFillColor(barColor);
                     
-                    // TOP BAR with beveled corners
-                    // Main horizontal bar
+                    // TOP BAR
                     pdf.rect(0, 0, pageWidth, barHeight, 'F');
-                    // Left leg
                     pdf.rect(0, 0, inset, barHeight * 2, 'F');
-                    // Right leg
                     pdf.rect(pageWidth - inset, 0, inset, barHeight * 2, 'F');
 
-                    // BOTTOM BAR with beveled corners
-                    // Main horizontal bar
+                    // BOTTOM BAR
                     pdf.rect(0, pageHeight - barHeight, pageWidth, barHeight, 'F');
-                    // Left leg
                     pdf.rect(0, pageHeight - barHeight * 2, inset, barHeight * 2, 'F');
-                    // Right leg
                     pdf.rect(pageWidth - inset, pageHeight - barHeight * 2, inset, barHeight * 2, 'F');
                 }
             }).save();
@@ -402,18 +396,22 @@ const Resume = () => {
                         <div className="ep-section">
                             <h2 className="ep-sec-title">LANGUAGE SKILLS</h2>
                             <div className="ep-sec-line" />
-                            <div className="ep-detail-row"><b>Mother tongue(s):</b> Bengali</div>
+                            <div className="ep-lang-row"><b>Mother tongue(s):</b> Bengali</div>
                         </div>
 
                         <div className="ep-section">
                             <h2 className="ep-sec-title">CERTIFICATIONS</h2>
                             <div className="ep-sec-line" />
-                            {data.certifications.slice(0, 8).map((c, i) => (
+                            {data.certifications.map((c, i) => (
                                 <div key={i} className="ep-cert-item">
-                                    <div className="ep-cert-meta">[ {c.issuer}, {c.date} ]</div>
+                                    <div className="ep-cert-meta">[ {c.issuer}, {c.date.split('-').reverse().join('/')} ]</div>
                                     <div className="ep-cert-name">{c.name}</div>
                                     <div className="ep-cert-mode"><b>Mode of learning:</b> Online</div>
-                                    {c.credentialUrl && <div className="ep-cert-link"><b>Link:</b> <a href={c.credentialUrl}>{c.credentialUrl}</a></div>}
+                                    {c.credentialUrl && (
+                                        <div className="ep-cert-link">
+                                            <b>Link:</b> <a href={c.credentialUrl}>{c.credentialUrl}</a>
+                                        </div>
+                                    )}
                                 </div>
                             ))}
                         </div>
@@ -594,9 +592,11 @@ const Resume = () => {
                 .ep-skill-level { font-size: 10.5px; color: #333; text-align: right; }
                 .ep-skill-level b { color: #003399; font-size: 11px; }
                 
-                .ep-cert-item { margin-bottom: 10px; }
-                .ep-cert-meta { font-size: 9.5px; color: #666; margin-bottom: 1px; }
-                .ep-cert-name { font-size: 11.5px; font-weight: bold; color: #333; margin-bottom: 1px; }
+                .ep-lang-row { font-size: 11px; color: #333; margin-bottom: 5px; }
+
+                .ep-cert-item { margin-bottom: 12px; }
+                .ep-cert-meta { font-size: 10.5px; color: #666; margin-bottom: 2px; }
+                .ep-cert-name { font-size: 11.5px; font-weight: bold; color: #003399; margin-bottom: 2px; }
                 .ep-cert-mode, .ep-cert-link { font-size: 10.5px; color: #555; }
                 .ep-cert-link a { color: #003399; text-decoration: none; word-break: break-all; }
 
