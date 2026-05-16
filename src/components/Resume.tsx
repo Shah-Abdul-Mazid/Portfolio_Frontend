@@ -595,7 +595,7 @@ const Resume = () => {
                 .ep-logo { width: 110px; flex-shrink: 0; text-align: right; }
                 .ep-logo img { width: 100%; height: auto; }
                 
-                .ep-section { margin-bottom: 20px; }
+                .ep-section { margin-bottom: 20px; break-inside: avoid !important; page-break-inside: avoid !important; }
                 .ep-sec-title { font-size: 13px; font-weight: bold; color: #003399; margin: 0 0 4px; text-transform: uppercase; }
                 .ep-sec-line { height: 1px; background: #ccd1d9; margin-bottom: 12px; }
                 
