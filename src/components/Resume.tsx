@@ -50,7 +50,7 @@ const Resume = () => {
             sheetRef.current.classList.add('pdf-export');
             // Options for html2pdf
             const opt = {
-                margin: [13.2, 0, 13.2, 0], // Exactly 50px (at 96dpi) top/bottom margin on every page
+                margin: [0, 0, 13.2, 0], // Top margin 0 to let header sit tight, 50px bottom margin for footer
                 filename: `${data.hero.name.replace(/\s+/g, '_')}_Resume.pdf`,
                 image: { type: 'jpeg', quality: 1.0 },
                 html2canvas: { 
@@ -501,7 +501,7 @@ const Resume = () => {
                 .rv-spin { animation: rvSpin 1s linear infinite; }
                 @keyframes rvSpin { to { transform: rotate(360deg); } }
                 .ep-sheet { border: none !important; }
-                .ep-page-break { page-break-before: always !important; }
+                .ep-page-break { page-break-before: always !important; padding-top: 50px !important; }
                 .rv-content { padding: 40px !important; overflow-wrap: break-word !important; position: relative; z-index: 2; }
                 
                 /* Europass Styles */
@@ -599,7 +599,7 @@ const Resume = () => {
                 .rv-layout-toggle { display: flex; background: #e2e8f0; padding: 4px; border-radius: 8px; gap: 4px; }
                 
                 /* Europass Styles */
-                .ep-content { padding: 40px !important; color: #333 !important; line-height: 1.4 !important; font-family: 'Arial', sans-serif !important; background: white; }
+                .ep-content { padding: 10px 40px 40px !important; color: #333 !important; line-height: 1.4 !important; font-family: 'Arial', sans-serif !important; background: white; }
                 .ep-header { display: grid; grid-template-columns: 120px 1fr 180px; align-items: start; gap: 20px; margin-bottom: 25px; }
                 .ep-photo { width: 110px; height: 110px; border-radius: 50%; overflow: hidden; border: 1px solid #ddd; flex-shrink: 0; }
                 .ep-photo img { width: 100%; height: 100%; object-fit: cover; }
