@@ -50,7 +50,7 @@ const Resume = () => {
             sheetRef.current.classList.add('pdf-export');
             // Options for html2pdf
             const opt = {
-                margin: [0, 0, 15, 0], // Only bottom margin to clear the footer on all pages
+                margin: [13.2, 0, 13.2, 0], // Exactly 50px (at 96dpi) top/bottom margin on every page
                 filename: `${data.hero.name.replace(/\s+/g, '_')}_Resume.pdf`,
                 image: { type: 'jpeg', quality: 1.0 },
                 html2canvas: { 
@@ -402,7 +402,7 @@ const Resume = () => {
                             <div className="ep-lang-row"><b>Mother tongue(s):</b> Bengali</div>
                         </div>
 
-                        <div className="ep-section ep-page-break">
+                        <div className="ep-section">
                             <h2 className="ep-sec-title">PROJECTS</h2>
                             <div className="ep-sec-line" />
                             {data.projects.map((p, i) => (
@@ -485,7 +485,7 @@ const Resume = () => {
                 .rv-spin { animation: rvSpin 1s linear infinite; }
                 @keyframes rvSpin { to { transform: rotate(360deg); } }
                 .ep-sheet { border: none !important; }
-                .ep-page-break { page-break-before: always !important; break-before: page !important; padding-top: 50px !important; }
+                .ep-page-break { page-break-before: always !important; }
                 .rv-content { padding: 40px !important; overflow-wrap: break-word !important; position: relative; z-index: 2; }
                 
                 /* Europass Styles */
@@ -599,7 +599,7 @@ const Resume = () => {
                 .ep-sec-title { font-size: 13px; font-weight: bold; color: #003399; margin: 0 0 4px; text-transform: uppercase; }
                 .ep-sec-line { height: 1px; background: #ccd1d9; margin-bottom: 12px; }
                 
-                .ep-item { margin-bottom: 12px; }
+                .ep-item { margin-bottom: 12px; break-inside: avoid !important; page-break-inside: avoid !important; }
                 .ep-item-title { font-size: 12px; font-weight: bold; color: #003399; margin: 0 0 1px; }
                 .ep-item-org { font-size: 11px; font-weight: bold; font-style: italic; color: #222; margin-bottom: 3px; }
                 .ep-item-meta { font-size: 10.5px; display: flex; flex-direction: column; gap: 1px; color: #444; }
@@ -620,7 +620,7 @@ const Resume = () => {
                 
                 .ep-lang-row { font-size: 11px; color: #333; margin-bottom: 5px; }
 
-                .ep-cert-item { margin-bottom: 12px; }
+                .ep-cert-item { margin-bottom: 12px; break-inside: avoid !important; page-break-inside: avoid !important; }
                 .ep-cert-meta { font-size: 10.5px; color: #666; margin-bottom: 2px; }
                 .ep-cert-name { font-size: 11.5px; font-weight: bold; color: #003399; margin-bottom: 2px; }
                 .ep-cert-mode, .ep-cert-link { font-size: 10.5px; color: #555; }
