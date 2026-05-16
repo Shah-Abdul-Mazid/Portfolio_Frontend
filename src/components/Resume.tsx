@@ -380,7 +380,7 @@ const Resume = () => {
                             ))}
                         </div>
 
-                        <div className="ep-section">
+                        <div className="ep-section ep-page-break">
                             <h2 className="ep-sec-title">TECHNICAL SKILLS</h2>
                             <div className="ep-sec-line" />
                             {data.skills.map((cat, i) => (
@@ -501,6 +501,7 @@ const Resume = () => {
                 .rv-spin { animation: rvSpin 1s linear infinite; }
                 @keyframes rvSpin { to { transform: rotate(360deg); } }
                 .ep-sheet { border: none !important; }
+                .ep-page-break { page-break-before: always !important; }
                 .rv-content { padding: 40px !important; overflow-wrap: break-word !important; position: relative; z-index: 2; }
                 
                 /* Europass Styles */
