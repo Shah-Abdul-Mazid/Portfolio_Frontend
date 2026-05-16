@@ -465,46 +465,11 @@ const Resume = () => {
                         </div>
 
                         <div className="ep-section">
-                            <h2 className="ep-sec-title">COMMUNICATION AND INTERPERSONAL SKILLS</h2>
-                            <div className="ep-sec-line" />
-                            <div className="ep-summary-text">
-                                • Excellent communication skills gained through experience as a Campus Ambassador and Event Organizer.<br/>
-                                • Strong ability to coordinate national-level programming contests and technical workshops for large audiences.<br/>
-                                • Proficient in cross-functional collaboration and leading student outreach initiatives.
-                            </div>
-                        </div>
-
-                        <div className="ep-section">
-                            <h2 className="ep-sec-title">ORGANISATIONAL / MANAGERIAL SKILLS</h2>
-                            <div className="ep-sec-line" />
-                            <div className="ep-summary-text">
-                                • Proven leadership and organizational abilities, managing events for 500+ participants.<br/>
-                                • Experienced in resource management and leading diverse teams in high-pressure environments like hackathons.
-                            </div>
-                        </div>
-
-                        <div className="ep-section">
                             <h2 className="ep-sec-title">HOBBIES AND INTERESTS</h2>
                             <div className="ep-sec-line" />
                             <div className="ep-summary-text">
                                 Open Source Contributing | Competitive Programming | Tech Blogging | Travelling | Photography
                             </div>
-                        </div>
-
-                        <div className="ep-section">
-                            <h2 className="ep-sec-title">REFERENCES</h2>
-                            <div className="ep-sec-line" />
-                            {data.references.map((r, i) => (
-                                <div key={i} className="ep-item">
-                                    <h3 className="ep-item-title">{r.name}</h3>
-                                    <div className="ep-item-org">{r.company}</div>
-                                    <div className="ep-item-meta">
-                                        <div><b>{r.title}</b> ({r.relation})</div>
-                                        <div><b>Email:</b> {r.email}</div>
-                                        {r.phone && <div><b>Phone:</b> {r.phone}</div>}
-                                    </div>
-                                </div>
-                            ))}
                         </div>
 
                         <div className="ep-section">
@@ -520,6 +485,22 @@ const Resume = () => {
                                             <b>Link:</b> <a href={c.credentialUrl}>{c.credentialUrl}</a>
                                         </div>
                                     )}
+                                </div>
+                            ))}
+                        </div>
+
+                        <div className="ep-section">
+                            <h2 className="ep-sec-title">REFERENCES</h2>
+                            <div className="ep-sec-line" />
+                            {data.references.map((r, i) => (
+                                <div key={i} className="ep-item">
+                                    <h3 className="ep-item-title">{r.name}</h3>
+                                    <div className="ep-item-org">{r.company}</div>
+                                    <div className="ep-item-meta">
+                                        <div><b>{r.title}</b> ({r.relation})</div>
+                                        <div><b>Email:</b> {r.email}</div>
+                                        {r.phone && <div><b>Phone:</b> {r.phone}</div>}
+                                    </div>
                                 </div>
                             ))}
                         </div>
@@ -582,6 +563,52 @@ const Resume = () => {
                 .ep-section { margin-bottom: 20px; }
                 .ep-sec-title { font-size: 13px; font-weight: bold; color: #003399; margin: 0 0 4px; text-transform: uppercase; }
                 .ep-sec-line { height: 1px; background: #ccd1d9; margin-bottom: 12px; }
+
+                /* Modern Layout Core CSS */
+                .rv-sheet { background: white; width: 794px; min-height: 1123px; color: #1a1a1a; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-radius: 4px; overflow: hidden; margin: 0 auto; }
+                .rv-hd { display: grid !important; grid-template-columns: 1.2fr 2fr 1.2fr !important; align-items: center !important; gap: 15px !important; padding-bottom: 15px !important; border-bottom: 1.5px solid #3d5a80 !important; margin-bottom: 12px !important; }
+                .rv-hd-left { display: flex !important; flex-direction: column !important; gap: 2px !important; text-align: left !important; font-size: 11px !important; }
+                .rv-hd-mid { display: flex; flex-direction: column; align-items: center; text-align: center; min-width: 0; }
+                .rv-hd-right { display: flex !important; flex-direction: column !important; gap: 2px !important; text-align: right !important; font-size: 11px !important; }
+                .rv-name { font-size: 26px; font-weight: 700; color: #1a1a1a; margin: 0; line-height: 1.1; white-space: nowrap; }
+                .rv-role { font-size: 12px; color: #3d5a80; font-weight: 600; margin: 4px 0 0; line-height: 1.3; max-width: 100%; }
+                .rv-contact-row { line-height: 1.3; }
+                .rv-contact-row a { color: #3d5a80; text-decoration: none; }
+                .rv-contact-row a:hover { text-decoration: underline; }
+                .rv-link { color: #3d5a80 !important; text-decoration: none !important; font-weight: 600 !important; }
+                .rv-link:hover { text-decoration: underline !important; }
+                .rv-proj-link-anchor:hover .rv-proj-title { color: #3d5a80; text-decoration: underline; }
+                .rv-body { padding: 0; }
+                .rv-summary { font-size: 12.5px; color: #1a1a1a; line-height: 1.4; margin: 0 0 10px; text-align: justify; }
+                .rv-sec { margin-bottom: 5px !important; min-height: 0 !important; padding: 0 !important; display: block; overflow: visible; break-inside: avoid !important; page-break-inside: avoid !important; }
+                .rv-sec-hd { font-size: 13px; font-weight: 700; text-transform: uppercase; color: #3d5a80; margin-bottom: 3px; display: flex; align-items: center; gap: 8px; break-after: avoid !important; page-break-after: avoid !important; }
+                .rv-sec-hd::after { content: ""; flex: 1; height: 1px; background: #3d5a80; margin-left: 8px; opacity: 0.3; }
+                .rv-skill-row { font-size: 11.5px; margin: 0 0 3px; color: #374151; break-inside: avoid; page-break-inside: avoid; }
+                .rv-skill-row b { color: #1a1a1a; }
+                .rv-item { margin-bottom: 4px; break-inside: avoid !important; page-break-inside: avoid !important; }
+                .rv-item-top { display: flex !important; justify-content: space-between !important; align-items: baseline !important; gap: 10px !important; margin-bottom: 1px !important; text-align: left !important; }
+                .rv-item-sub { display: flex !important; justify-content: space-between !important; align-items: baseline !important; gap: 10px !important; margin-bottom: 2px !important; text-align: left !important; }
+                .rv-bold { font-weight: 700; font-size: 13px; color: #1a1a1a; }
+                .rv-muted { color: #1a1a1a; font-weight: 600; font-size: 12.5px; }
+                .rv-sm { font-size: 12px; color: #374151; }
+                .rv-meta { font-size: 12px; color: #1a1a1a; font-weight: 600; white-space: nowrap; }
+                .rv-meta-date { font-weight: 700; font-size: 12.5px; color: #1a1a1a; }
+                .rv-ul { margin: 1px 0 0; padding-left: 14px; list-style: disc; }
+                .rv-ul li { font-size: 12px; color: #1a1a1a; margin-bottom: 1px; line-height: 1.3; }
+                .rv-proj-hd { display: flex; align-items: baseline; gap: 6px; break-inside: avoid !important; page-break-inside: avoid !important; }
+                .rv-proj-title { font-weight: 700; font-size: 13px; color: #1a1a1a; }
+                .rv-proj-link { font-size: 11px; color: #3d5a80; font-style: italic; }
+                .rv-ref-grid { display: grid !important; grid-template-columns: 1fr 1fr 1fr !important; gap: 10px 15px !important; margin-top: 2px !important; }
+                .rv-ref-item { border-left: 2px solid #3d5a80 !important; padding-left: 8px !important; break-inside: avoid !important; page-break-inside: avoid !important; }
+                .rv-ref-name { font-weight: 700; font-size: 11.5px; color: #1a1a1a; line-height: 1.2; }
+                .rv-ref-pos { font-size: 10.5px; color: #3d5a80; font-weight: 600; line-height: 1.2; }
+                .rv-ref-org { font-size: 10px; color: #374151; margin-bottom: 1px; }
+                .rv-ref-rel { font-size: 9.5px; color: #6b7280; font-style: italic; margin-bottom: 1px; }
+                .rv-ref-contact { font-size: 9.5px; color: #374151; }
+                .rv-ref-link { color: #3d5a80; text-decoration: none; }
+                .rv-ref-link:hover { text-decoration: underline; }
+                .rv-ref-phone { color: #374151; }
+                
                 .ep-item { margin-bottom: 15px; break-inside: avoid !important; page-break-inside: avoid !important; }
                 .ep-company-row { display: flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: bold; color: #003399; margin-bottom: 2px; }
                 .ep-role { font-size: 11px; font-weight: bold; color: #333; margin: 0 0 2px; }
@@ -604,12 +631,32 @@ const Resume = () => {
                 .ep-cert-name { font-size: 11.5px; font-weight: bold; color: #003399; margin-bottom: 2px; }
                 .ep-cert-mode, .ep-cert-link { font-size: 10.5px; color: #555; }
                 .ep-cert-link a { color: #003399; text-decoration: none; word-break: break-all; }
-                @media print {
-                    .rv-page { background: white !important; padding: 0 !important; }
+                
+                @media print { 
+                    @page { size: A4; margin: 0.75in 0.5in; }
+                    .rv-page { background: white !important; padding: 0 !important; margin: 0 !important; width: 100% !important; } 
+                    .rv-toolbar, .ats-overlay, .rv-print-tip { display: none !important; } 
+                    .rv-sheet { box-shadow: none !important; width: 100% !important; max-width: 100% !important; padding: 0 !important; margin: 0 !important; overflow: visible !important; border: none !important; }
+                    .rv-content { padding: 0 !important; width: 100% !important; }
+                    .rv-hd { grid-template-columns: 1.4fr 2fr 1.4fr !important; gap: 10px !important; }
+                    .rv-hd-left, .rv-hd-right { font-size: 10px !important; }
+                    .rv-name { font-size: 24px !important; }
+                    header, footer, .mobile-drawer { display: none !important; }
+                    main { padding: 0 !important; margin: 0 !important; }
+                    .container { max-width: none !important; padding: 0 !important; margin: 0 !important; }
+                    .bu-project { break-before: auto !important; page-break-before: auto !important; }
+                    .rv-item, .rv-proj-hd, .rv-ref-item, .rv-skill-row { break-inside: auto !important; page-break-inside: auto !important; }
+                    .rv-sec { break-inside: auto !important; page-break-inside: auto !important; margin-bottom: 12px !important; }
+                    .rv-sec-hd { break-after: avoid !important; page-break-after: avoid !important; margin-top: 15px !important; }
+                    .rv-sec-hd:first-child { margin-top: 0 !important; }
+                    .rv-sheet a { pointer-events: auto !important; text-decoration: none !important; }
+                    
+                    /* Europass Print */
                     .ep-content { padding: 0 !important; border: none !important; }
                     .ep-name { color: #003399 !important; -webkit-print-color-adjust: exact; }
                     .ep-sec-title { color: #003399 !important; -webkit-print-color-adjust: exact; }
                 }
+                .pdf-export .rv-content { padding: 0 !important; }
             `}</style>
         </div>
     );
