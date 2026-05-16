@@ -48,9 +48,8 @@ const Resume = () => {
         
         try {
             sheetRef.current.classList.add('pdf-export');
-            // Options for html2pdf
             const opt = {
-                margin: [13.2, 0, 13.2, 0], // 50px gap on every page to clear bars
+                margin: [13.2, 0, 13.2, 0],
                 filename: `${data.hero.name.replace(/\s+/g, '_')}_Resume.pdf`,
                 image: { type: 'jpeg', quality: 1.0 },
                 html2canvas: { 
@@ -65,28 +64,22 @@ const Resume = () => {
                 pagebreak: { mode: ['css', 'legacy'] }
             };
 
-            // Modern way to call html2pdf with full link preservation
             const worker = (html2pdf() as any).set(opt).from(sheetRef.current);
             await worker.toPdf().get('pdf').then((pdf: any) => {
-                // ONLY DRAW BARS IF IN EUROPASS MODE
                 if (cvType === 'europass') {
                     const totalPages = pdf.internal.getNumberOfPages();
-                    const pageWidth = 210; // A4 Width in mm
-                    const pageHeight = 297; // A4 Height in mm
-                    const barHeight = 8; // mm
+                    const pageWidth = 210;
+                    const pageHeight = 297;
+                    const barHeight = 8;
                     const barColor = '#a8c4e5';
-                    const inset = 6; // mm
+                    const inset = 6;
 
                     for (let i = 1; i <= totalPages; i++) {
                         pdf.setPage(i);
                         pdf.setFillColor(barColor);
-                        
-                        // TOP BAR
                         pdf.rect(0, 0, pageWidth, barHeight, 'F');
                         pdf.rect(0, 0, inset, barHeight * 2, 'F');
                         pdf.rect(pageWidth - inset, 0, inset, barHeight * 2, 'F');
-
-                        // BOTTOM BAR
                         pdf.rect(0, pageHeight - barHeight, pageWidth, barHeight, 'F');
                         pdf.rect(0, pageHeight - barHeight * 2, inset, barHeight * 2, 'F');
                         pdf.rect(pageWidth - inset, pageHeight - barHeight * 2, inset, barHeight * 2, 'F');
@@ -512,6 +505,8 @@ const Resume = () => {
                                     </div>
                                 </div>
                             ))}
+                        </div>
+
                         <div className="ep-section">
                             <h2 className="ep-sec-title">CERTIFICATIONS</h2>
                             <div className="ep-sec-line" />
@@ -560,10 +555,7 @@ const Resume = () => {
                 @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap');
                 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
                 * { box-sizing: border-box !important; }
-                @page {
-                    size: A4;
-                    margin: 0.5in;
-                }
+                @page { size: A4; margin: 0.5in; }
                 .rv-page { background: #f1f5f9; min-height: 100vh; padding: 32px 16px 60px; display: flex; flex-direction: column; align-items: center; font-family: 'Source Sans Pro', 'Inter', sans-serif; }
                 .rv-toolbar { width: min(794px, 100%); display: flex; justify-content: flex-end; gap: 10px; margin-bottom: 16px; }
                 .rv-btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer; border: none; text-decoration: none; transition: all 0.2s; }
@@ -574,146 +566,42 @@ const Resume = () => {
                 .ep-sheet { border: none !important; }
                 .ep-page-break { page-break-before: always !important; padding-top: 50px !important; }
                 .rv-content { padding: 40px !important; overflow-wrap: break-word !important; position: relative; z-index: 2; }
-                
-                /* Europass Styles */
                 .ep-content { padding: 40px 40px !important; color: #333 !important; line-height: 1.4 !important; font-family: 'Arial', sans-serif !important; background: white; position: relative; z-index: 2; }
                 .ep-frame-top { position: absolute; top: 0; left: 0; right: 0; height: 35px; background: #a8c4e5; clip-path: polygon(0 0, 100% 0, 100% 100%, 96% 100%, 96% 35%, 4% 35%, 4% 100%, 0 100%); z-index: 3; pointer-events: none; }
                 .ep-frame-bottom { position: absolute; bottom: 0; left: 0; right: 0; height: 35px; background: #a8c4e5; clip-path: polygon(0 100%, 100% 100%, 100% 0, 96% 0, 96% 65%, 4% 65%, 4% 0, 0 0%); z-index: 3; pointer-events: none; }
                 .pdf-export .ep-frame-top, .pdf-export .ep-frame-bottom { display: none !important; }
-                .ep-header { display: grid; grid-template-columns: 120px 1fr 120px; align-items: start; gap: 20px; margin-bottom: 25px; margin-top: 10px; position: relative; z-index: 4; }
-                .rv-hd { display: grid !important; grid-template-columns: 1.2fr 2fr 1.2fr !important; align-items: center !important; gap: 15px !important; padding-bottom: 15px !important; border-bottom: 1.5px solid #3d5a80 !important; margin-bottom: 12px !important; }
-                .rv-hd-left { display: flex !important; flex-direction: column !important; gap: 2px !important; text-align: left !important; font-size: 11px !important; }
-                .rv-hd-mid { display: flex; flex-direction: column; align-items: center; text-align: center; min-width: 0; }
-                .rv-hd-right { display: flex !important; flex-direction: column !important; gap: 2px !important; text-align: right !important; font-size: 11px !important; }
-                .rv-name { font-size: 26px; font-weight: 700; color: #1a1a1a; margin: 0; line-height: 1.1; white-space: nowrap; }
-                .rv-role { font-size: 12px; color: #3d5a80; font-weight: 600; margin: 4px 0 0; line-height: 1.3; max-width: 100%; }
-                .rv-contact-row { line-height: 1.3; }
-                .rv-contact-row a { color: #3d5a80; text-decoration: none; }
-                .rv-contact-row a:hover { text-decoration: underline; }
-                .rv-link { color: #3d5a80 !important; text-decoration: none !important; font-weight: 600 !important; }
-                .rv-link:hover { text-decoration: underline !important; }
-                .rv-proj-link-anchor:hover .rv-proj-title { color: #3d5a80; text-decoration: underline; }
-                .rv-body { padding: 0; }
-                .rv-summary { font-size: 12.5px; color: #1a1a1a; line-height: 1.4; margin: 0 0 10px; text-align: justify; }
-                .rv-sec { margin-bottom: 5px !important; min-height: 0 !important; padding: 0 !important; display: block; overflow: visible; break-inside: avoid !important; page-break-inside: avoid !important; }
-                .rv-sec-hd { font-size: 13px; font-weight: 700; text-transform: uppercase; color: #3d5a80; margin-bottom: 3px; display: flex; align-items: center; gap: 8px; break-after: avoid !important; page-break-after: avoid !important; }
-                .rv-sec-hd::after { content: ""; flex: 1; height: 1px; background: #3d5a80; margin-left: 8px; opacity: 0.3; }
-                .rv-skill-row { font-size: 11.5px; margin: 0 0 3px; color: #374151; break-inside: avoid; page-break-inside: avoid; }
-                .rv-skill-row b { color: #1a1a1a; }
-                .rv-item { margin-bottom: 4px; break-inside: avoid !important; page-break-inside: avoid !important; }
-                .rv-item-top { display: flex !important; justify-content: space-between !important; align-items: baseline !important; gap: 10px !important; margin-bottom: 1px !important; text-align: left !important; }
-                .rv-item-sub { display: flex !important; justify-content: space-between !important; align-items: baseline !important; gap: 10px !important; margin-bottom: 2px !important; text-align: left !important; }
-                .rv-bold { font-weight: 700; font-size: 13px; color: #1a1a1a; }
-                .rv-muted { color: #1a1a1a; font-weight: 600; font-size: 12.5px; }
-                .rv-sm { font-size: 12px; }
-                .rv-meta { font-size: 12px; color: #1a1a1a; font-weight: 600; white-space: nowrap; }
-                .rv-meta-date { font-weight: 700; font-size: 12.5px; color: #1a1a1a; }
-                .rv-ul { margin: 1px 0 0; padding-left: 14px; list-style: disc; }
-                .rv-ul li { font-size: 12px; color: #1a1a1a; margin-bottom: 1px; line-height: 1.3; }
-                .rv-proj-hd { display: flex; align-items: baseline; gap: 6px; break-inside: avoid !important; page-break-inside: avoid !important; }
-                .rv-proj-title { font-weight: 700; font-size: 13px; color: #1a1a1a; }
-                .rv-proj-link { font-size: 11px; color: #3d5a80; font-style: italic; }
-                .rv-ref-grid { display: grid !important; grid-template-columns: 1fr 1fr 1fr !important; gap: 10px 15px !important; margin-top: 2px !important; }
-                .rv-ref-item { border-left: 2px solid #3d5a80 !important; padding-left: 8px !important; break-inside: avoid !important; page-break-inside: avoid !important; }
-                .rv-ref-name { font-weight: 700; font-size: 11.5px; color: #1a1a1a; line-height: 1.2; }
-                .rv-ref-pos { font-size: 10.5px; color: #3d5a80; font-weight: 600; line-height: 1.2; }
-                .rv-ref-org { font-size: 10px; color: #374151; margin-bottom: 1px; }
-                .rv-ref-rel { font-size: 9.5px; color: #6b7280; font-style: italic; margin-bottom: 1px; }
-                .rv-ref-contact { font-size: 9.5px; color: #374151; }
-                .rv-ref-link { color: #3d5a80; text-decoration: none; }
-                .rv-ref-link:hover { text-decoration: underline; }
-                .rv-ref-phone { color: #374151; }
-                .ats-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(8px); z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 20px; animation: fadeIn 0.3s ease; }
-                .ats-panel { width: 100%; max-width: 420px; background: #1e293b; border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; padding: 30px; color: white; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
-                .ats-hd { display: flex; justify-content: space-between; align-items: start; margin-bottom: 25px; }
-                .ats-hd h3 { margin: 0; font-size: 1.4rem; color: #10b981; }
-                .ats-hd p { margin: 4px 0 0; font-size: 0.9rem; color: #94a3b8; }
-                .ats-close { background: none; border: none; color: #94a3b8; cursor: pointer; padding: 0; transition: color 0.2s; }
-                .ats-close:hover { color: white; }
-                .ats-score-box { display: flex; flex-direction: column; align-items: center; margin-bottom: 30px; }
-                .ats-circle { width: 120px; height: 120px; border: 8px solid #334155; border-top-color: #10b981; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 15px; position: relative; }
-                .ats-num { font-size: 3rem; font-weight: 800; color: white; }
-                .ats-pct { font-size: 1rem; color: #10b981; margin-top: 10px; margin-left: 2px; }
-                .ats-label { font-size: 1.1rem; font-weight: 600; color: #10b981; text-transform: uppercase; letter-spacing: 1px; }
-                .ats-tips { display: flex; flex-direction: column; gap: 12px; margin-bottom: 25px; }
-                .ats-tip { display: flex; align-items: center; gap: 10px; font-size: 0.92rem; padding: 10px 14px; border-radius: 12px; background: rgba(255,255,255,0.03); }
-                .ats-plus { color: #10b981; border-left: 3px solid #10b981; }
-                .ats-tip.ats-tip { color: #38bdf8; border-left: 3px solid #38bdf8; }
-                .ats-minus { color: #f43f5e; border-left: 3px solid #f43f5e; }
-                .ats-footer { text-align: center; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px; }
-                .ats-footer p { font-size: 0.75rem; color: #64748b; margin: 0; line-height: 1.4; }
-                @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-                @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-                @media print { 
-                    @page { size: A4; margin: 0.75in 0.5in; }
-                    .rv-page { background: white !important; padding: 0 !important; margin: 0 !important; width: 100% !important; } 
-                    .rv-toolbar, .ats-overlay, .rv-print-tip { display: none !important; } 
-                    .rv-sheet { box-shadow: none !important; width: 100% !important; max-width: 100% !important; padding: 0 !important; margin: 0 !important; overflow: visible !important; }
-                    .rv-content { padding: 0 !important; width: 100% !important; }
-                    .rv-hd { grid-template-columns: 1.4fr 2fr 1.4fr !important; gap: 10px !important; }
-                    .rv-hd-left, .rv-hd-right { font-size: 10px !important; }
-                    .rv-name { font-size: 24px !important; }
-                    header, footer, .mobile-drawer { display: none !important; }
-                    main { padding: 0 !important; margin: 0 !important; }
-                    .container { max-width: none !important; padding: 0 !important; margin: 0 !important; }
-                    .bu-project { break-before: auto !important; page-break-before: auto !important; }
-                    .rv-item, .rv-proj-hd, .rv-ref-item, .rv-skill-row { break-inside: auto !important; page-break-inside: auto !important; }
-                    .rv-sec { break-inside: auto !important; page-break-inside: auto !important; margin-bottom: 12px !important; }
-                    .rv-sec-hd { break-after: avoid !important; page-break-after: avoid !important; margin-top: 15px !important; }
-                    .rv-sec-hd:first-child { margin-top: 0 !important; }
-                    .rv-sheet a { pointer-events: auto !important; text-decoration: none !important; }
-                }
-                .pdf-export .rv-content { padding: 0 !important; }
-                .rv-page { background: #5a7da8; min-height: 100vh; padding: 32px 16px 60px; display: flex; flex-direction: column; align-items: center; font-family: 'Source Sans Pro', 'Inter', sans-serif; }
-                .rv-toolbar { width: min(850px, 100%); display: flex; justify-content: flex-end; gap: 10px; margin-bottom: 16px; }
-                .rv-active { background: #3d5a80 !important; color: white !important; }
-                .rv-layout-toggle { display: flex; background: #e2e8f0; padding: 4px; border-radius: 8px; gap: 4px; }
-                
-                /* Europass Styles */
-                .ep-content { padding: 40px !important; color: #333 !important; line-height: 1.4 !important; font-family: 'Arial', sans-serif !important; background: white; }
-                .ep-header { display: grid; grid-template-columns: 120px 1fr 180px; align-items: start; gap: 20px; margin-bottom: 25px; }
+                .ep-header { display: grid; grid-template-columns: 120px 1fr 180px; align-items: start; gap: 20px; margin-bottom: 25px; position: relative; z-index: 4; }
                 .ep-photo { width: 110px; height: 110px; border-radius: 50%; overflow: hidden; border: 1px solid #ddd; flex-shrink: 0; }
                 .ep-photo img { width: 100%; height: 100%; object-fit: cover; }
-                .ep-photo-placeholder { width: 100%; height: 100%; background: #f0f0f0; }
-                .ep-info { display: flex; flex-direction: column; justify-content: center; height: 100%; }
                 .ep-name { font-size: 22px; font-weight: bold; color: #003399; margin: 0 0 10px; }
                 .ep-details { font-size: 11px; display: flex; flex-direction: column; gap: 3px; color: #333; }
                 .ep-detail-row { display: flex; align-items: center; gap: 6px; }
                 .ep-logo { width: 180px; flex-shrink: 0; text-align: right; margin-top: -25px; }
                 .ep-logo img { width: 100%; height: auto; }
-                
                 .ep-summary-text { font-size: 11px; color: #333; line-height: 1.5; text-align: justify; }
                 .ep-section { margin-bottom: 20px; }
                 .ep-sec-title { font-size: 13px; font-weight: bold; color: #003399; margin: 0 0 4px; text-transform: uppercase; }
                 .ep-sec-line { height: 1px; background: #ccd1d9; margin-bottom: 12px; }
-                
                 .ep-item { margin-bottom: 12px; break-inside: avoid !important; page-break-inside: avoid !important; }
-                .ep-item-title { font-size: 12px; font-weight: bold; color: #003399; margin: 0 0 1px; }
-                .ep-item-org { font-size: 11px; font-weight: bold; font-style: italic; color: #222; margin-bottom: 3px; }
-                .ep-item-meta { font-size: 10.5px; display: flex; flex-direction: column; gap: 1px; color: #444; }
-                .ep-meta-row { display: block; }
-                .ep-item-meta a { color: #003399; text-decoration: none; }
-                
-                .ep-company-row { display: flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: bold; color: #003399; margin-bottom: 2px; }
-                .ep-role { font-size: 12px; font-weight: bold; color: #222; margin: 0 0 2px; }
-                .ep-dates { font-size: 10.5px; color: #555; margin-bottom: 5px; }
+                .ep-item-title { font-size: 12px; font-weight: bold; color: #003399; margin-bottom: 2px; }
+                .ep-item-org { font-size: 11px; font-weight: bold; color: #333; margin-bottom: 2px; }
+                .ep-item-meta { font-size: 10.5px; color: #555; line-height: 1.4; }
+                .ep-dates { color: #666; font-style: italic; margin-bottom: 2px; }
+                .ep-meta-row { display: flex; gap: 5px; margin-top: 3px; }
+                .ep-meta-row a { color: #003399; text-decoration: none; }
                 .ep-bullets { margin: 0; padding-left: 18px; list-style: disc; }
                 .ep-bullets li { font-size: 10.5px; color: #333; margin-bottom: 2px; line-height: 1.4; }
-                
                 .ep-skill-row { display: flex; justify-content: space-between; align-items: center; padding: 4px 0; border-bottom: 1px solid #f2f4f7; }
                 .ep-skill-name { display: flex; align-items: center; gap: 10px; font-size: 11px; color: #444; }
                 .ep-skill-icon { color: #999; display: flex; align-items: center; }
                 .ep-skill-level { font-size: 10.5px; color: #333; text-align: right; }
                 .ep-skill-level b { color: #003399; font-size: 11px; }
-                
                 .ep-lang-row { font-size: 11px; color: #333; margin-bottom: 5px; }
-
                 .ep-cert-item { margin-bottom: 12px; break-inside: avoid !important; page-break-inside: avoid !important; }
                 .ep-cert-meta { font-size: 10.5px; color: #666; margin-bottom: 2px; }
                 .ep-cert-name { font-size: 11.5px; font-weight: bold; color: #003399; margin-bottom: 2px; }
                 .ep-cert-mode, .ep-cert-link { font-size: 10.5px; color: #555; }
                 .ep-cert-link a { color: #003399; text-decoration: none; word-break: break-all; }
-
                 @media print {
                     .rv-page { background: white !important; padding: 0 !important; }
                     .ep-content { padding: 0 !important; border: none !important; }
