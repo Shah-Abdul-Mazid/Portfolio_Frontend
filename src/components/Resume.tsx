@@ -327,17 +327,23 @@ const Resume = () => {
                             <div className="ep-info">
                                 <h1 className="ep-name">{data.hero.name}</h1>
                                 <div className="ep-details">
-                                    <div className="ep-detail-row"><b>Nationality:</b> {data.contact.nationality || 'Bangladeshi'} <span style={{ marginLeft: '10px' }}><b>Date of birth:</b> {data.contact.dob || '01/06/2001'}</span></div>
-                                    <div className="ep-detail-row"><b>Place of birth:</b> {data.contact.pob || 'Dhaka, Bangladesh'}</div>
+                                    <div className="ep-detail-row"><b>Nationality:</b> Bangladeshi <span style={{ marginLeft: '10px' }}><b>Date of birth:</b> 01/06/2001</span></div>
+                                    <div className="ep-detail-row"><b>Place of birth:</b> Dhaka, Bangladesh</div>
                                     <div className="ep-detail-row">
                                         <MapPin size={12} fill="#003399" color="white" />
-                                        <b>Home:</b> {loc}
+                                        <b>Home:</b> 14/14, Tajmohol Road , Mohammadpur, 1207 Dhaka (Bangladesh)
                                     </div>
                                 </div>
                             </div>
                             <div className="ep-logo">
                                 <img src="/Logo/Europass-Full-Colour-Brand-Mark_1.svg" alt="Europass Logo" />
                             </div>
+                        </div>
+
+                        <div className="ep-section">
+                            <h2 className="ep-sec-title">ABOUT ME</h2>
+                            <div className="ep-sec-line" />
+                            <div className="ep-summary-text">{data.about.bio}</div>
                         </div>
 
                         <div className="ep-section">
@@ -370,6 +376,16 @@ const Resume = () => {
                                     <ul className="ep-bullets">
                                         {w.details.map((d, j) => <li key={j}>{d}</li>)}
                                     </ul>
+                                </div>
+                            ))}
+                        </div>
+
+                        <div className="ep-section">
+                            <h2 className="ep-sec-title">TECHNICAL SKILLS</h2>
+                            <div className="ep-sec-line" />
+                            {data.skills.map((cat, i) => (
+                                <div key={i} className="ep-lang-row" style={{ marginBottom: '8px' }}>
+                                    <b>{cat.name}:</b> {cat.items.join(', ')}
                                 </div>
                             ))}
                         </div>
@@ -595,6 +611,7 @@ const Resume = () => {
                 .ep-logo { width: 110px; flex-shrink: 0; text-align: right; }
                 .ep-logo img { width: 100%; height: auto; }
                 
+                .ep-summary-text { font-size: 11px; color: #333; line-height: 1.5; text-align: justify; }
                 .ep-section { margin-bottom: 20px; break-inside: avoid !important; page-break-inside: avoid !important; }
                 .ep-sec-title { font-size: 13px; font-weight: bold; color: #003399; margin: 0 0 4px; text-transform: uppercase; }
                 .ep-sec-line { height: 1px; background: #ccd1d9; margin-bottom: 12px; }
