@@ -102,7 +102,7 @@ const Resume = () => {
     const em = data.contact.email || '';
     const ph = data.contact.phone || '';
     const loc = data.contact.location || '';
-    const city = loc.split(',')[0]?.trim() || 'Dhaka';
+    const city = 'Dhaka, Bangladesh';
 
     const sortedWork = [...data.work].sort((a, b) => {
         if (!a.endDate && b.endDate) return -1;
