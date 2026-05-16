@@ -348,7 +348,7 @@ const Resume = () => {
                                     <div className="ep-item-org">{e.school}</div>
                                     <div className="ep-item-meta">
                                         <span className="ep-meta-row"><b>Address:</b> Dhaka, Bangladesh</span>
-                                        <span className="ep-meta-row"><b>Website:</b> <a href="https://www.ewubd.edu/">https://www.ewubd.edu/</a></span>
+                                        {i === 0 && <span className="ep-meta-row"><b>Website:</b> <a href="https://www.ewubd.edu/">https://www.ewubd.edu/</a></span>}
                                         <span className="ep-meta-row"><b>Level in EQF:</b> {i === 0 ? 'EQF level 6' : i === 1 ? 'EQF level 4' : 'EQF level 3'}</span>
                                     </div>
                                 </div>
