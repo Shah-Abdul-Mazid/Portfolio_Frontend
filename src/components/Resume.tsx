@@ -122,7 +122,7 @@ const Resume = () => {
                 </button>
             </div>
 
-            <div className="rv-sheet" ref={sheetRef}>
+            <div className={`rv-sheet ${cvType === 'europass' ? 'ep-sheet' : ''}`} ref={sheetRef}>
                 {cvType === 'modern' ? (
                     <div className="rv-content">
                         <div className="rv-hd">
@@ -293,13 +293,13 @@ const Resume = () => {
                     </div>
                 ) : (
                     <div className="ep-content">
+                        <div className="ep-bg-accents">
+                            <div className="ep-accent-top" />
+                            <div className="ep-accent-bottom" />
+                        </div>
                         <div className="ep-header">
                             <div className="ep-photo">
-                                {data.hero.avatarUrl ? (
-                                    <img src={resolveUrl(data.hero.avatarUrl)} alt="Profile" onError={(e) => (e.currentTarget.style.display = 'none')} />
-                                ) : (
-                                    <div className="ep-photo-placeholder" />
-                                )}
+                                <img src="/Image/FD=109767.jpg" alt="Profile" />
                             </div>
                             <div className="ep-info">
                                 <h1 className="ep-name">{data.hero.name}</h1>
@@ -434,8 +434,15 @@ const Resume = () => {
                 .rv-solid:hover { background: #2b3f5a; transform: translateY(-1px); }
                 .rv-spin { animation: rvSpin 1s linear infinite; }
                 @keyframes rvSpin { to { transform: rotate(360deg); } }
-                .rv-sheet { width: 100% !important; max-width: 210mm !important; margin: 0 auto !important; background: white !important; color: #1a1a1a !important; font-size: 13.5px !important; line-height: 1.4 !important; padding: 0 !important; box-shadow: 0 4px 24px rgba(0,0,0,0.1) !important; text-align: left !important; overflow: hidden !important; }
-                .rv-content { padding: 0.5in !important; overflow-wrap: break-word !important; }
+                .rv-sheet { width: 100% !important; max-width: 210mm !important; margin: 0 auto !important; background: white !important; color: #1a1a1a !important; font-size: 13.5px !important; line-height: 1.4 !important; padding: 0 !important; box-shadow: 0 4px 24px rgba(0,0,0,0.1) !important; text-align: left !important; overflow: hidden !important; transition: border 0.3s; }
+                .ep-sheet { border: 15px solid #a8c4e5 !important; }
+                .rv-content { padding: 0.5in !important; overflow-wrap: break-word !important; position: relative; }
+                
+                /* Europass Styles */
+                .ep-content { padding: 30px 40px !important; color: #333 !important; line-height: 1.4 !important; font-family: 'Arial', sans-serif !important; background: white; position: relative; }
+                .ep-bg-accents { position: absolute; inset: 0; pointer-events: none; }
+                .ep-accent-top { position: absolute; top: 0; left: 0; right: 0; height: 60px; background: #a8c4e5; opacity: 0.2; }
+                .ep-header { display: grid; grid-template-columns: 120px 1fr 120px; align-items: start; gap: 20px; margin-bottom: 25px; position: relative; z-index: 1; }
                 .rv-hd { display: grid !important; grid-template-columns: 1.2fr 2fr 1.2fr !important; align-items: center !important; gap: 15px !important; padding-bottom: 15px !important; border-bottom: 1.5px solid #3d5a80 !important; margin-bottom: 12px !important; }
                 .rv-hd-left { display: flex !important; flex-direction: column !important; gap: 2px !important; text-align: left !important; font-size: 11px !important; }
                 .rv-hd-mid { display: flex; flex-direction: column; align-items: center; text-align: center; min-width: 0; }
