@@ -442,6 +442,36 @@ const Resume = () => {
                         </div>
 
                         <div className="ep-section">
+                            <h2 className="ep-sec-title">PUBLICATIONS</h2>
+                            <div className="ep-sec-line" />
+                            {data.papers.map((p, i) => (
+                                <div key={i} className="ep-item">
+                                    <h3 className="ep-item-title">{p.title}</h3>
+                                    <div className="ep-item-meta">
+                                        <div><b>Authors:</b> {p.authors}</div>
+                                        <div><b>Venue:</b> {p.venue}, {p.year}</div>
+                                        {p.link && <div className="ep-meta-row"><b>Link:</b> <a href={p.link}>{p.link}</a></div>}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+
+                        <div className="ep-section">
+                            <h2 className="ep-sec-title">HONOURS AND AWARDS</h2>
+                            <div className="ep-sec-line" />
+                            {data.activities.map((a, i) => (
+                                <div key={i} className="ep-item">
+                                    <h3 className="ep-item-title">{a.role}</h3>
+                                    <div className="ep-item-org">{a.organization}</div>
+                                    <div className="ep-item-meta">
+                                        <div className="ep-dates">{a.period}</div>
+                                        <div style={{ fontSize: '10.5px', color: '#333' }}>{a.desc}</div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+
+                        <div className="ep-section">
                             <h2 className="ep-sec-title">CERTIFICATIONS</h2>
                             <div className="ep-sec-line" />
                             {data.certifications.map((c, i) => (
