@@ -50,7 +50,7 @@ const Resume = () => {
             sheetRef.current.classList.add('pdf-export');
             // Options for html2pdf
             const opt = {
-                margin: [0, 0, 13.2, 0], // Top margin 0 to let header sit tight, 50px bottom margin for footer
+                margin: [13.2, 0, 13.2, 0], // 50px gap on every page to clear bars
                 filename: `${data.hero.name.replace(/\s+/g, '_')}_Resume.pdf`,
                 image: { type: 'jpeg', quality: 1.0 },
                 html2canvas: { 
@@ -599,8 +599,8 @@ const Resume = () => {
                 .rv-layout-toggle { display: flex; background: #e2e8f0; padding: 4px; border-radius: 8px; gap: 4px; }
                 
                 /* Europass Styles */
-                .ep-content { padding: 35px 40px 40px !important; color: #333 !important; line-height: 1.4 !important; font-family: 'Arial', sans-serif !important; background: white; }
-                .ep-header { display: grid; grid-template-columns: 120px 1fr 180px; align-items: start; gap: 20px; margin-bottom: 25px; }
+                .ep-content { padding: 40px !important; color: #333 !important; line-height: 1.4 !important; font-family: 'Arial', sans-serif !important; background: white; }
+                .ep-header { display: grid; grid-template-columns: 120px 1fr 180px; align-items: start; gap: 20px; margin-bottom: 25px; margin-top: -15px; }
                 .ep-photo { width: 110px; height: 110px; border-radius: 50%; overflow: hidden; border: 1px solid #ddd; flex-shrink: 0; }
                 .ep-photo img { width: 100%; height: 100%; object-fit: cover; }
                 .ep-photo-placeholder { width: 100%; height: 100%; background: #f0f0f0; }
