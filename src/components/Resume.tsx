@@ -472,6 +472,47 @@ const Resume = () => {
                         </div>
 
                         <div className="ep-section">
+                            <h2 className="ep-sec-title">COMMUNICATION AND INTERPERSONAL SKILLS</h2>
+                            <div className="ep-sec-line" />
+                            <div className="ep-summary-text">
+                                • Excellent communication skills gained through experience as a Campus Ambassador and Event Organizer.<br/>
+                                • Strong ability to coordinate national-level programming contests and technical workshops for large audiences.<br/>
+                                • Proficient in cross-functional collaboration and leading student outreach initiatives.
+                            </div>
+                        </div>
+
+                        <div className="ep-section">
+                            <h2 className="ep-sec-title">ORGANISATIONAL / MANAGERIAL SKILLS</h2>
+                            <div className="ep-sec-line" />
+                            <div className="ep-summary-text">
+                                • Proven leadership and organizational abilities, managing events for 500+ participants.<br/>
+                                • Experienced in resource management and leading diverse teams in high-pressure environments like hackathons.
+                            </div>
+                        </div>
+
+                        <div className="ep-section">
+                            <h2 className="ep-sec-title">HOBBIES AND INTERESTS</h2>
+                            <div className="ep-sec-line" />
+                            <div className="ep-summary-text">
+                                Open Source Contributing | Competitive Programming | Tech Blogging | Travelling | Photography
+                            </div>
+                        </div>
+
+                        <div className="ep-section">
+                            <h2 className="ep-sec-title">REFERENCES</h2>
+                            <div className="ep-sec-line" />
+                            {data.references.map((r, i) => (
+                                <div key={i} className="ep-item">
+                                    <h3 className="ep-item-title">{r.name}</h3>
+                                    <div className="ep-item-org">{r.company}</div>
+                                    <div className="ep-item-meta">
+                                        <div><b>{r.title}</b> ({r.relation})</div>
+                                        <div><b>Email:</b> {r.email}</div>
+                                        {r.phone && <div><b>Phone:</b> {r.phone}</div>}
+                                    </div>
+                                </div>
+                            ))}
+                        <div className="ep-section">
                             <h2 className="ep-sec-title">CERTIFICATIONS</h2>
                             <div className="ep-sec-line" />
                             {data.certifications.map((c, i) => (
