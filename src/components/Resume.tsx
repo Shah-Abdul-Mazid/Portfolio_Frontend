@@ -588,7 +588,7 @@ const Resume = () => {
                 .ep-item-title { font-size: 12px; font-weight: bold; color: #003399; margin-bottom: 2px; }
                 .ep-item-org { font-size: 11px; font-weight: bold; color: #333; margin-bottom: 2px; }
                 .ep-item-meta { font-size: 10.5px; color: #555; line-height: 1.4; }
-                .ep-dates { color: #666; font-style: italic; margin-bottom: 2px; }
+                .ep-dates { color: #333; font-weight: bold; font-size: 10px; margin-bottom: 5px; }
                 .ep-meta-row { display: flex; gap: 5px; margin-top: 3px; }
                 .ep-meta-row a { color: #003399; text-decoration: none; }
                 .ep-bullets { margin: 0; padding-left: 18px; list-style: disc; }
