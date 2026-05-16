@@ -1,5 +1,5 @@
 import { useRef, useState, useMemo } from 'react';
-import { usePortfolio, resolveUrl } from '../context/PortfolioContext';
+import { usePortfolio } from '../context/PortfolioContext';
 import { Download, Loader, Printer, CheckCircle2, AlertCircle, Info, X, Zap, Mail, MapPin, Globe, Briefcase } from 'lucide-react';
 // @ts-ignore
 import html2pdf from 'html2pdf.js';
