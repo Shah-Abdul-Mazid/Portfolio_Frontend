@@ -1,6 +1,6 @@
 import { useRef, useState, useMemo } from 'react';
-import { usePortfolio } from '../context/PortfolioContext';
-import { Download, Loader, Printer, CheckCircle2, AlertCircle, Info, X, Zap } from 'lucide-react';
+import { usePortfolio, resolveUrl } from '../context/PortfolioContext';
+import { Download, Loader, Printer, CheckCircle2, AlertCircle, Info, X, Zap, Mail, Phone, MapPin, Globe, Briefcase } from 'lucide-react';
 // @ts-ignore
 import html2pdf from 'html2pdf.js';
 
@@ -296,7 +296,7 @@ const Resume = () => {
                         <div className="ep-header">
                             <div className="ep-photo">
                                 {data.hero.avatarUrl ? (
-                                    <img src={data.hero.avatarUrl} alt="Profile" />
+                                    <img src={resolveUrl(data.hero.avatarUrl)} alt="Profile" onError={(e) => (e.currentTarget.style.display = 'none')} />
                                 ) : (
                                     <div className="ep-photo-placeholder" />
                                 )}
@@ -304,17 +304,16 @@ const Resume = () => {
                             <div className="ep-info">
                                 <h1 className="ep-name">{data.hero.name}</h1>
                                 <div className="ep-details">
-                                    <div className="ep-detail-row"><b>Nationality:</b> {data.contact.nationality || 'Bangladeshi'}</div>
-                                    <div className="ep-detail-row"><b>Date of birth:</b> {data.contact.dob || '01/06/2001'}</div>
+                                    <div className="ep-detail-row"><b>Nationality:</b> {data.contact.nationality || 'Bangladeshi'} <span style={{ marginLeft: '10px' }}><b>Date of birth:</b> {data.contact.dob || '01/06/2001'}</span></div>
                                     <div className="ep-detail-row"><b>Place of birth:</b> {data.contact.pob || 'Dhaka, Bangladesh'}</div>
                                     <div className="ep-detail-row">
-                                        <svg viewBox="0 0 24 24" fill="currentColor" width="12" height="12"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                                        <MapPin size={12} fill="#003399" color="white" />
                                         <b>Home:</b> {loc}
                                     </div>
                                 </div>
                             </div>
                             <div className="ep-logo">
-                                <img src="https://europa.eu/europass/themes/custom/europass_theme/logo.svg" alt="Europass Logo" />
+                                <img src="/Logo/Europass-Full-Colour-Brand-Mark_1.svg" alt="Europass Logo" />
                             </div>
                         </div>
 
@@ -326,9 +325,9 @@ const Resume = () => {
                                     <h3 className="ep-item-title">{e.degree}</h3>
                                     <div className="ep-item-org">{e.school}</div>
                                     <div className="ep-item-meta">
-                                        <span><b>Address:</b> Dhaka, Bangladesh</span>
-                                        <span><b>Website:</b> <a href="https://www.ewubd.edu/">https://www.ewubd.edu/</a></span>
-                                        <span><b>Level in EQF:</b> {i === 0 ? 'EQF level 6' : i === 1 ? 'EQF level 4' : 'EQF level 3'}</span>
+                                        <span className="ep-meta-row"><b>Address:</b> Dhaka, Bangladesh</span>
+                                        <span className="ep-meta-row"><b>Website:</b> <a href="https://www.ewubd.edu/">https://www.ewubd.edu/</a></span>
+                                        <span className="ep-meta-row"><b>Level in EQF:</b> {i === 0 ? 'EQF level 6' : i === 1 ? 'EQF level 4' : 'EQF level 3'}</span>
                                     </div>
                                 </div>
                             ))}
@@ -340,7 +339,7 @@ const Resume = () => {
                             {sortedWork.map((w, i) => (
                                 <div key={i} className="ep-item">
                                     <div className="ep-company-row">
-                                        <svg viewBox="0 0 24 24" fill="#003399" width="14" height="14"><path d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10zm-2-8h-2v2h2v-2zm0 4h-2v2h2v-2z"/></svg>
+                                        <Briefcase size={14} fill="#003399" color="white" />
                                         <span className="ep-company">{w.company}</span> — <span className="ep-loc">{city}</span>
                                     </div>
                                     <h3 className="ep-role">{w.role}</h3>
@@ -356,18 +355,19 @@ const Resume = () => {
                             <h2 className="ep-sec-title">DIGITAL SKILLS TEST RESULTS</h2>
                             <div className="ep-sec-line" />
                             {[
-                                { name: 'Information and data literacy', level: 'INTERMEDIATE', val: '3 / 6', icon: 'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z' },
-                                { name: 'Communication and collaboration', level: 'INTERMEDIATE', val: '4 / 6', icon: 'M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5s-3 1.34-3 3 1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z' },
-                                { name: 'Digital content creation', level: 'ADVANCED', val: '5 / 6', icon: 'M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z' },
-                                { name: 'Safety', level: 'INTERMEDIATE', val: '3 / 6', icon: 'M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-1 6h2v2h-2V7zm0 4h2v6h-2v-6z' }
+                                { name: 'Information and data literacy', level: 'INTERMEDIATE', val: 'Level 3 / 6', icon: <Globe size={14} /> },
+                                { name: 'Communication and collaboration', level: 'INTERMEDIATE', val: 'Level 4 / 6', icon: <Mail size={14} /> },
+                                { name: 'Digital content creation', level: 'ADVANCED', val: 'Level 5 / 6', icon: <Globe size={14} /> },
+                                { name: 'Safety', level: 'INTERMEDIATE', val: 'Level 3 / 6', icon: <CheckCircle2 size={14} /> },
+                                { name: 'Problem solving', level: 'INTERMEDIATE', val: 'Level 4 / 6', icon: <Zap size={14} /> }
                             ].map((s, i) => (
                                 <div key={i} className="ep-skill-row">
                                     <div className="ep-skill-name">
-                                        <svg viewBox="0 0 24 24" fill="#666" width="16" height="16"><path d={s.icon}/></svg>
+                                        <span className="ep-skill-icon">{s.icon}</span>
                                         {s.name}
                                     </div>
                                     <div className="ep-skill-level">
-                                        <b>{s.level}</b> Level {s.val}
+                                        <b>{s.level}</b> {s.val}
                                     </div>
                                 </div>
                             ))}
@@ -519,53 +519,56 @@ const Resume = () => {
                     .rv-sheet a { pointer-events: auto !important; text-decoration: none !important; }
                 }
                 .pdf-export .rv-content { padding: 0 !important; }
+                .rv-page { background: #5a7da8; min-height: 100vh; padding: 32px 16px 60px; display: flex; flex-direction: column; align-items: center; font-family: 'Source Sans Pro', 'Inter', sans-serif; }
+                .rv-toolbar { width: min(850px, 100%); display: flex; justify-content: flex-end; gap: 10px; margin-bottom: 16px; }
                 .rv-active { background: #3d5a80 !important; color: white !important; }
                 .rv-layout-toggle { display: flex; background: #e2e8f0; padding: 4px; border-radius: 8px; gap: 4px; }
-                .rv-layout-toggle .rv-btn { background: transparent; box-shadow: none; color: #64748b; }
-                .rv-layout-toggle .rv-btn:hover { background: rgba(255,255,255,0.5); }
                 
                 /* Europass Styles */
-                .ep-content { padding: 40px !important; color: #333 !important; line-height: 1.5 !important; font-family: 'Arial', sans-serif !important; }
-                .ep-header { display: flex; align-items: start; gap: 30px; margin-bottom: 30px; }
-                .ep-photo { width: 120px; height: 120px; border-radius: 50%; overflow: hidden; border: 1px solid #ddd; flex-shrink: 0; }
+                .ep-content { padding: 40px !important; color: #333 !important; line-height: 1.4 !important; font-family: 'Arial', sans-serif !important; background: white; }
+                .ep-header { display: grid; grid-template-columns: 120px 1fr 120px; align-items: start; gap: 20px; margin-bottom: 25px; }
+                .ep-photo { width: 110px; height: 110px; border-radius: 50%; overflow: hidden; border: 1px solid #ddd; flex-shrink: 0; }
                 .ep-photo img { width: 100%; height: 100%; object-fit: cover; }
                 .ep-photo-placeholder { width: 100%; height: 100%; background: #f0f0f0; }
-                .ep-info { flex: 1; }
-                .ep-name { font-size: 24px; font-weight: bold; color: #003399; margin: 0 0 15px; }
-                .ep-details { font-size: 11px; display: flex; flex-direction: column; gap: 4px; color: #444; }
+                .ep-info { display: flex; flex-direction: column; justify-content: center; height: 100%; }
+                .ep-name { font-size: 22px; font-weight: bold; color: #003399; margin: 0 0 10px; }
+                .ep-details { font-size: 11px; display: flex; flex-direction: column; gap: 3px; color: #333; }
                 .ep-detail-row { display: flex; align-items: center; gap: 6px; }
-                .ep-logo { width: 120px; flex-shrink: 0; text-align: right; }
-                .ep-logo img { width: 100%; }
+                .ep-logo { width: 110px; flex-shrink: 0; text-align: right; }
+                .ep-logo img { width: 100%; height: auto; }
                 
-                .ep-section { margin-bottom: 25px; }
-                .ep-sec-title { font-size: 14px; font-weight: bold; color: #003399; margin: 0 0 5px; text-transform: uppercase; }
-                .ep-sec-line { height: 1px; background: #ddd; margin-bottom: 15px; }
+                .ep-section { margin-bottom: 20px; }
+                .ep-sec-title { font-size: 13px; font-weight: bold; color: #003399; margin: 0 0 4px; text-transform: uppercase; }
+                .ep-sec-line { height: 1px; background: #ccd1d9; margin-bottom: 12px; }
                 
-                .ep-item { margin-bottom: 15px; }
-                .ep-item-title { font-size: 13px; font-weight: bold; color: #003399; margin: 0 0 2px; }
-                .ep-item-org { font-size: 12px; font-weight: bold; font-style: italic; color: #333; margin-bottom: 5px; }
-                .ep-item-meta { font-size: 11px; display: flex; flex-direction: column; gap: 2px; color: #555; }
+                .ep-item { margin-bottom: 12px; }
+                .ep-item-title { font-size: 12px; font-weight: bold; color: #003399; margin: 0 0 1px; }
+                .ep-item-org { font-size: 11px; font-weight: bold; font-style: italic; color: #222; margin-bottom: 3px; }
+                .ep-item-meta { font-size: 10.5px; display: flex; flex-direction: column; gap: 1px; color: #444; }
+                .ep-meta-row { display: block; }
                 .ep-item-meta a { color: #003399; text-decoration: none; }
                 
-                .ep-company-row { display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: bold; color: #003399; margin-bottom: 3px; }
-                .ep-role { font-size: 13px; font-weight: bold; color: #333; margin: 0 0 2px; }
-                .ep-dates { font-size: 11px; color: #666; margin-bottom: 8px; }
+                .ep-company-row { display: flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: bold; color: #003399; margin-bottom: 2px; }
+                .ep-role { font-size: 12px; font-weight: bold; color: #222; margin: 0 0 2px; }
+                .ep-dates { font-size: 10.5px; color: #555; margin-bottom: 5px; }
                 .ep-bullets { margin: 0; padding-left: 18px; list-style: disc; }
-                .ep-bullets li { font-size: 11px; color: #444; margin-bottom: 3px; }
+                .ep-bullets li { font-size: 10.5px; color: #333; margin-bottom: 2px; line-height: 1.4; }
                 
-                .ep-skill-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid #f0f0f0; }
-                .ep-skill-name { display: flex; align-items: center; gap: 8px; font-size: 11px; color: #333; }
-                .ep-skill-level { font-size: 11px; color: #333; }
-                .ep-skill-level b { color: #003399; }
+                .ep-skill-row { display: flex; justify-content: space-between; align-items: center; padding: 4px 0; border-bottom: 1px solid #f2f4f7; }
+                .ep-skill-name { display: flex; align-items: center; gap: 10px; font-size: 11px; color: #444; }
+                .ep-skill-icon { color: #999; display: flex; align-items: center; }
+                .ep-skill-level { font-size: 10.5px; color: #333; text-align: right; }
+                .ep-skill-level b { color: #003399; font-size: 11px; }
                 
-                .ep-cert-item { margin-bottom: 12px; }
-                .ep-cert-meta { font-size: 10px; color: #666; margin-bottom: 2px; }
-                .ep-cert-name { font-size: 12px; font-weight: bold; color: #333; margin-bottom: 2px; }
-                .ep-cert-mode, .ep-cert-link { font-size: 11px; color: #555; }
+                .ep-cert-item { margin-bottom: 10px; }
+                .ep-cert-meta { font-size: 9.5px; color: #666; margin-bottom: 1px; }
+                .ep-cert-name { font-size: 11.5px; font-weight: bold; color: #333; margin-bottom: 1px; }
+                .ep-cert-mode, .ep-cert-link { font-size: 10.5px; color: #555; }
                 .ep-cert-link a { color: #003399; text-decoration: none; word-break: break-all; }
 
                 @media print {
-                    .ep-content { padding: 0 !important; }
+                    .rv-page { background: white !important; padding: 0 !important; }
+                    .ep-content { padding: 0 !important; border: none !important; }
                     .ep-name { color: #003399 !important; -webkit-print-color-adjust: exact; }
                     .ep-sec-title { color: #003399 !important; -webkit-print-color-adjust: exact; }
                 }
