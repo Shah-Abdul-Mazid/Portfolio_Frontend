@@ -600,7 +600,7 @@ const Resume = () => {
                 
                 /* Europass Styles */
                 .ep-content { padding: 40px !important; color: #333 !important; line-height: 1.4 !important; font-family: 'Arial', sans-serif !important; background: white; }
-                .ep-header { display: grid; grid-template-columns: 120px 1fr 120px; align-items: start; gap: 20px; margin-bottom: 25px; }
+                .ep-header { display: grid; grid-template-columns: 120px 1fr 180px; align-items: start; gap: 20px; margin-bottom: 25px; }
                 .ep-photo { width: 110px; height: 110px; border-radius: 50%; overflow: hidden; border: 1px solid #ddd; flex-shrink: 0; }
                 .ep-photo img { width: 100%; height: 100%; object-fit: cover; }
                 .ep-photo-placeholder { width: 100%; height: 100%; background: #f0f0f0; }
@@ -608,7 +608,7 @@ const Resume = () => {
                 .ep-name { font-size: 22px; font-weight: bold; color: #003399; margin: 0 0 10px; }
                 .ep-details { font-size: 11px; display: flex; flex-direction: column; gap: 3px; color: #333; }
                 .ep-detail-row { display: flex; align-items: center; gap: 6px; }
-                .ep-logo { width: 110px; flex-shrink: 0; text-align: right; }
+                .ep-logo { width: 180px; flex-shrink: 0; text-align: right; }
                 .ep-logo img { width: 100%; height: auto; }
                 
                 .ep-summary-text { font-size: 11px; color: #333; line-height: 1.5; text-align: justify; }
