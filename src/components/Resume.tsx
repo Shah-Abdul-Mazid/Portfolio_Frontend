@@ -457,15 +457,15 @@ const Resume = () => {
                         </div>
 
                         <div className="ep-section">
-                            <h2 className="ep-sec-title">HONOURS AND AWARDS</h2>
+                            <h2 className="ep-sec-title">COMPETITIONS AND AWARDS</h2>
                             <div className="ep-sec-line" />
-                            {data.activities.map((a, i) => (
+                            {data.experience.map((e, i) => (
                                 <div key={i} className="ep-item">
-                                    <h3 className="ep-item-title">{a.role}</h3>
-                                    <div className="ep-item-org">{a.organization}</div>
+                                    <h3 className="ep-item-title">{e.role}</h3>
+                                    <div className="ep-item-org">{e.company}</div>
                                     <div className="ep-item-meta">
-                                        <div className="ep-dates">{a.period}</div>
-                                        <div style={{ fontSize: '10.5px', color: '#333' }}>{a.desc}</div>
+                                        <div className="ep-dates">{e.period}</div>
+                                        <div style={{ fontSize: '10.5px', color: '#333' }}>{e.desc}</div>
                                     </div>
                                 </div>
                             ))}
