@@ -50,7 +50,7 @@ const Resume = () => {
             sheetRef.current.classList.add('pdf-export');
             // Options for html2pdf
             const opt = {
-                margin: [15, 0, 15, 0], // 15mm top/bottom margin to clear the bars
+                margin: [0, 0, 15, 0], // Only bottom margin to clear the footer on all pages
                 filename: `${data.hero.name.replace(/\s+/g, '_')}_Resume.pdf`,
                 image: { type: 'jpeg', quality: 1.0 },
                 html2canvas: { 
@@ -485,7 +485,7 @@ const Resume = () => {
                 .rv-spin { animation: rvSpin 1s linear infinite; }
                 @keyframes rvSpin { to { transform: rotate(360deg); } }
                 .ep-sheet { border: none !important; }
-                .ep-page-break { page-break-before: always !important; break-before: page !important; }
+                .ep-page-break { page-break-before: always !important; break-before: page !important; padding-top: 50px !important; }
                 .rv-content { padding: 40px !important; overflow-wrap: break-word !important; position: relative; z-index: 2; }
                 
                 /* Europass Styles */
