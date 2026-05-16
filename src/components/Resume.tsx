@@ -102,7 +102,7 @@ const Resume = () => {
     const em = data.contact.email || '';
     const ph = data.contact.phone || '';
     const loc = data.contact.location || '';
-    const city = loc.split(',')[1]?.trim() || 'Bangladesh';
+    const city = loc.split(',')[0]?.trim() || 'Dhaka';
 
     const sortedWork = [...data.work].sort((a, b) => {
         if (!a.endDate && b.endDate) return -1;
@@ -582,7 +582,9 @@ const Resume = () => {
                 .ep-section { margin-bottom: 20px; }
                 .ep-sec-title { font-size: 13px; font-weight: bold; color: #003399; margin: 0 0 4px; text-transform: uppercase; }
                 .ep-sec-line { height: 1px; background: #ccd1d9; margin-bottom: 12px; }
-                .ep-item { margin-bottom: 12px; break-inside: avoid !important; page-break-inside: avoid !important; }
+                .ep-item { margin-bottom: 15px; break-inside: avoid !important; page-break-inside: avoid !important; }
+                .ep-company-row { display: flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: bold; color: #003399; margin-bottom: 2px; }
+                .ep-role { font-size: 11px; font-weight: bold; color: #333; margin: 0 0 2px; }
                 .ep-item-title { font-size: 12px; font-weight: bold; color: #003399; margin-bottom: 2px; }
                 .ep-item-org { font-size: 11px; font-weight: bold; color: #333; margin-bottom: 2px; }
                 .ep-item-meta { font-size: 10.5px; color: #555; line-height: 1.4; }
