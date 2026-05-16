@@ -67,8 +67,34 @@ const Resume = () => {
 
             // Modern way to call html2pdf with full link preservation
             const worker = (html2pdf() as any).set(opt).from(sheetRef.current);
-            await worker.toPdf().get('pdf').then(() => {
-                // PDF generated successfully
+            await worker.toPdf().get('pdf').then((pdf: any) => {
+                const totalPages = pdf.internal.getNumberOfPages();
+                const pageWidth = pdf.internal.pageSize.getWidth();
+                const pageHeight = pdf.internal.pageSize.getHeight();
+                const barHeight = 8; // mm
+                const barColor = '#a8c4e5';
+                const inset = 5; // mm (the 'legs' of the bevel)
+
+                for (let i = 1; i <= totalPages; i++) {
+                    pdf.setPage(i);
+                    pdf.setFillColor(barColor);
+                    
+                    // TOP BAR with beveled corners
+                    // Main horizontal bar
+                    pdf.rect(0, 0, pageWidth, barHeight, 'F');
+                    // Left leg
+                    pdf.rect(0, 0, inset, barHeight * 2, 'F');
+                    // Right leg
+                    pdf.rect(pageWidth - inset, 0, inset, barHeight * 2, 'F');
+
+                    // BOTTOM BAR with beveled corners
+                    // Main horizontal bar
+                    pdf.rect(0, pageHeight - barHeight, pageWidth, barHeight, 'F');
+                    // Left leg
+                    pdf.rect(0, pageHeight - barHeight * 2, inset, barHeight * 2, 'F');
+                    // Right leg
+                    pdf.rect(pageWidth - inset, pageHeight - barHeight * 2, inset, barHeight * 2, 'F');
+                }
             }).save();
         } catch (e) { 
             console.error("PDF Download Error:", e); 
@@ -442,6 +468,7 @@ const Resume = () => {
                 .ep-content { padding: 40px 40px !important; color: #333 !important; line-height: 1.4 !important; font-family: 'Arial', sans-serif !important; background: white; position: relative; z-index: 2; }
                 .ep-frame-top { position: absolute; top: 0; left: 0; right: 0; height: 35px; background: #a8c4e5; clip-path: polygon(0 0, 100% 0, 100% 100%, 96% 100%, 96% 35%, 4% 35%, 4% 100%, 0 100%); z-index: 3; pointer-events: none; }
                 .ep-frame-bottom { position: absolute; bottom: 0; left: 0; right: 0; height: 35px; background: #a8c4e5; clip-path: polygon(0 100%, 100% 100%, 100% 0, 96% 0, 96% 65%, 4% 65%, 4% 0, 0 0%); z-index: 3; pointer-events: none; }
+                .pdf-export .ep-frame-top, .pdf-export .ep-frame-bottom { display: none !important; }
                 .ep-header { display: grid; grid-template-columns: 120px 1fr 120px; align-items: start; gap: 20px; margin-bottom: 25px; margin-top: 10px; position: relative; z-index: 4; }
                 .rv-hd { display: grid !important; grid-template-columns: 1.2fr 2fr 1.2fr !important; align-items: center !important; gap: 15px !important; padding-bottom: 15px !important; border-bottom: 1.5px solid #3d5a80 !important; margin-bottom: 12px !important; }
                 .rv-hd-left { display: flex !important; flex-direction: column !important; gap: 2px !important; text-align: left !important; font-size: 11px !important; }
